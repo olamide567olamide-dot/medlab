@@ -1,0 +1,649 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>modern   _disease diagnosis assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .navbar-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .navbar-logo {
+            flex: 0 0 auto;
+        }
+
+        .logo-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #0f172a;
+            letter-spacing: 0.3px;
+        }
+
+        .navbar-menu {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            flex-direction: row;
+            transition: flex-direction 0.3s ease;
+        }
+        
+        .navbar-menu.horizontal {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 20px 24px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            margin-top: 0;
+            z-index: 999;
+        }
+
+        .nav-link {
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 2px;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #0f172a;
+        }
+
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 999px;
+        }
+
+        .login-signup-btn {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .hamburger-menu {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+            border-radius: 12px;
+            transition: background-color 0.2s ease;
+        }
+
+        .hamburger-menu:hover {
+            background: rgba(15, 23, 42, 0.05);
+        }
+
+        .hamburger-menu span {
+            width: 24px;
+            height: 2px;
+            background: #0f172a;
+            border-radius: 999px;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+            display: block;
+            transform-origin: center;
+        }
+
+        .hamburger-menu.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .mobile-nav-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: min(82vw, 320px);
+            height: 100vh;
+            background: #fff;
+            box-shadow: 20px 0 40px rgba(15, 23, 42, 0.18);
+            padding: 96px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-nav-panel[aria-hidden="false"] {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-nav-link {
+            padding: 14px 16px;
+            text-decoration: none;
+            border-radius: 12px;
+            color: #0f172a;
+            font-weight: 600;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .mobile-nav-link:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .mobile-nav-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 998;
+        }
+
+        .mobile-nav-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-only-login {
+            display: inline-flex;
+            margin-top: 10px;
+            width: fit-content;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: #111827;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-menu,
+            .login-signup-btn {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: inline-flex;
+            }
+
+            .mobile-only-login {
+                display: inline-flex;
+            }
+        }
+        /* Direction indicators */
+        .nav-link, .mobile-nav-link, .cta-button {
+            position: relative;
+        }
+        
+        .nav-link.show-direction::after, .mobile-nav-link.show-direction::after {
+            content: '↓';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 1;
+            animation: pointDown 0.6s ease-in-out;
+        }
+        
+        .cta-button.show-direction::after {
+            content: '←';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 1;
+            animation: pointLeft 0.6s ease-in-out;
+        }
+        
+        @keyframes pointDown {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(8px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(16px);
+            }
+        }
+        
+        @keyframes pointLeft {
+            0% {
+                opacity: 0;
+                transform: translateY(-50%) translateX(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-50%) translateX(-8px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50%) translateX(-16px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <span class="logo-icon">iMEDIC🩺</span> 
+            </div>
+            <nav class="navbar-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#about" class="nav-link">About us</a>
+                <a href="#testimonials" class="nav-link">Testimonials</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#contact" class="nav-link">Contact Info</a>
+            </nav>
+
+        <a href="login.html" class="login-signup-btn login-signup-link">
+                login & signup 
+                <span class="arrow-icon">→</span>
+            </a>
+            <button class="hamburger-menu" type="button" aria-label="mobile-nav-panel">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="mobile-nav-panel" aria-hidden="true">
+                <a href="#home" class="mobile-nav-link">Home</a>
+                <a href="#about" class="mobile-nav-link">About</a>
+                <a href="#services" class="mobile-nav-link">Services</a>
+                <a href="#blog" class="mobile-nav-link">Blog</a>
+                <a href="#contact" class="mobile-nav-link">Contact Info</a>
+                <a href="login.html" class="mobile-nav-link mobile-only-login">Login &amp; Signup</a>
+            </div>
+            <div class="mobile-nav-backdrop" aria-hidden="true"></div>
+        </div>
+    </header>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    iMEDIC 🩺💊💉
+                    MODERN<br>DISEASE🧬 DIAGNOSIS<br><span class="highlight">ASSISTANT.</span>
+                </h1>
+                <p class="hero-description">
+                    Expert disease diagnosis and treatment delivered with comfort, precision and trust.
+                </p>
+                <div class="service-badges">
+                    <button class="badge diagnosis-badge">Disease Diagnosis</button>
+                    <button class="badge monitoring-badge">Healthcare Symptom Monitoring</button>
+                    <button class="badge quick-diagnosis">Quick diagnosis </button>
+                    <button class="badge specialist">Treatment and first aid specialist </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="image.png" alt="Disease Diagnosis">
+                <div class="doctor-profile">
+                    <img src="https://via.placeholder.com/80/333333/ffffff?text=Dr.+Jonas" alt="Nur. oladipupo precious">
+                    <div class="profile-info">
+                        <h4>nurse precious</h4>
+                        <p>BSN Student</p>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="years">1 years Experience 4.9 Rating</span>
+                        </div>
+                    </div>
+                    <button class="nav-profile">›</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="reviews-header">
+            <div class="review-stat">
+                <div class="stat-number">750+</div>
+                <div class="stat-label">Reviews</div>
+            </div>
+            <p class="reviews-text">
+                Discover delighted patient reviews about their comforting and satisfying medical care experience.
+            </p>
+        </div>
+        <div class="review-carousel">
+            <button class="carousel-btn prev">‹</button>
+            <div class="reviews-container">
+                <div class="review-card">★★★★★</div>
+                <div class="review-card">★★★★★</div>
+                <div class="review-card">★★★★★</div>
+            </div>
+            <button class="carousel-btn next">›</button>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="services-header">
+            <h2>Our Features</h2>
+            <h3>DISCOVER OUR SIGNATURE DISEASE DIAGNOSIS SERVICES</h3>
+            <p>Experience modern disease diagnosis and treatment delivered with comfort, precision, and attention to detail. Our clinic provides a calm, welcoming environment designed to make every visit stress-free.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-image symptoms-img">
+                    <span>Enter your symptoms</span>
+                </div>
+            </div>
+            <div class="service-card">
+                <div class="service-image assessment-img">
+                    <span>Health Assessment</span>
+                </div>
+            </div>
+            <div class="service-card">
+                <div class="service-image diagnosis-img">
+                    <span>AI-Powered Diagnosis</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-container">
+            <div class="about-image">
+                <img src="IMEDIC Excellence.jfif" alt="iMEDIC Excellence">
+            </div>
+            <div class="about-content">
+                <h4 class="about-label">About iMEDIC Assistant</h4>
+                <h2>EXCELLENCE IN MEDICAL ASSISTANCE WITH COMPASSIONATE CARE</h2>
+                <p>Discover delighted patient reviews about their comforting and satisfying medical assistance experience.</p>
+                <a href="#" class="read-more-btn">
+                    Read more
+                    <span>→</span>
+                </a>
+                <div class="about-stats">
+                    <div class="stat">
+                        <h3>98%</h3>
+                        <p>SATISFACTION<br>RATE</p>
+                    </div>
+                    <div class="stat">
+                        <h3>50K</h3>
+                        <p>PATIENTS<br>DIAGNOSED</p>
+                    </div>
+                    <div class="stat">
+                        <h3>4.9</h3>
+                        <p>CUSTOMERS<br>RATING</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Doctors Section -->
+    <section class="doctors">
+        <h3>Our Specialist</h3>
+       
+            <div class="Nurse-card">
+                <img src="Nur. oladipupo precious.png" alt="Nur.Oladipupo Precious">
+                <h4>Nur.Oladipupo Precious</h4>
+                <p>Pre-Licensure Nursing Student</p>
+            </div>
+        </div>
+    </section>
+  
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="testimonials-container">
+            <h2>Patient Testimonials</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>" i am a medical student .this app made my entire experience comfortable and professional
+                        insense that when i was attending to my patient i was able to get a quick diagnosis for my patient possible disease infection . Highly recommended!"</p>
+                    <h4>Sarah Johnson</h4>
+                    <p class="patient-type">Patient</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"The facilities are modern and clean. I felt completely at ease during my treatment."</p>
+                    <h4>Michael Chen</h4>
+                    <p class="patient-type">Patient</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Exceptional care and attention to detail. This is my go-to disease diagnosis for all my family's needs."</p>
+                    <h4>Emma Wilson</h4>
+                    <p class="patient-type">Patient</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog">
+        <div class="blog-container">
+            <h2>Our Blog</h2>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <img src="https://via.placeholder.com/300x200/6bb3d4/ffffff?text=Health+Tips" alt="Health Tips">
+                    <h3>5 Tips for Maintaining Your Health</h3>
+                    <p>Learn essential habits to keep yourself healthy between medical visits.</p>
+                    <a href="#">Read More →</a>
+                </article>
+                <article class="blog-card">
+                    <img src="https://via.placeholder.com/300x200/6bb3d4/ffffff?text=Professional+Care" alt="Professional Medical Care">
+                    <h3>The Benefits of Professional Disease Diagnosis</h3>
+                    <p>Discover why professional diagnosis is safer and more effective than over-the-counter options.</p>
+                    <a href="#">Read More →</a>
+                </article>
+                <article class="blog-card">
+                    <img src="https://via.placeholder.com/300x200/6bb3d4/ffffff?text=Health+Care" alt="Health Care">
+                    <h3>Why Regular Checkups Matter</h3>
+                    <p>Understanding the importance of regular diagnosis for long-term healthy life.</p>
+                    <a href="#">Read More →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready for Your Health Transformation?</h2>
+            <p>Sign up or login today and get instant disease diagnosis with our AI-powered medical assistant.</p>
+            <a href="login.html" class="cta-button">GET STARTED NOW</a>
+        </div>
+    </section>
+
+   
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>About iMEDIC</h4>
+                <p>We provide exceptional medical assistance with a focus on patient comfort and modern techniques.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact Info</a></li>
+                </ul>
+            </div>
+            <div id="contact" class="footer-section">
+                <h4>Contact Info</h4>
+                <p>📞 (555) 123-4567</p>
+                <p>📧 hello@imedic.com</p>
+                <p>📍 123 Medical Center, City, DC 12345</p>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 iMEDIC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Hamburger menu functionality
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const mobileNavPanel = document.querySelector('.mobile-nav-panel');
+        const mobileNavBackdrop = document.querySelector('.mobile-nav-backdrop');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const ctaButton = document.querySelector('.cta-button');
+
+        const closeMobileMenu = () => {
+            mobileNavPanel.setAttribute('aria-hidden', 'true');
+            mobileNavBackdrop.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+            hamburgerMenu.setAttribute('aria-expanded', 'false');
+        };
+
+        // Toggle mobile menu
+        hamburgerMenu.addEventListener('click', () => {
+            const isHidden = mobileNavPanel.getAttribute('aria-hidden') === 'true';
+            mobileNavPanel.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+            mobileNavBackdrop.classList.toggle('active', isHidden);
+            hamburgerMenu.classList.toggle('active', isHidden);
+            hamburgerMenu.setAttribute('aria-expanded', String(isHidden));
+            
+            // Keep navbar-menu visible and toggle vertical display
+            const navbarMenu = document.querySelector('.navbar-menu');
+            navbarMenu.classList.toggle('vertical', isHidden);
+        });
+
+        mobileNavBackdrop.addEventListener('click', closeMobileMenu);
+
+        // Close mobile menu when a link is clicked
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+                
+                // Show direction indicator
+                link.classList.add('show-direction');
+                setTimeout(() => {
+                    link.classList.remove('show-direction');
+                }, 600);
+            });
+        });
+
+        // Show direction indicator on nav links click
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                link.classList.add('show-direction');
+                setTimeout(() => {
+                    link.classList.remove('show-direction');
+                }, 600);
+            });
+        });
+
+        // Show direction indicator on CTA button click
+        if (ctaButton) {
+            ctaButton.addEventListener('click', () => {
+                ctaButton.classList.add('show-direction');
+                setTimeout(() => {
+                    ctaButton.classList.remove('show-direction');
+                }, 600);
+            });
+        }
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section[id]');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

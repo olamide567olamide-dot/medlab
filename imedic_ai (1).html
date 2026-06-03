@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMedic AI - Health Information Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f0f9ff;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0D0552;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 44px; height: 44px; background: white; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 1.5rem;
+        }
+        .logo-text h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-text span { font-size: 0.75rem; opacity: 0.9; font-weight: 400; }
+        .header-actions { display: flex; gap: 12px; }
+        .btn-icon {
+            width: 40px; height: 40px; border-radius: 10px; border: none;
+            background: rgba(255,255,255,0.15); color: white; cursor: pointer;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-icon:hover { background: rgba(255,255,255,0.25); }
+
+        .disclaimer-banner {
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--accent);
+            padding: 12px 24px;
+            display: flex; align-items: center; gap: 12px;
+            font-size: 0.875rem; color: #92400e;
+        }
+        .disclaimer-banner i { font-size: 1.25rem; color: var(--accent); }
+        .disclaimer-banner strong { color: #78350f; }
+
+        .main-container {
+            flex: 1; display: flex; max-width: 1400px;
+            width: 100%; margin: 0 auto; gap: 24px; padding: 24px;
+        }
+
+        .sidebar { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+        .sidebar-card {
+            background: var(--card); border-radius: 16px; padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        .sidebar-card h3 {
+            font-size: 0.875rem; font-weight: 600; color: var(--text-light);
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;
+        }
+        .quick-topic {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 12px; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s; margin-bottom: 4px;
+        }
+        .quick-topic:hover { background: var(--bg); }
+        .quick-topic i { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
+        .quick-topic .icon-fever { background: #fef2f2; color: var(--danger); }
+        .quick-topic .icon-cough { background: #f0fdf4; color: var(--secondary); }
+        .quick-topic .icon-headache { background: #eff6ff; color: var(--primary); }
+        .quick-topic .icon-stomach { background: #fffbeb; color: var(--accent); }
+        .quick-topic .icon-sleep { background: #f5f3ff; color: #8b5cf6; }
+        .quick-topic .icon-stress { background: #fdf2f8; color: #ec4899; }
+        .quick-topic span { font-size: 0.875rem; font-weight: 500; }
+        .emergency-card { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #fecaca; }
+        .emergency-card h3 { color: var(--danger); }
+        .emergency-number {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px; background: white; border-radius: 10px;
+            margin-bottom: 8px; border: 1px solid #fecaca;
+        }
+        .emergency-number i { color: var(--danger); font-size: 1.25rem; }
+        .emergency-number div { font-size: 0.875rem; }
+        .emergency-number strong { display: block; color: var(--danger); font-size: 1rem; }
+
+        .chat-container {
+            flex: 1; display: flex; flex-direction: column;
+            background: var(--card); border-radius: 20px;
+            box-shadow: var(--shadow-lg); overflow: hidden;
+        }
+        .chat-messages {
+            flex: 1; overflow-y: auto; padding: 24px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .welcome-screen {
+            text-align: center; padding: 60px 20px;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 20px;
+        }
+        .welcome-icon {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 24px; display: flex;
+            align-items: center; justify-content: center;
+            color: white; font-size: 2.5rem;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+        }
+        .welcome-screen h2 { font-size: 1.75rem; font-weight: 700; color: var(--text); }
+        .welcome-screen p { color: var(--text-light); max-width: 500px; line-height: 1.6; }
+        .suggestion-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 600px; }
+        .chip {
+            padding: 10px 18px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 100px; font-size: 0.875rem; cursor: pointer;
+            transition: all 0.2s; color: var(--text);
+        }
+        .chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .message {
+            display: flex; gap: 12px; max-width: 90%;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+        .message-avatar {
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 1rem;
+        }
+        .message.ai .message-avatar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        .message.user .message-avatar { background: var(--secondary); color: white; }
+        .message-content {
+            background: var(--bg); padding: 14px 18px;
+            border-radius: 16px; border-top-left-radius: 4px;
+            line-height: 1.6; font-size: 0.9375rem;
+        }
+        .message.user .message-content {
+            background: var(--primary); color: white;
+            border-top-left-radius: 16px; border-top-right-radius: 4px;
+        }
+        .message-time {
+            font-size: 0.75rem; color: var(--text-light);
+            margin-top: 4px; text-align: right;
+        }
+        .message.user .message-time { text-align: left; }
+
+        .info-card {
+            background: white; border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px; margin-top: 12px;
+        }
+        .info-card h4 {
+            font-size: 0.875rem; font-weight: 600; color: var(--primary);
+            margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        }
+        .info-card ul { list-style: none; padding: 0; }
+        .info-card ul li {
+            padding: 6px 0; padding-left: 20px; position: relative;
+            font-size: 0.875rem; color: var(--text-light);
+        }
+        .info-card ul li::before {
+            content: "•"; color: var(--primary);
+            position: absolute; left: 0; font-weight: bold;
+        }
+
+        .warning-box {
+            background: #fef3c7; border: 1px solid #fde68a;
+            border-radius: 12px; padding: 14px; margin-top: 12px;
+            display: flex; gap: 10px; align-items: flex-start;
+        }
+        .warning-box i { color: var(--accent); font-size: 1.25rem; margin-top: 2px; }
+        .warning-box div { font-size: 0.875rem; color: #92400e; }
+        .warning-box strong { color: #78350f; }
+
+        .doctor-cta {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 1px solid #a7f3d0; border-radius: 12px;
+            padding: 14px; margin-top: 12px;
+            display: flex; gap: 10px; align-items: center;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .doctor-cta:hover { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+        .doctor-cta i { color: var(--secondary); font-size: 1.25rem; }
+        .doctor-cta div { font-size: 0.875rem; color: #065f46; }
+        .doctor-cta strong { color: #064e3b; }
+
+        .sources-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd; border-radius: 12px;
+            padding: 14px; margin-top: 12px;
+        }
+        .sources-card h4 {
+            font-size: 0.8rem; font-weight: 600; color: var(--primary-dark);
+            margin-bottom: 10px; display: flex; align-items: center;
+            gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .source-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .source-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; background: white;
+            border: 1px solid #bae6fd; border-radius: 8px;
+            font-size: 0.8rem; color: var(--primary-dark);
+            text-decoration: none; transition: all 0.2s; cursor: pointer;
+        }
+        .source-link:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .source-link i { font-size: 0.75rem; }
+
+        .fallback-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b; border-radius: 12px;
+            padding: 16px; margin-top: 12px;
+        }
+        .fallback-card h4 {
+            font-size: 0.875rem; font-weight: 600; color: #92400e;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+        }
+        .fallback-card p {
+            font-size: 0.875rem; color: #78350f; margin-bottom: 12px; line-height: 1.5;
+        }
+        .search-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px; background: white;
+            border: 1px solid #f59e0b; border-radius: 8px;
+            font-size: 0.875rem; color: #92400e; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; text-decoration: none;
+        }
+        .search-btn:hover { background: #f59e0b; color: white; }
+
+        .auto-open-notice {
+            background: #ecfdf5; border: 1px solid #a7f3d0;
+            border-radius: 8px; padding: 10px 14px;
+            margin-top: 10px; font-size: 0.8rem;
+            color: #065f46; display: flex; align-items: center; gap: 8px;
+        }
+        .auto-open-notice i { color: var(--secondary); }
+
+        .live-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px; background: #ecfdf5;
+            border: 1px solid #a7f3d0; border-radius: 20px;
+            font-size: 0.75rem; color: #065f46; font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .live-badge .pulse {
+            width: 8px; height: 8px; background: var(--secondary);
+            border-radius: 50%; animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .confidence-bar {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 10px; font-size: 0.75rem;
+        }
+        .confidence-bar .bar {
+            height: 4px; border-radius: 2px; flex: 1;
+            background: var(--border); overflow: hidden;
+        }
+        .confidence-bar .bar-fill {
+            height: 100%; border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        .confidence-bar .bar-fill.high { background: var(--secondary); width: 85%; }
+        .confidence-bar .bar-fill.medium { background: var(--accent); width: 60%; }
+        .confidence-bar .bar-fill.low { background: var(--danger); width: 30%; }
+
+        .typing { display: flex; gap: 6px; padding: 18px; }
+        .typing span {
+            width: 8px; height: 8px; background: var(--primary);
+            border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing span:nth-child(1) { animation-delay: -0.32s; }
+        .typing span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .chat-input-area {
+            padding: 20px 24px; border-top: 1px solid var(--border); background: white;
+        }
+        .input-wrapper {
+            display: flex; gap: 12px; align-items: flex-end;
+            background: var(--bg); border-radius: 16px;
+            padding: 8px; border: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .input-wrapper:focus-within { border-color: var(--primary); }
+        .chat-input {
+            flex: 1; border: none; background: transparent;
+            padding: 10px 14px; font-size: 0.9375rem;
+            font-family: inherit; resize: none; outline: none;
+            max-height: 120px; min-height: 24px;
+        }
+        .chat-input::placeholder { color: var(--text-light); }
+        .send-btn {
+            width: 44px; height: 44px; border-radius: 12px; border: none;
+            background: var(--primary); color: white; cursor: pointer;
+            transition: all 0.2s; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .send-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .input-hint {
+            text-align: center; font-size: 0.75rem;
+            color: var(--text-light); margin-top: 10px;
+        }
+
+        .footer-disclaimer {
+            background: #f8fafc; border-top: 1px solid var(--border);
+            padding: 16px 24px; text-align: center;
+            font-size: 0.75rem; color: var(--text-light);
+        }
+        .footer-disclaimer i { color: var(--accent); margin-right: 6px; }
+
+        @media (max-width: 1024px) { .sidebar { display: none; } }
+        @media (max-width: 640px) {
+            .main-container { padding: 0; gap: 0; }
+            .chat-container { border-radius: 0; }
+            .header { padding: 1rem; }
+            .logo-text h1 { font-size: 1.25rem; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+            <div class="logo-text">
+                <h1>iMedic AI</h1>
+                <span>Health Information Assistant</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-icon" title="Clear Chat" onclick="clearChat()"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn-icon" title="About" onclick="showAbout()"><i class="fas fa-info-circle"></i></button>
+        </div>
+    </header>
+
+    <div class="disclaimer-banner">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+            <strong>Medical Disclaimer:</strong> iMedic AI provides general health information only. It does not diagnose conditions or prescribe treatments. Always consult a qualified healthcare professional for medical advice.
+        </div>
+    </div>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+                <h3>Quick Topics</h3>
+                <div class="quick-topic" onclick="sendQuickTopic('fever')"><i class="fas fa-temperature-high icon-fever"></i><span>Fever & Temperature</span></div>
+                <div class="quick-topic" onclick="sendQuickTopic('cough')"><i class="fas fa-head-side-cough icon-cough"></i><span>Cough & Cold</span></div>
+                <div class="quick-topic" onclick="sendQuickTopic('headache')"><i class="fas fa-brain icon-headache"></i><span>Headache & Migraine</span></div>
+                <div class="quick-topic" onclick="sendQuickTopic('stomach')"><i class="fas fa-stomach icon-stomach"></i><span>Stomach Issues</span></div>
+                <div class="quick-topic" onclick="sendQuickTopic('sleep')"><i class="fas fa-moon icon-sleep"></i><span>Sleep Problems</span></div>
+                <div class="quick-topic" onclick="sendQuickTopic('stress')"><i class="fas fa-spa icon-stress"></i><span>Stress & Anxiety</span></div>
+            </div>
+
+            <div class="sidebar-card emergency-card">
+                <h3><i class="fas fa-ambulance"></i> Emergency Numbers</h3>
+                <div class="emergency-number"><i class="fas fa-phone-alt"></i><div><strong>911</strong>Emergency Services</div></div>
+                <div class="emergency-number"><i class="fas fa-poison"></i><div><strong>1-800-222-1222</strong>Poison Control</div></div>
+                <div class="emergency-number"><i class="fas fa-heart-broken"></i><div><strong>988</strong>Suicide & Crisis Lifeline</div></div>
+            </div>
+        </aside>
+
+        <main class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
+                    <h2>Welcome to iMedic AI</h2>
+                    <p>I answer health questions from verified sources. If I cannot answer confidently, I automatically search Google, NHS, and WHO for you!</p>
+                    <div class="suggestion-chips">
+                        <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
+                        <button class="chip" onclick="sendMessage('How can I improve my sleep quality?')">Sleep tips</button>
+                        <button class="chip" onclick="sendMessage('What should I do if I have a fever?')">Fever guidance</button>
+                        <button class="chip" onclick="sendMessage('When should I see a doctor for chest pain?')">Chest pain advice</button>
+                        <button class="chip" onclick="sendMessage('Tips for managing stress')">Stress management</button>
+                        <button class="chip" onclick="sendMessage('What is the latest on monkeypox?')">Monkeypox info</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <textarea class="chat-input" id="chatInput" placeholder="Ask about symptoms, wellness tips, or any health topic..." rows="1" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="input-hint">
+                    <i class="fas fa-shield-alt"></i> iMedic AI answers from verified sources. Unknown questions trigger automatic search on WHO, NHS & Google.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer-disclaimer">
+        <i class="fas fa-exclamation-circle"></i>
+        <strong>Important:</strong> The information provided by iMedic AI is for educational purposes only and should not replace professional medical advice, diagnosis, or treatment. If you think you may have a medical emergency, call 911 or your local emergency number immediately.
+    </footer>
+
+    <script>
+        // ========== EXTERNAL SOURCE DATABASE ==========
+        const externalSources = {
+            fever: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/fever",
+                cdc: "https://www.cdc.gov/flu/symptoms/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=fever&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/diseases-conditions/fever/symptoms-causes/syc-20352759",
+                nhs: "https://www.nhs.uk/conditions/fever-in-adults/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=WHO+fever+guidelines+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org"
+            },
+            cough: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/cough-and-cold-remedies-for-the-treatment-of-acute-respiratory-infections-in-children",
+                cdc: "https://www.cdc.gov/antibiotic-use/community/for-patients/common-illnesses/cough.html",
+                cdcData: "https://data.cdc.gov/browse?q=cough&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/symptoms/cough/basics/definition/sym-20050846",
+                nhs: "https://www.nhs.uk/conditions/cough/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=CDC+cough+treatment+guidelines+site:cdc.gov+OR+site:who.int+OR+site:mayoclinic.org"
+            },
+            headache: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/headache-disorders",
+                cdc: "https://www.cdc.gov/migraine/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=headache&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/symptoms/headache/basics/definition/sym-20050800",
+                nhs: "https://www.nhs.uk/conditions/headaches/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=WHO+headache+disorders+fact+sheet+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org"
+            },
+            stomach: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease",
+                cdc: "https://www.cdc.gov/norovirus/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=stomach&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/symptoms/abdominal-pain/basics/definition/sym-20050728",
+                nhs: "https://www.nhs.uk/conditions/stomach-ache/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=WHO+diarrheal+disease+prevention+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org"
+            },
+            sleep: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/insomnia",
+                cdc: "https://www.cdc.gov/sleep/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=sleep&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/diseases-conditions/insomnia/symptoms-causes/syc-20355167",
+                nhs: "https://www.nhs.uk/conditions/insomnia/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=CDC+sleep+hygiene+recommendations+site:cdc.gov+OR+site:who.int+OR+site:mayoclinic.org"
+            },
+            stress: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/mental-health-strengthening-our-response",
+                cdc: "https://www.cdc.gov/mentalhealth/index.htm",
+                cdcData: "https://data.cdc.gov/browse?q=mental+health&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/stress/art-20046037",
+                nhs: "https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/feelings-and-symptoms/stress/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=WHO+mental+health+stress+management+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org"
+            },
+            chest: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)",
+                cdc: "https://www.cdc.gov/heartdisease/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=heart+disease&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/symptoms/chest-pain/basics/definition/sym-20050816",
+                nhs: "https://www.nhs.uk/conditions/chest-pain/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=CDC+heart+disease+warning+signs+site:cdc.gov+OR+site:who.int+OR+site:mayoclinic.org"
+            },
+            diet: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+                cdc: "https://www.cdc.gov/nutrition/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=nutrition&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/healthy-diets/art-20046267",
+                nhs: "https://www.nhs.uk/live-well/eat-well/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=WHO+healthy+diet+guidelines+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org"
+            },
+            diabetes: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/diabetes",
+                cdc: "https://www.cdc.gov/diabetes/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=diabetes&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/diseases-conditions/diabetes/symptoms-causes/syc-20371444",
+                nhs: "https://www.nhs.uk/conditions/diabetes/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=CDC+diabetes+prevention+site:cdc.gov+OR+site:who.int+OR+site:mayoclinic.org"
+            },
+            hypertension: {
+                who: "https://www.who.int/news-room/fact-sheets/detail/hypertension",
+                cdc: "https://www.cdc.gov/bloodpressure/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=hypertension&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/diseases-conditions/high-blood-pressure/symptoms-causes/syc-20373410",
+                nhs: "https://www.nhs.uk/conditions/high-blood-pressure-hypertension/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=CDC+high+blood+pressure+guidelines+site:cdc.gov+OR+site:who.int+OR+site:mayoclinic.org"
+            },
+            covid: {
+                who: "https://www.who.int/emergencies/diseases/novel-coronavirus-2019",
+                cdc: "https://www.cdc.gov/coronavirus/2019-ncov/index.html",
+                cdcData: "https://data.cdc.gov/browse?q=covid&sortBy=relevance",
+                mayo: "https://www.mayoclinic.org/diseases-conditions/coronavirus/symptoms-causes/syc-20479963",
+                nhs: "https://www.nhs.uk/conditions/coronavirus-covid-19/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=CDC+COVID+guidelines+2026+site:cdc.gov+OR+site:who.int+OR+site:mayoclinic.org"
+            },
+            default: {
+                who: "https://www.who.int/news-room/fact-sheets",
+                cdc: "https://www.cdc.gov/diseasesconditions/index.html",
+                cdcData: "https://data.cdc.gov/",
+                mayo: "https://www.mayoclinic.org/diseases-conditions",
+                nhs: "https://www.nhs.uk/conditions/",
+                nhi: "https://www.nhi.gov.tw/English/",
+                search: "https://www.google.com/search?q=health+information+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org+OR+site:nhs.uk"
+            }
+        };
+
+        // ========== HEALTH KNOWLEDGE BASE ==========
+        const healthKnowledge = {
+            fever: {
+                title: "Understanding Fever",
+                content: "A fever is a temporary increase in body temperature, often due to an illness. For adults, a fever is generally considered to be a body temperature of 100.4F (38C) or higher. According to WHO, fever is one of the most common medical signs and can indicate various underlying conditions.",
+                causes: ["Viral infections (cold, flu, COVID-19)", "Bacterial infections", "Heat exhaustion", "Inflammatory conditions", "Certain medications"],
+                selfCare: ["Stay hydrated with water, broth, or electrolyte drinks", "Get plenty of rest", "Wear light clothing and keep room temperature comfortable", "Use a cool compress on forehead", "Take over-the-counter fever reducers like acetaminophen or ibuprofen (follow package directions)"],
+                whenToSeeDoctor: ["Temperature is 103F (39.4C) or higher", "Fever lasts more than 3 days", "Severe headache, stiff neck, or confusion", "Difficulty breathing", "Chest pain or rash", "Seizures"],
+                warning: "Never give aspirin to children or teenagers with fever symptoms, as it may cause Reye's syndrome."
+            },
+            cough: {
+                title: "Understanding Cough",
+                content: "A cough is your body's way of clearing irritants from your airways. The CDC notes that while often harmless, persistent coughs may indicate an underlying condition requiring medical attention.",
+                causes: ["Common cold or flu", "Allergies", "Asthma", "Acid reflux (GERD)", "Post-nasal drip", "Smoking or air pollution"],
+                selfCare: ["Stay hydrated to thin mucus", "Use a humidifier or take steamy showers", "Honey can soothe cough (not for children under 1 year)", "Avoid smoke and irritants", "Elevate your head while sleeping"],
+                whenToSeeDoctor: ["Cough lasts more than 3 weeks", "Coughing up blood", "High fever with cough", "Wheezing or shortness of breath", "Chest pain", "Unexplained weight loss"],
+                warning: "Seek immediate care if you have severe difficulty breathing or bluish lips/face."
+            },
+            headache: {
+                title: "Understanding Headaches",
+                content: "Headaches are one of the most common health complaints. WHO reports that headache disorders are among the most common disorders of the nervous system. Most are tension-type headaches or migraines, but some can signal serious conditions.",
+                causes: ["Tension and stress", "Dehydration", "Lack of sleep", "Eye strain (screen time)", "Sinus congestion", "Caffeine withdrawal", "Hormonal changes"],
+                selfCare: ["Rest in a quiet, dark room", "Apply a cold or warm compress", "Stay hydrated", "Practice relaxation techniques", "Gentle neck and shoulder stretches", "Over-the-counter pain relievers (use as directed)"],
+                whenToSeeDoctor: ["Sudden, severe 'thunderclap' headache", "Headache with fever, stiff neck, or rash", "Headache after head injury", "Vision changes or weakness", "Headaches that worsen over time", "New or different headache pattern"],
+                warning: "A sudden, severe headache ('worst headache of your life') requires emergency evaluation."
+            },
+            stomach: {
+                title: "Understanding Stomach Issues",
+                content: "Stomach discomfort can range from mild indigestion to more serious conditions. WHO estimates that diarrheal disease is the second leading cause of death in children under five years old globally.",
+                causes: ["Indigestion or overeating", "Food poisoning", "Viral gastroenteritis ('stomach flu')", "Acid reflux or GERD", "Food intolerances", "Constipation or diarrhea", "Stress and anxiety"],
+                selfCare: ["Eat bland foods (BRAT diet: bananas, rice, applesauce, toast)", "Stay hydrated with small, frequent sips", "Avoid alcohol, caffeine, and fatty foods", "Rest and apply a warm compress", "Ginger or peppermint tea may help nausea"],
+                whenToSeeDoctor: ["Severe or worsening abdominal pain", "Blood in vomit or stool", "Persistent vomiting (>24 hours)", "Signs of dehydration (dry mouth, dizziness, dark urine)", "High fever with stomach pain", "Unexplained weight loss"],
+                warning: "Severe abdominal pain with fever, vomiting, or a rigid abdomen requires immediate medical attention."
+            },
+            sleep: {
+                title: "Improving Sleep Quality",
+                content: "Quality sleep is essential for physical and mental health. The CDC reports that 1 in 3 adults don't get enough sleep. Most adults need 7-9 hours of sleep per night.",
+                causes: ["Poor sleep habits (irregular schedule)", "Stress and anxiety", "Caffeine or alcohol consumption", "Screen exposure before bed", "Sleep disorders (sleep apnea, insomnia)", "Medications or medical conditions"],
+                selfCare: ["Maintain a consistent sleep schedule", "Create a relaxing bedtime routine", "Keep bedroom cool, dark, and quiet", "Avoid screens 1 hour before bed", "Limit caffeine after 2 PM", "Exercise regularly but not right before bed", "Avoid heavy meals close to bedtime"],
+                whenToSeeDoctor: ["Insomnia lasting more than 3 weeks", "Loud snoring or gasping during sleep", "Excessive daytime sleepiness", "Restless legs syndrome", "Sleepwalking or night terrors", "Mood changes related to poor sleep"],
+                warning: "Chronic sleep deprivation increases risk of heart disease, diabetes, and mental health issues."
+            },
+            stress: {
+                title: "Managing Stress & Anxiety",
+                content: "Stress is a natural response, but chronic stress can harm your health. WHO emphasizes that mental health is a state of well-being that enables people to cope with life's stresses.",
+                causes: ["Work or academic pressure", "Financial concerns", "Relationship issues", "Health problems", "Major life changes", "Traumatic events"],
+                selfCare: ["Practice deep breathing exercises (4-7-8 technique)", "Regular physical activity", "Mindfulness meditation or yoga", "Maintain social connections", "Set realistic goals and priorities", "Take breaks and engage in hobbies", "Limit caffeine and alcohol"],
+                whenToSeeDoctor: ["Persistent feelings of hopelessness", "Inability to perform daily activities", "Thoughts of self-harm", "Panic attacks", "Substance use to cope", "Physical symptoms (chest pain, rapid heartbeat)"],
+                warning: "If you or someone you know is in crisis, call or text 988 (Suicide & Crisis Lifeline) immediately."
+            },
+            chest: {
+                title: "Chest Pain: When to Seek Help",
+                content: "Chest pain can range from harmless (muscle strain, heartburn) to life-threatening (heart attack). According to the CDC, heart disease is the leading cause of death in the United States. It's important to know the warning signs.",
+                causes: ["Muscle strain or costochondritis", "Acid reflux/heartburn", "Anxiety or panic attacks", "Respiratory infections", "Angina or heart attack", "Pulmonary embolism"],
+                selfCare: ["For suspected muscle strain: rest, ice, gentle stretching", "For heartburn: avoid trigger foods, eat smaller meals", "For anxiety: practice breathing exercises", "Monitor symptoms and note triggers"],
+                whenToSeeDoctor: ["Pressure, squeezing, or crushing chest pain", "Pain radiating to arm, jaw, neck, or back", "Shortness of breath with chest pain", "Nausea, sweating, or dizziness with chest pain", "Chest pain lasting more than a few minutes", "Any new, severe, or unexplained chest pain"],
+                warning: "Call 911 immediately if you suspect a heart attack. Do not drive yourself to the hospital."
+            },
+            diet: {
+                title: "Healthy Eating Guidelines",
+                content: "A balanced diet supports overall health, energy levels, and disease prevention. WHO recommends eating at least 400g of fruits and vegetables per day. Focus on nutrient-dense foods.",
+                recommendations: ["Eat plenty of fruits and vegetables (aim for 5+ servings/day)", "Choose whole grains over refined grains", "Include lean proteins (fish, poultry, beans, nuts)", "Limit added sugars and saturated fats", "Stay hydrated (8 glasses of water daily)", "Practice portion control", "Limit processed foods and sodium"],
+                tips: ["Plan meals ahead to avoid unhealthy choices", "Read nutrition labels", "Cook at home more often", "Eat mindfully and slowly", "Allow occasional treats in moderation"],
+                whenToSeeDoctor: ["Significant unintentional weight loss or gain", "Persistent digestive issues", "Eating disorder symptoms", "Food allergies or intolerances", "Nutritional deficiencies"],
+                warning: "Consult a registered dietitian for personalized nutrition plans, especially if you have chronic conditions."
+            },
+            diabetes: {
+                title: "Understanding Diabetes",
+                content: "Diabetes is a chronic disease that occurs when the body cannot effectively regulate blood sugar. WHO reports that the number of people with diabetes has risen from 108 million in 1980 to 422 million in 2014.",
+                causes: ["Type 1: Autoimmune destruction of insulin-producing cells", "Type 2: Insulin resistance (often lifestyle-related)", "Gestational diabetes during pregnancy", "Genetic factors", "Obesity and physical inactivity", "Age (risk increases after 45)"],
+                selfCare: ["Monitor blood sugar levels regularly", "Follow a balanced, low-sugar diet", "Exercise regularly (at least 150 min/week)", "Take prescribed medications as directed", "Maintain healthy weight", "Get regular eye and foot exams"],
+                whenToSeeDoctor: ["Frequent urination and excessive thirst", "Unexplained weight loss", "Blurred vision", "Slow-healing sores or frequent infections", "Tingling or numbness in hands/feet", "Family history of diabetes"],
+                warning: "Untreated diabetes can lead to heart disease, kidney failure, blindness, and lower limb amputation."
+            },
+            hypertension: {
+                title: "Understanding High Blood Pressure",
+                content: "Hypertension (high blood pressure) is when blood pressure in arteries is persistently elevated. WHO estimates 1.28 billion adults aged 30-79 worldwide have hypertension, but nearly half are unaware.",
+                causes: ["Age (risk increases with age)", "Family history", "Obesity", "High sodium diet", "Lack of physical activity", "Excessive alcohol consumption", "Chronic stress", "Smoking"],
+                selfCare: ["Reduce sodium intake (less than 2,300mg/day)", "Exercise regularly (30 min most days)", "Maintain healthy weight", "Limit alcohol consumption", "Quit smoking", "Manage stress", "Monitor blood pressure at home"],
+                whenToSeeDoctor: ["Blood pressure consistently 130/80 or higher", "Severe headache with high BP", "Vision problems", "Chest pain or shortness of breath", "Blood in urine", "Family history of hypertension"],
+                warning: "Hypertension is called the 'silent killer' because it often has no symptoms but can cause stroke, heart attack, and kidney damage."
+            },
+            covid: {
+                title: "COVID-19 Information",
+                content: "COVID-19 is caused by the SARS-CoV-2 virus. WHO declared it a pandemic in March 2020. The CDC continues to monitor variants and update guidance as the situation evolves.",
+                causes: ["Infection with SARS-CoV-2 virus", "Respiratory droplet transmission", "Close contact with infected individuals", "Touching contaminated surfaces then face"],
+                selfCare: ["Rest and stay hydrated", "Monitor symptoms (fever, cough, difficulty breathing)", "Isolate to prevent spread", "Use over-the-counter medications for symptom relief", "Seek medical care if symptoms worsen"],
+                whenToSeeDoctor: ["Difficulty breathing or shortness of breath", "Persistent chest pain or pressure", "Confusion or inability to stay awake", "Bluish lips or face", "High fever lasting more than 3 days", "Symptoms worsening after initial improvement"],
+                warning: "High-risk individuals (elderly, immunocompromised, those with chronic conditions) should seek medical attention early."
+            },
+            default: {
+                title: "General Health Information",
+                content: "I can provide general health information on various topics from verified sources like WHO, CDC, Mayo Clinic, and NHS. Please be specific about what you'd like to know.",
+                topics: ["Common symptoms and their possible causes", "General wellness and prevention tips", "When to seek medical care", "Healthy lifestyle recommendations"],
+                reminder: "Remember, I provide educational information only from verified health organizations. For personalized medical advice, please consult a healthcare professional.",
+                warning: "If you are experiencing a medical emergency, call 911 or your local emergency number immediately."
+            }
+        };
+
+        // ========== QUERY ANALYSIS ENGINE ==========
+        function analyzeQuery(query) {
+            const lowerQuery = query.toLowerCase();
+            const keywords = {
+                fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
+                cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
+                headache: ['headache', 'migraine', 'head pain', 'head hurts'],
+                stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
+                sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
+                stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
+                chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
+                diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
+                diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
+                hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
+                covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
+            };
+
+            for (const [topic, words] of Object.entries(keywords)) {
+                if (words.some(word => lowerQuery.includes(word))) return topic;
+            }
+            return 'default';
+        }
+
+        // ========== CONFIDENCE SCORING ==========
+        function calculateConfidence(query, topic) {
+            const lowerQuery = query.toLowerCase();
+            const keywords = {
+                fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
+                cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
+                headache: ['headache', 'migraine', 'head pain', 'head hurts'],
+                stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
+                sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
+                stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
+                chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
+                diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
+                diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
+                hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
+                covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
+            };
+
+            if (topic === 'default') return 0;
+
+            const topicKeywords = keywords[topic] || [];
+            const matches = topicKeywords.filter(kw => lowerQuery.includes(kw)).length;
+            const score = Math.min(matches / 2, 1);
+
+            return score;
+        }
+
+        // ========== SEARCH URL GENERATOR ==========
+        function generateSearchUrls(query) {
+            const encoded = encodeURIComponent(query);
+            return {
+                google: `https://www.google.com/search?q=${encoded}+health+information`,
+                nhs: `https://www.nhs.uk/search/?q=${encoded}`,
+                who: `https://www.who.int/search?q=${encoded}`,
+                cdc: `https://search.cdc.gov/search/?query=${encoded}&sitelimit=&affiliate=cdc-main`,
+                filtered: `https://www.google.com/search?q=${encoded}+site:nhs.uk+OR+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org`
+            };
+        }
+
+        // ========== FALLBACK RESPONSE GENERATOR ==========
+        function generateFallbackResponse(query) {
+            const searchUrls = generateSearchUrls(query);
+
+            return `
+                <div class="confidence-bar">
+                    <span>Confidence:</span>
+                    <div class="bar"><div class="bar-fill low"></div></div>
+                    <span>Low - Searching external sources</span>
+                </div>
+                <p>I don't have specific information about <strong>"${query}"</strong> in my knowledge base. Let me search verified health sources for you.</p>
+
+                <div class="fallback-card">
+                    <h4><i class="fas fa-search"></i> Search Verified Sources</h4>
+                    <p>I have prepared searches across the most trusted health organizations. Click any link below to find official information:</p>
+                    <div class="source-links" style="margin-top: 10px;">
+                        <a class="search-btn" href="${searchUrls.nhs}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-hospital"></i> Search NHS
+                        </a>
+                        <a class="search-btn" href="${searchUrls.who}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-globe"></i> Search WHO
+                        </a>
+                        <a class="search-btn" href="${searchUrls.cdc}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-shield-virus"></i> Search CDC
+                        </a>
+                        <a class="search-btn" href="${searchUrls.filtered}" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-google"></i> Search All Sources
+                        </a>
+                    </div>
+                </div>
+
+                <div class="auto-open-notice">
+                    <i class="fas fa-robot"></i>
+                    <span><strong>Auto-search activated:</strong> A new tab with Google results has been opened automatically.</span>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div><strong>Important:</strong> Since I cannot verify this topic, please consult a healthcare professional before making any health decisions based on information you find.</div>
+                </div>
+
+                <div class="doctor-cta" onclick="window.open('https://www.zocdoc.com', '_blank')">
+                    <i class="fas fa-user-md"></i>
+                    <div>
+                        <strong>Need professional care?</strong>
+                        Find a doctor near you and schedule an appointment.
+                    </div>
+                </div>
+            `;
+        }
+
+        let isTyping = false;
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+        }
+
+        function addMessage(content, isUser = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            if (welcomeScreen) welcomeScreen.style.display = 'none';
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = isUser ? '<i class="fas fa-user"></i>' : '<i class="fas fa-heart-pulse"></i>';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = content;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = getCurrentTime();
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
+
+        function showTyping() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar"><i class="fas fa-heart-pulse"></i></div>
+                <div class="message-content">
+                    <div class="typing"><span></span><span></span><span></span></div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) typingIndicator.remove();
+        }
+
+        // ========== SOURCE LINK GENERATOR ==========
+        function generateSourcesLinks(topic) {
+            const sources = externalSources[topic] || externalSources.default;
+            return `
+                <div class="sources-card">
+                    <h4><i class="fas fa-external-link-alt"></i> Verified External Sources</h4>
+                    <div class="source-links">
+                        <a class="source-link" href="${sources.who}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-globe"></i> WHO
+                        </a>
+                        <a class="source-link" href="${sources.cdc}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-shield-virus"></i> CDC
+                        </a>
+                        <a class="source-link" href="${sources.cdcData}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-database"></i> CDC Data
+                        </a>
+                        <a class="source-link" href="${sources.mayo}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-hospital"></i> Mayo Clinic
+                        </a>
+                        <a class="source-link" href="${sources.nhs}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-heartbeat"></i> NHS
+                        </a>
+                        <a class="source-link" href="${sources.nhi}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-briefcase-medical"></i> NHI
+                        </a>
+                        <a class="source-link" href="${sources.search}" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-google"></i> Search More
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========== CONFIDENCE RESPONSE GENERATOR ==========
+        function generateConfidentResponse(query, topic) {
+            const data = healthKnowledge[topic];
+            const confidence = calculateConfidence(query, topic);
+            let confidenceClass = 'medium';
+            if (confidence >= 0.7) confidenceClass = 'high';
+            else if (confidence <= 0.3) confidenceClass = 'low';
+
+            let response = `
+                <div class="confidence-bar">
+                    <span>Confidence:</span>
+                    <div class="bar"><div class="bar-fill ${confidenceClass}"></div></div>
+                    <span>${confidenceClass === 'high' ? 'High' : confidenceClass === 'medium' ? 'Medium' : 'Low'} - Based on verified sources</span>
+                </div>
+                <div class="live-badge"><div class="pulse"></div>Connected to Verified Health Sources</div>
+                <p>${data.content}</p>
+            `;
+
+            if (data.causes) {
+                response += `
+                    <div class="info-card">
+                        <h4><i class="fas fa-search"></i> Common Causes</h4>
+                        <ul>${data.causes.map(c => `<li>${c}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            if (data.selfCare) {
+                response += `
+                    <div class="info-card">
+                        <h4><i class="fas fa-hand-holding-medical"></i> Self-Care Tips</h4>
+                        <ul>${data.selfCare.map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            if (data.recommendations) {
+                response += `
+                    <div class="info-card">
+                        <h4><i class="fas fa-apple-alt"></i> Recommendations</h4>
+                        <ul>${data.recommendations.map(r => `<li>${r}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            if (data.tips) {
+                response += `
+                    <div class="info-card">
+                        <h4><i class="fas fa-lightbulb"></i> Tips</h4>
+                        <ul>${data.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            if (data.topics) {
+                response += `
+                    <div class="info-card">
+                        <h4><i class="fas fa-list"></i> Topics I Can Help With</h4>
+                        <ul>${data.topics.map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            if (data.whenToSeeDoctor) {
+                response += `
+                    <div class="info-card">
+                        <h4><i class="fas fa-user-md"></i> When to See a Doctor</h4>
+                        <ul>${data.whenToSeeDoctor.map(w => `<li>${w}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            if (data.warning) {
+                response += `
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div><strong>Important:</strong> ${data.warning}</div>
+                    </div>
+                `;
+            }
+
+            if (data.reminder) {
+                response += `
+                    <div class="warning-box">
+                        <i class="fas fa-info-circle"></i>
+                        <div>${data.reminder}</div>
+                    </div>
+                `;
+            }
+
+            response += generateSourcesLinks(topic);
+
+            response += `
+                <div class="doctor-cta" onclick="window.open('https://www.zocdoc.com', '_blank')">
+                    <i class="fas fa-user-md"></i>
+                    <div>
+                        <strong>Need professional care?</strong>
+                        Find a doctor near you and schedule an appointment.
+                    </div>
+                </div>
+            `;
+
+            return response;
+        }
+
+        // ========== MESSAGE HANDLER ==========
+        function sendMessage(text = null) {
+            const input = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const query = text || input.value.trim();
+
+            if (!query || isTyping) return;
+
+            addMessage(query, true);
+            if (!text) { input.value = ''; input.style.height = 'auto'; }
+
+            isTyping = true;
+            sendBtn.disabled = true;
+            showTyping();
+
+            setTimeout(() => {
+                hideTyping();
+
+                const topic = analyzeQuery(query);
+                const confidence = calculateConfidence(query, topic);
+
+                let response;
+                if (topic !== 'default' && confidence >= 0.3) {
+                    // High/Medium confidence - answer from knowledge base
+                    response = generateConfidentResponse(query, topic);
+                } else {
+                    // Low confidence - fallback to external search
+                    response = generateFallbackResponse(query);
+                    // Auto-open Google search in new tab
+                    const searchUrls = generateSearchUrls(query);
+                    window.open(searchUrls.filtered, '_blank');
+                }
+
+                addMessage(response, false);
+                isTyping = false;
+                sendBtn.disabled = false;
+            }, 1500 + Math.random() * 1000);
+        }
+
+        function sendQuickTopic(topic) {
+            const queries = {
+                fever: "Tell me about fever and when I should be concerned",
+                cough: "What should I know about cough and colds?",
+                headache: "What are common causes of headaches?",
+                stomach: "I have stomach issues, what should I know?",
+                sleep: "How can I improve my sleep quality?",
+                stress: "Tips for managing stress and anxiety"
+            };
+            sendMessage(queries[topic]);
+        }
+
+        function clearChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
+                    <h2>Welcome to iMedic AI</h2>
+                    <p>I answer health questions from verified sources. If I cannot answer confidently, I automatically search Google, NHS, and WHO for you!</p>
+                    <div class="suggestion-chips">
+                        <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
+                        <button class="chip" onclick="sendMessage('How can I improve my sleep quality?')">Sleep tips</button>
+                        <button class="chip" onclick="sendMessage('What should I do if I have a fever?')">Fever guidance</button>
+                        <button class="chip" onclick="sendMessage('When should I see a doctor for chest pain?')">Chest pain advice</button>
+                        <button class="chip" onclick="sendMessage('Tips for managing stress')">Stress management</button>
+                        <button class="chip" onclick="sendMessage('What is the latest on monkeypox?')">Monkeypox info</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showAbout() {
+            const aboutContent = `
+                <div style="text-align: center; padding: 10px;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.75rem; margin: 0 auto 16px;">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                    <h3 style="margin-bottom: 8px;">iMedic AI</h3>
+                    <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 16px;">Version 3.0.0 - Smart Search Fallback</p>
+                    <p style="font-size: 0.875rem; line-height: 1.6; margin-bottom: 16px;">
+                        iMedic AI uses a confidence-based system. When it can answer confidently, it provides verified health information. When it cannot, it automatically searches WHO, NHS, and Google for the most reliable information available.
+                    </p>
+                    <div style="background: #fef3c7; border-radius: 10px; padding: 12px; font-size: 0.8rem; color: #92400e; text-align: left;">
+                        <strong>Medical Disclaimer:</strong> This application does not provide medical diagnosis, treatment recommendations, or prescriptions. All information is for educational purposes only. Always consult a qualified healthcare professional for medical advice.
+                    </div>
+                </div>
+            `;
+            addMessage(aboutContent, false);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('chatInput').focus();
+        });
+    </script>
+</body>
+</html>

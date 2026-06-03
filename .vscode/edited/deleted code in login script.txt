@@ -1,0 +1,91 @@
+ <script>
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        // Email validation
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Password validation
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        // Real-time email validation
+        emailInput.addEventListener('blur', function() {
+            if (this.value && !validateEmail(this.value)) {
+                this.classList.add('error');
+                emailError.classList.add('show');
+            } else {
+                this.classList.remove('error');
+                emailError.classList.remove('show');
+            }
+        });
+
+        // Real-time password validation
+        passwordInput.addEventListener('blur', function() {
+            if (this.value && !validatePassword(this.value)) {
+                this.classList.add('error');
+                passwordError.classList.add('show');
+            } else {
+                this.classList.remove('error');
+                passwordError.classList.remove('show');
+            }
+        });
+
+        // Form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            let isValid = true;
+
+            // Validate email
+            if (!email || !validateEmail(email)) {
+                emailInput.classList.add('error');
+                emailError.classList.add('show');
+                isValid = false;
+            } else {
+                emailInput.classList.remove('error');
+                emailError.classList.remove('show');
+            }
+
+            // Validate password
+            if (!password || !validatePassword(password)) {
+                passwordInput.classList.add('error');
+                passwordError.classList.add('show');
+                isValid = false;
+            } else {
+                passwordInput.classList.remove('error');
+                passwordError.classList.remove('show');
+            }
+
+            // If valid, redirect to disease diagnosis page
+            if (isValid) {
+                // Store user data in localStorage for demo purposes
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Redirect to disease diagnosis page
+                window.location.href = 'disease_diagnosis_app front 3a.html';
+            }
+        });
+
+        // Clear errors on input
+        emailInput.addEventListener('input', function() {
+            this.classList.remove('error');
+            emailError.classList.remove('show');
+        });
+
+        passwordInput.addEventListener('input', function() {
+            this.classList.remove('error');
+            passwordError.classList.remove('show');
+        });
+    </script>
