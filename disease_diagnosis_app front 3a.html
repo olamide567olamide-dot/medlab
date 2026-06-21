@@ -440,6 +440,23 @@
         border-top: 25px solid #30E9FE;
       }
     }
+
+    /* Print Styles */
+    @media print {
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; border-radius: 0; max-width: 100%; }
+      .margin-bottom-30 { display: none; }
+      .fab-button { display: none !important; }
+      .modal-overlay { display: none !important; }
+      .modal-chat { display: none !important; }
+      .fab-arrow { display: none; }
+      .page-padding-large { padding: 20px; }
+      header { page-break-after: avoid; }
+      .results-header { page-break-after: avoid; }
+      .disease-card { page-break-inside: avoid; }
+      .detail-section { page-break-inside: avoid; }
+      .disease-detail img { max-height: 300px; }
+    }
   </style>
 </head>
 <body>
@@ -495,10 +512,6 @@
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label for="patientEmail">Email Address</label>
-                  <input type="email" id="patientEmail" placeholder="your.email@example.com">
-                </div>
               </div>
               <div class="form-group">
                 <label for="patientNotes">Medical History & Additional Notes</label>
@@ -539,8 +552,9 @@
       <div id="resultsPage" class="page">
         <div class="fab-arrow">click to get more information</div>
         <div class="page-padding-large">
-          <div class="margin-bottom-30">
+          <div class="margin-bottom-30" style="display: flex; gap: 15px; flex-wrap: wrap;">
             <button class="btn-secondary" onclick="goBackToForm()">← Back to Form</button>
+            <button class="btn-primary" onclick="printResults()" style="background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white;">🖨️ Print Report</button>
           </div>
           <div class="results-header">
             <h1>UNIFY🌎MEDIC🩺</h1>
@@ -13988,7 +14002,6 @@
         name: document.getElementById('patientName').value,
         age: document.getElementById('patientAge').value,
         gender: document.getElementById('patientGender').value,
-        email: document.getElementById('patientEmail').value,
         notes: document.getElementById('patientNotes').value,
         duration: document.getElementById('durationDays').value || 'Not specified'
       };
@@ -14163,6 +14176,10 @@
 
     function goBackToForm() { showPage('landingPage'); }
     function goBackToResults() { showPage('resultsPage'); }
+
+    function printResults() {
+      window.print();
+    }
 
     function openAIChat() {
       document.getElementById('modalOverlay').classList.add('active');
