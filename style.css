@@ -497,7 +497,7 @@ body {
 
 /* ============ SERVICES SECTION ============ */
 .services {
-    background-color: var(--light-bg);
+    background-color: var(--white);
     padding: 6rem 2rem;
 }
 
@@ -654,7 +654,7 @@ body {
 
 /* ============ DOCTORS SECTION ============ */
 .doctors {
-    background-color: var(--light-bg);
+    background-color: var(--white);
     padding: 4rem 2rem;
     text-align: center;
 }
@@ -772,7 +772,7 @@ body {
 
 /* ============ BLOG SECTION ============ */
 .blog {
-    background-color: var(--light-bg);
+    background-color: var(--white);
     padding: 6rem 2rem;
 }
 
