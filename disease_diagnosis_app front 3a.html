@@ -11,9 +11,9 @@
     header { background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white; padding: 25px; text-align: center; }
     header h1 { font-size: 2.8em; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 15px; }
     header p { font-size: 1.1em; opacity: 0.95; font-weight: 500; }
-    main { padding: 0; position: relative; }
-    .page { display: none !important; pointer-events: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; position: absolute !important; top: 0; left: 0; right: 0; width: 100%; }
-    .page.active { display: block !important; pointer-events: auto !important; visibility: visible !important; height: auto !important; overflow: visible !important; position: relative !important; animation: fadeIn 0.3s ease-in; }
+    main { padding: 0; }
+    .page { display: none !important; pointer-events: none !important; visibility: hidden !important; }
+    .page.active { display: block !important; pointer-events: auto !important; visibility: visible !important; animation: fadeIn 0.3s ease-in; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .hero-section { background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f2 100%); padding: 50px 40px; text-align: center; position: relative; overflow: hidden; }
     .hero-section::before { content: ''; position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(43, 122, 157, 0.1) 0%, transparent 70%); border-radius: 50%; }
@@ -14141,15 +14141,19 @@
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
-        page.style.display = 'none';
-        page.style.visibility = 'hidden';
-        page.style.pointerEvents = 'none';
+        page.style.display = '';
+        page.style.visibility = '';
+        page.style.pointerEvents = '';
       });
       const activePage = document.getElementById(pageId);
       activePage.classList.add('active');
-      activePage.style.display = 'block';
-      activePage.style.visibility = 'visible';
-      activePage.style.pointerEvents = 'auto';
+      const fabButton = document.getElementById('fabButton');
+      if (pageId === 'resultsPage') {
+        fabButton.style.display = 'flex';
+      } else {
+        fabButton.style.display = 'none';
+        closeAIChat();
+      }
       window.scrollTo(0, 0);
     }
 
@@ -14165,18 +14169,6 @@
       document.getElementById('modalOverlay').classList.remove('active');
       document.getElementById('modalChat').classList.remove('active');
     }
-
-    const originalShowPage = showPage;
-    showPage = function(pageId) {
-      originalShowPage(pageId);
-      const fabButton = document.getElementById('fabButton');
-      if (pageId === 'resultsPage') {
-        fabButton.style.display = 'flex';
-      } else {
-        fabButton.style.display = 'none';
-        closeAIChat();
-      }
-    };
   </script>
 </body>
 </html>
