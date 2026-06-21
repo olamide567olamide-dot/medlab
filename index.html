@@ -160,16 +160,16 @@
         .mobile-nav-panel {
             position: fixed;
             top: 0;
-            left: 0;
+            right: 0;
             width: min(82vw, 320px);
             height: 100vh;
             background: #fff;
-            box-shadow: 20px 0 40px rgba(15, 23, 42, 0.18);
+            box-shadow: -20px 0 40px rgba(15, 23, 42, 0.18);
             padding: 96px 24px 24px;
             display: flex;
             flex-direction: column;
             gap: 14px;
-            transform: translateX(-100%);
+            transform: translateX(100%);
             opacity: 0;
             pointer-events: none;
             transition: transform 0.3s ease, opacity 0.3s ease;

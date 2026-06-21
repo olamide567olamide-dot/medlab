@@ -7,7 +7,7 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: white; min-height: 100vh; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: auto; }
     header { background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white; padding: 25px; text-align: center; }
     header h1 { font-size: 2.8em; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 15px; }
     header p { font-size: 1.1em; opacity: 0.95; font-weight: 500; }
@@ -14045,59 +14045,63 @@
       let resultsHTML = '';
       
       if (perfectMatches.length > 0) {
-        resultsHTML += `<h3 style="color: #0d5a7a; font-size: 1.8em; margin-bottom: 30px; font-weight: 700;">✓ 100% Match Found</h3><div class="disease-cards">`;
+        resultsHTML += `<h3 style="color: #047857; font-size: 1.6em; margin-bottom: 30px; font-weight: 700;">✓ 100% Match Found</h3>`;
         perfectMatches.forEach(disease => {
           const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-          resultsHTML += `<div class="disease-card" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
-            <h3>${disease.name}</h3>
-            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-              <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-              <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
+          resultsHTML += `
+            <div style="background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; margin-bottom: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1);" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
+              <h3 style="color: #0d5a7a; font-size: 1.3em; font-weight: 700; margin-bottom: 12px;">${disease.name}</h3>
+              <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
+                <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
+                <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
+              </div>
+              <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${disease.description || 'No description available'}</p>
+              <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
+                🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
+              </div>
             </div>
-            <p style="color: #1a5f7a; margin: 15px 0; font-size: 0.95em; line-height: 1.5;">${disease.description || 'No description available'}</p>
-            <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1.05em;">
-              🎯 Match Score: <span style="font-size: 1.15em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
-            </div>
-          </div>`;
+          `;
         });
-        resultsHTML += '</div>';
         
         if (otherMatches.length > 0) {
-          resultsHTML += `<div style="text-align: center; margin-top: 40px;"><button class="btn-primary" onclick="toggleOtherMatches()" style="padding: 15px 45px; font-size: 1.05em;">👀 View Other Related Matches (${otherMatches.length})</button></div>`;
-          resultsHTML += `<div id="otherMatchesContainer" style="display: none; margin-top: 40px;"><h3 style="color: #0d5a7a; font-size: 1.8em; margin-bottom: 30px; font-weight: 700;">📋 Other Related Matches</h3><div class="disease-cards">`;
+          resultsHTML += `<div style="text-align: center; margin-top: 30px;"><button class="btn-primary" onclick="toggleOtherMatches()" style="padding: 15px 45px; font-size: 1.05em;">👀 View Other Related Matches</button></div>`;
+          resultsHTML += `<div id="otherMatchesContainer" style="display: none; margin-top: 40px;">`;
           otherMatches.forEach(disease => {
             const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-            resultsHTML += `<div class="disease-card" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
-              <h3>${disease.name}</h3>
-              <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-                <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-                <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
+            resultsHTML += `
+              <div style="background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; margin-bottom: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1);" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
+                <h3 style="color: #0d5a7a; font-size: 1.3em; font-weight: 700; margin-bottom: 12px;">${disease.name}</h3>
+                <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
+                  <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
+                  <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
+                </div>
+                <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${disease.description || 'No description available'}</p>
+                <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
+                  🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
+                </div>
               </div>
-              <p style="color: #1a5f7a; margin: 15px 0; font-size: 0.95em; line-height: 1.5;">${disease.description || 'No description available'}</p>
-              <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1.05em;">
-                🎯 Match Score: <span style="font-size: 1.15em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
-              </div>
-            </div>`;
+            `;
           });
-          resultsHTML += '</div></div>';
+          resultsHTML += `</div>`;
         }
       } else {
-        resultsHTML += `<h3 style="color: #0d5a7a; font-size: 1.8em; margin-bottom: 30px; font-weight: 700;">✓ Likely Conditions Found (${matchedDiseases.length} matches)</h3><div class="disease-cards">`;
+        resultsHTML += `<h3 style="color: #047857; font-size: 1.6em; margin-bottom: 30px; font-weight: 700;">✓ Likely Conditions Found</h3>`;
         matchedDiseases.forEach(disease => {
           const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-          resultsHTML += `<div class="disease-card" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
-            <h3>${disease.name}</h3>
-            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-              <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-              <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
+          resultsHTML += `
+            <div style="background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; margin-bottom: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1);" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
+              <h3 style="color: #0d5a7a; font-size: 1.3em; font-weight: 700; margin-bottom: 12px;">${disease.name}</h3>
+              <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
+                <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
+                <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
+              </div>
+              <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${disease.description || 'No description available'}</p>
+              <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
+                🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
+              </div>
             </div>
-            <p style="color: #1a5f7a; margin: 15px 0; font-size: 0.95em; line-height: 1.5;">${disease.description || 'No description available'}</p>
-            <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1.05em;">
-              🎯 Match Score: <span style="font-size: 1.15em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
-            </div>
-          </div>`;
+          `;
         });
-        resultsHTML += '</div>';
       }
       
       resultsContainer.innerHTML = resultsHTML;
