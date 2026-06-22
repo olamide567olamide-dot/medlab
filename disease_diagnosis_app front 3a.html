@@ -14034,8 +14034,18 @@
         return;
       }
       const matchedDiseases = matchSymptomsToDisease();
-      displayResults(matchedDiseases);
-      showPage('resultsPage');
+      
+      // ===== CHANGE: Save diagnosis data to localStorage and redirect =====
+      const diagnosisData = {
+        patientData: currentPatientData,
+        symptoms: userSymptoms,
+        matchedDiseases: matchedDiseases,
+        timestamp: new Date().toLocaleString()
+      };
+      localStorage.setItem('diagnosisReport', JSON.stringify(diagnosisData));
+      
+      // Redirect to separate results page
+      window.location.href = 'results.html';
     }
 
     function matchSymptomsToDisease() {

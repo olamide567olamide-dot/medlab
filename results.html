@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIFY🌍MEDIC - Diagnosis Report</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: white; min-height: 100vh; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+    header { background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white; padding: 25px; text-align: center; }
+    header h1 { font-size: 2.8em; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.5px; }
+    header p { font-size: 1.1em; opacity: 0.95; font-weight: 500; }
+    main { padding: 50px 40px; background: white; }
+    .page-padding-large { padding: 0; }
+    .margin-bottom-30 { margin-bottom: 30px; }
+    .result-highlight { color: #047857; font-weight: 600; font-size: 1.05em; }
+    button { padding: 15px 45px; font-size: 1.05em; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; transition: all 0.3s ease; }
+    .btn-primary { background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.3); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(48, 233, 254, 0.5); }
+    .btn-secondary { background: #eff6ff; color: #30E9FE; border: 2px solid #30E9FE; }
+    .btn-secondary:hover { background: #dbeafe; transform: translateY(-3px); }
+    .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+    .results-header { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 5px solid #30E9FE; }
+    .results-header h2 { color: #000000; font-size: 1.8em; }
+    .patient-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+    .info-item { background: white; padding: 15px; border-radius: 10px; border: 2px solid #b3d9ea; }
+    .info-label { font-weight: 700; color: #000000; }
+    .disease-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .disease-card { background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1); }
+    .disease-card:hover { border-color: #30E9FE; box-shadow: 0 12px 30px rgba(48, 233, 254, 0.3); transform: translateY(-5px); }
+    .disease-card h3 { color: #000000; margin-bottom: 8px; font-size: 1.3em; font-weight: 700; }
+    .disease-card p { color: #4a7a95; }
+    .severity { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700; }
+    .severity.low { background: #b3d9ea; color: #1a4d6d; }
+    .severity.medium { background: #ffe0b2; color: #e65100; }
+    .severity.high { background: #ffcdd2; color: #b71c1c; }
+    .detail-section { margin: 30px 0; background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); padding: 25px; border-radius: 15px; border-left: 5px solid #30E9FE; }
+    .detail-section h3 { color: #000000; margin-bottom: 15px; font-size: 1.4em; font-weight: 700; }
+    .detail-section ul, .detail-section ol { margin-left: 20px; }
+    .detail-section li { margin: 10px 0; color: #4a7a95; }
+    .disease-detail img { max-width: 100%; height: auto; border-radius: 15px; margin: 20px 0; max-height: 400px; box-shadow: 0 10px 30px rgba(48, 233, 254, 0.2); }
+    .error-message { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); padding: 40px; border-radius: 15px; border-left: 5px solid #f44336; text-align: center; }
+    .error-message h2 { color: #c62828; font-size: 1.6em; margin-bottom: 15px; }
+    .error-message p { color: #d32f2f; font-size: 1.05em; }
+    .disclaimer-box { background: #fff3cd; padding: 20px; border-radius: 12px; margin-top: 30px; border-left: 5px solid #ffc107; }
+    .disclaimer-strong { color: #856404; }
+    .disclaimer-text { color: #856404; margin-top: 8px; line-height: 1.5; }
+    .print-button { margin-left: 10px; }
+    @media (max-width: 768px) {
+      main { padding: 30px 20px; }
+      .disease-cards { grid-template-columns: 1fr; }
+      .button-group { flex-direction: column; }
+      button { width: 100%; }
+      .results-header h2 { font-size: 1.3em; }
+    }
+    @media print {
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; border-radius: 0; max-width: 100%; }
+      .margin-bottom-30 { display: none; }
+      .button-group { display: none !important; }
+      main { padding: 20px; }
+      header { page-break-after: avoid; }
+      .results-header { page-break-after: avoid; }
+      .disease-card { page-break-inside: avoid; }
+      .detail-section { page-break-inside: avoid; }
+      .disease-detail img { max-height: 300px; }
+      .disclaimer-box { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>UNIFY🌎MEDIC🩺</h1>
+      <h2>⚕️ Medical Diagnosis Report 🧬</h2>
+      <p>💊 AI-Powered Disease Analysis & Recommendations 🩺</p>
+    </header>
+
+    <main>
+      <!-- Buttons Section -->
+      <div class="margin-bottom-30">
+        <div class="button-group">
+          <button class="btn-secondary" onclick="goBackToDiagnosis()">← Back to Diagnosis Form</button>
+          <button class="btn-primary" onclick="window.print()" style="background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white;">🖨️ Print Report</button>
+          <button class="btn-primary" onclick="downloadPDF()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">📥 Download as PDF</button>
+        </div>
+      </div>
+
+      <!-- Content Container -->
+      <div id="reportContent">
+        <!-- Report will be populated by JavaScript -->
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    // ========== Initialize Report ==========
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAndDisplayReport();
+    });
+
+    function loadAndDisplayReport() {
+      const diagnosisDataJSON = localStorage.getItem('diagnosisReport');
+      
+      if (!diagnosisDataJSON) {
+        displayErrorMessage();
+        return;
+      }
+
+      try {
+        const diagnosisData = JSON.parse(diagnosisDataJSON);
+        displayDiagnosisReport(diagnosisData);
+      } catch (error) {
+        console.error('Error parsing diagnosis data:', error);
+        displayErrorMessage();
+      }
+    }
+
+    function displayErrorMessage() {
+      const reportContent = document.getElementById('reportContent');
+      reportContent.innerHTML = `
+        <div class="error-message">
+          <h2>❌ No Diagnosis Report Found</h2>
+          <p>Please complete a diagnosis first to view your report.</p>
+          <div class="button-group" style="margin-top: 30px; justify-content: center;">
+            <button class="btn-primary" onclick="goBackToDiagnosis()">Return to Diagnosis Form</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function displayDiagnosisReport(diagnosisData) {
+      const { patientData, symptoms, matchedDiseases } = diagnosisData;
+      
+      if (!matchedDiseases || matchedDiseases.length === 0) {
+        displayNoMatchesFound(patientData, symptoms);
+        return;
+      }
+
+      let reportHTML = `
+        <div class="results-header">
+          <h1>UNIFY🌎MEDIC🩺</h1>
+          <h2>📊 Diagnosis Report Analysis 📈📉</h2>
+          <h3 style="margin-top: 15px; color: #0d5a7a;">Generated on ${diagnosisData.timestamp}</h3>
+          <div class="patient-info">
+            <div class="info-item">
+              <div class="info-label">👤 Patient Name</div>
+              <div class="result-highlight">${escapeHtml(patientData.name)}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">📅 Age & Gender</div>
+              <div class="result-highlight">${patientData.age} years old, ${escapeHtml(patientData.gender)}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">🔍 Symptoms Reported</div>
+              <div class="result-highlight">${symptoms.length} reported</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">⏱️ Duration</div>
+              <div class="result-highlight">${patientData.duration} days</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Reported Symptoms Section
+      reportHTML += `
+        <div class="detail-section">
+          <h3>🩹 Reported Symptoms</h3>
+          <ul>
+            ${symptoms.map(symptom => `<li>${escapeHtml(symptom)}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      // Separate matches by percentage
+      const perfectMatches = matchedDiseases.filter(d => d.matchPercentage === 100);
+      const otherMatches = matchedDiseases.filter(d => d.matchPercentage < 100);
+
+      // Display Perfect Matches
+      if (perfectMatches.length > 0) {
+        reportHTML += `<h2 style="color: #047857; font-size: 1.8em; margin: 40px 0 30px 0; font-weight: 700;">✓ 100% Match Found</h2>`;
+        reportHTML += `<div class="disease-cards">`;
+        perfectMatches.forEach(disease => {
+          reportHTML += createDiseaseCard(disease);
+        });
+        reportHTML += `</div>`;
+      }
+
+      // Display Other Matches
+      if (otherMatches.length > 0) {
+        reportHTML += `<h2 style="color: #0d5a7a; font-size: 1.8em; margin: 40px 0 30px 0; font-weight: 700;">📋 Other Possible Conditions</h2>`;
+        reportHTML += `<div class="disease-cards">`;
+        otherMatches.forEach(disease => {
+          reportHTML += createDiseaseCard(disease);
+        });
+        reportHTML += `</div>`;
+      }
+
+      // Medical Disclaimer
+      reportHTML += `
+        <div class="disclaimer-box">
+          <strong class="disclaimer-strong">⚠️ Important Medical Disclaimer:</strong>
+          <p class="disclaimer-text">This report is generated for educational and informational purposes only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. The diseases listed are based on symptom matching and should not be considered as definitive diagnoses. Always consult with a qualified healthcare provider for accurate diagnosis and appropriate treatment of any health condition. In case of emergency, please contact your local emergency services immediately.</p>
+        </div>
+      `;
+
+      document.getElementById('reportContent').innerHTML = reportHTML;
+    }
+
+    function createDiseaseCard(disease) {
+      const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
+      const severityEmoji = {
+        'low': '🟢',
+        'medium': '🟡',
+        'high': '🔴'
+      };
+      const emoji = severityEmoji[severityClass] || '⚪';
+
+      return `
+        <div class="disease-card">
+          <h3>${escapeHtml(disease.name)}</h3>
+          <div style="display: flex; gap: 12px; margin: 12px 0; flex-wrap: wrap;">
+            <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${escapeHtml(disease.category || 'Uncategorized')}</span>
+            <span class="severity ${severityClass}">${emoji} Severity: ${disease.severity || 'Unknown'}</span>
+          </div>
+          <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${escapeHtml(disease.description || 'No description available')}</p>
+          
+          <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
+            🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span>
+            <br><small style="color: #4a7a95; font-weight: 400;">(${disease.matchCount} matching symptoms)</small>
+          </div>
+
+          <!-- Expandable Details -->
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #b3e5fc;">
+            <button class="btn-secondary" onclick="toggleDetails('details-${escapeHtml(disease.name)}')" style="width: 100%; padding: 10px 20px; font-size: 0.95em;">📖 View Full Details</button>
+            <div id="details-${escapeHtml(disease.name)}" style="display: none; margin-top: 15px;">
+              ${disease.causes && disease.causes.length > 0 ? `
+                <div class="detail-section">
+                  <h4 style="font-size: 1.1em;">🔬 Known Causes</h4>
+                  <ul>${disease.causes.map(cause => `<li>${escapeHtml(cause)}</li>`).join('')}</ul>
+                </div>
+              ` : ''}
+              
+              ${disease.symptoms && disease.symptoms.length > 0 ? `
+                <div class="detail-section">
+                  <h4 style="font-size: 1.1em;">🩹 Common Symptoms</h4>
+                  <ul>${disease.symptoms.map(symptom => `<li>${escapeHtml(symptom)}</li>`).join('')}</ul>
+                </div>
+              ` : ''}
+              
+              ${disease.first_aid && disease.first_aid.length > 0 ? `
+                <div class="detail-section">
+                  <h4 style="font-size: 1.1em;">🆘 First Aid Measures</h4>
+                  <ol>${disease.first_aid.map(aid => `<li>${escapeHtml(aid)}</li>`).join('')}</ol>
+                </div>
+              ` : ''}
+              
+              ${disease.drugs && disease.drugs.length > 0 ? `
+                <div class="detail-section">
+                  <h4 style="font-size: 1.1em;">💊 Common Medications</h4>
+                  <ul>${disease.drugs.map(drug => `<li>${escapeHtml(drug)}</li>`).join('')}</ul>
+                </div>
+              ` : ''}
+              
+              ${disease.treatment && disease.treatment.length > 0 ? `
+                <div class="detail-section">
+                  <h4 style="font-size: 1.1em;">🏥 Recommended Treatments</h4>
+                  <ol>${disease.treatment.map(treatment => `<li>${escapeHtml(treatment)}</li>`).join('')}</ol>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function displayNoMatchesFound(patientData, symptoms) {
+      const reportHTML = `
+        <div class="results-header">
+          <h1>UNIFY🌎MEDIC🩺</h1>
+          <h2>📊 Diagnosis Report Analysis 📈📉</h2>
+          <div class="patient-info">
+            <div class="info-item">
+              <div class="info-label">👤 Patient Name</div>
+              <div class="result-highlight">${escapeHtml(patientData.name)}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">📅 Age & Gender</div>
+              <div class="result-highlight">${patientData.age} years old, ${escapeHtml(patientData.gender)}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">🔍 Symptoms Reported</div>
+              <div class="result-highlight">${symptoms.length} reported</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>🩹 Reported Symptoms</h3>
+          <ul>
+            ${symptoms.map(symptom => `<li>${escapeHtml(symptom)}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, #e3f9ff 0%, #f0f9ff 100%); border-radius: 15px; margin-top: 30px; border: 2px solid #b3e5fc;">
+          <p style="font-size: 1.3em; color: #0d5a7a; margin-bottom: 15px;">❌ No Matching Diseases Found</p>
+          <p style="color: #1a5f7a; font-size: 1.05em; margin-bottom: 20px;">
+            <strong>The reported symptoms do not match any diseases in our database.</strong>
+          </p>
+          <p style="color: #4a7a95; font-size: 0.95em; line-height: 1.6;">
+            Please consult with a qualified healthcare professional for proper diagnosis and treatment.
+          </p>
+        </div>
+
+        <div class="disclaimer-box">
+          <strong class="disclaimer-strong">⚠️ Important Medical Disclaimer:</strong>
+          <p class="disclaimer-text">This report is generated for educational and informational purposes only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider for accurate diagnosis and appropriate treatment of any health condition.</p>
+        </div>
+      `;
+
+      document.getElementById('reportContent').innerHTML = reportHTML;
+    }
+
+    function toggleDetails(detailId) {
+      const detailsDiv = document.getElementById(detailId);
+      if (detailsDiv.style.display === 'none') {
+        detailsDiv.style.display = 'block';
+      } else {
+        detailsDiv.style.display = 'none';
+      }
+    }
+
+    function goBackToDiagnosis() {
+      window.location.href = 'disease_diagnosis_app front 3a.html';
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('reportContent');
+      const opt = {
+        margin: 10,
+        filename: 'UNIFY_MEDIC_Diagnosis_Report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    // Utility function to escape HTML special characters (prevent XSS)
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+  </script>
+</body>
+</html>
