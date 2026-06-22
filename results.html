@@ -67,6 +67,65 @@
       .disease-detail img { max-height: 300px; }
       .disclaimer-box { page-break-inside: avoid; }
     }
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 100px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%);
+      box-shadow: 0 8px 24px rgba(48, 233, 254, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      z-index: 50;
+      opacity: 0.5;
+      gap: 8px;
+    }
+    .fab-text {
+      font-weight: 900;
+      font-size: 0.8rem;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      letter-spacing: -0.5px;
+    }
+    .fab-arrow {
+      animation: bounce 2s infinite;
+      font-size: 1.2rem;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .fab:hover {
+      opacity: 1;
+      transform: scale(1.15) rotateZ(10deg);
+      box-shadow: 0 12px 32px rgba(48, 233, 254, 0.6);
+    }
+    .fab:active {
+      transform: scale(0.95);
+    }
+    @media (max-width: 768px) {
+      .fab {
+        bottom: 20px;
+        right: 20px;
+        width: 85px;
+        height: 100px;
+        font-size: 1.25rem;
+      }
+      .fab-text {
+        font-size: 0.6rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -191,11 +250,16 @@
 
       // Display Other Matches
       if (otherMatches.length > 0) {
+        reportHTML += `<div id="otherConditionsContainer" style="margin-top: 30px;">`;
+        reportHTML += `<button id="toggleOtherConditions" class="btn-secondary" style="width: 100%; padding: 15px 20px; margin-bottom: 20px; text-align: center; font-size: 1.05em;">📋 View Other Possible Conditions ▼</button>`;
+        reportHTML += `<div id="otherConditionsContent" style="display: none;">`;
         reportHTML += `<h2 style="color: #0d5a7a; font-size: 1.8em; margin: 40px 0 30px 0; font-weight: 700;">📋 Other Possible Conditions</h2>`;
         reportHTML += `<div class="disease-cards">`;
         otherMatches.forEach(disease => {
           reportHTML += createDiseaseCard(disease);
         });
+        reportHTML += `</div>`;
+        reportHTML += `</div>`;
         reportHTML += `</div>`;
       }
 
@@ -208,6 +272,17 @@
       `;
 
       document.getElementById('reportContent').innerHTML = reportHTML;
+
+      // Add toggle functionality for other conditions
+      const toggleButton = document.getElementById('toggleOtherConditions');
+      const otherConditionsContent = document.getElementById('otherConditionsContent');
+      if (toggleButton && otherConditionsContent) {
+        toggleButton.addEventListener('click', function() {
+          const isVisible = otherConditionsContent.style.display !== 'none';
+          otherConditionsContent.style.display = isVisible ? 'none' : 'block';
+          toggleButton.textContent = isVisible ? '📋 View Other Possible Conditions ▼' : '📋 Hide Other Possible Conditions ▲';
+        });
+      }
     }
 
     function createDiseaseCard(disease) {
@@ -362,5 +437,11 @@
       return text.replace(/[&<>"']/g, m => map[m]);
     }
   </script>
+  <!-- Floating Action Button -->
+  <a href="imedic_ai (1).html" class="fab" title="Click to get more information from verified source">
+    <span class="fab-text"><strong>UNIFY🌎Medic AI</strong></span>
+    <i class="fas fa-brain"></i>
+    <span class="fab-arrow">↓</span>
+  </a>
 </body>
 </html>
