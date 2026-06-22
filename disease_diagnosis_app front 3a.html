@@ -11,9 +11,31 @@
     header { background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white; padding: 25px; text-align: center; }
     header h1 { font-size: 2.8em; margin-bottom: 8px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 15px; }
     header p { font-size: 1.1em; opacity: 0.95; font-weight: 500; }
-    main { padding: 0; }
-    .page { display: none !important; pointer-events: none !important; visibility: hidden !important; }
-    .page.active { display: block !important; pointer-events: auto !important; visibility: visible !important; animation: fadeIn 0.3s ease-in; }
+    main { padding: 0; position: relative; width: 100%; min-height: 100vh; }
+    /* ========== PAGE VISIBILITY SYSTEM ========== */
+    /* CRITICAL FIX: Ensure proper page hiding and showing */
+    .page { 
+      display: none !important; 
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      pointer-events: none !important; 
+      visibility: hidden !important;
+      opacity: 0 !important;
+      z-index: 1 !important;
+    }
+    /* CRITICAL FIX: Only active page is visible */
+    .page.active { 
+      display: block !important; 
+      position: static !important;
+      pointer-events: auto !important; 
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 100 !important;
+      animation: fadeIn 0.3s ease-in;
+    }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .hero-section { background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f2 100%); padding: 50px 40px; text-align: center; position: relative; overflow: hidden; }
     .hero-section::before { content: ''; position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(43, 122, 157, 0.1) 0%, transparent 70%); border-radius: 50%; }
@@ -14156,14 +14178,29 @@
     }
 
     function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(page => {
+      // CRITICAL FIX: Remove active class from ALL pages to ensure they're hidden
+      const allPages = document.querySelectorAll('.page');
+      allPages.forEach(page => {
         page.classList.remove('active');
+        // Clear any inline styles that might interfere
         page.style.display = '';
         page.style.visibility = '';
         page.style.pointerEvents = '';
+        page.style.opacity = '';
+        page.style.zIndex = '';
       });
+      
+      // CRITICAL FIX: Get the target page and ensure it exists
       const activePage = document.getElementById(pageId);
+      if (!activePage) {
+        console.error('Page not found:', pageId);
+        return;
+      }
+      
+      // CRITICAL FIX: Add active class to make only the target page visible
       activePage.classList.add('active');
+      
+      // Manage FAB button visibility
       const fabButton = document.getElementById('fabButton');
       if (pageId === 'resultsPage') {
         fabButton.style.display = 'flex';
@@ -14171,6 +14208,8 @@
         fabButton.style.display = 'none';
         closeAIChat();
       }
+      
+      // Scroll to top of page
       window.scrollTo(0, 0);
     }
 
