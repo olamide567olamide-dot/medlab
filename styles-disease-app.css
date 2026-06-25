@@ -143,7 +143,7 @@ main {
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(48, 233, 254, 0.2);
     transition: transform 0.3s ease;
-    border: 4px solid #30E9FE;
+    border: 4px solid  #2b7a9d;
 }
 
 .hero-image-box:hover {
@@ -308,7 +308,7 @@ input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: #30E9FE;
+    border-color: #2b7a9d;
     background: white;
     box-shadow: 0 0 0 4px rgba(48, 233, 254, 0.15);
 }
