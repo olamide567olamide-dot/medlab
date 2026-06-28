@@ -13,15 +13,20 @@ body{
     margin:0;
     padding:0;
     color:#333;
+    width:100%;
+    min-width:0;
+    overflow-x:hidden;
 }
 
 .container{
     max-width:1000px;
+    width:100%;
     margin:40px auto;
     background:#fff;
     padding:40px;
     border-radius:10px;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
+    box-sizing:border-box;
 }
 
 h1{
@@ -46,6 +51,49 @@ h2{
     margin-top:40px;
     padding-top:20px;
     border-top:1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    .container {
+        margin: 20px auto;
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 1.9rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 16px auto;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    h2 {
+        font-size: 1.05rem;
+    }
+
+    .notice {
+        padding: 1rem;
+    }
+
+    ul {
+        padding-left: 1rem;
+    }
 }
 </style>
 </head>

@@ -234,6 +234,14 @@
         </div>
       `;
 
+      reportHTML += `
+        <div class="detail-section">
+          <h3>🗂️ Clinical Scenario</h3>
+          <p>A ${patientData.age}-year-old ${escapeHtml(patientData.gender.toLowerCase())} patient presents after ${patientData.duration} days of symptoms, including ${symptoms.map(symptom => escapeHtml(symptom)).join(', ')}.</p>
+          <p>This presentation is described as a 100% match found for the leading diagnosis, while keeping other possible conditions under consideration.</p>
+        </div>
+      `;
+
       // Separate matches by percentage
       const perfectMatches = matchedDiseases.filter(d => d.matchPercentage === 100);
       const otherMatches = matchedDiseases.filter(d => d.matchPercentage < 100);
