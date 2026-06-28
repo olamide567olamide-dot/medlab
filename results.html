@@ -21,7 +21,7 @@
     .btn-secondary { background: #eff6ff; color: #2b7a9d; border: 4px solid #2b7a9d; }
     .btn-secondary:hover { background: #dbeafe; transform: translateY(-3px); }
     .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
-    .results-header { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 2px solid  #2b7a9d; }
+    .results-header { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 0px solid  #2b7a9d; }
     .results-header h2 { color: #000000; font-size: 1.8em; }
     .patient-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
     .info-item { background: white; padding: 15px; border-radius: 10px; border: 2px solid #b3d9ea; }
@@ -35,7 +35,7 @@
     .severity.low { background: #b3d9ea; color: #1a4d6d; }
     .severity.medium { background: #ffe0b2; color: #e65100; }
     .severity.high { background: #ffcdd2; color: #b71c1c; }
-    .detail-section { margin: 30px 0; background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); padding: 25px; border-radius: 15px; border-left: 5px solid #30E9FE; }
+    .detail-section { margin: 30px 0; background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); padding: 25px; border-radius: 15px; border-left: 0px solid #2b7a9d; }
     .detail-section h3 { color: #000000; margin-bottom: 15px; font-size: 1.4em; font-weight: 700; }
     .detail-section ul, .detail-section ol { margin-left: 20px; }
     .detail-section li { margin: 10px 0; color: #4a7a95; }
@@ -201,7 +201,7 @@
       let reportHTML = `
         <div class="results-header">
           <h1>UNIFY🌎MEDIC🩺</h1>
-          <h2>📊 Diagnosis Report Analysis 📈📉</h2>
+          <h2>📊 Our AI helps healthcare students and professionals develop clinical reasoning by analyzing symptoms, explaining why certain diseases are more likely than others, and guiding users through the diagnostic thought process 📈📉</h2>
           <h3 style="margin-top: 15px; color: #0d5a7a;">Generated on ${diagnosisData.timestamp}</h3>
           <div class="patient-info">
             <div class="info-item">
