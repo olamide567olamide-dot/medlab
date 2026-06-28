@@ -60,6 +60,7 @@
             transition: all 0.2s; display: flex; align-items: center; justify-content: center;
         }
         .btn-icon:hover { background: rgba(255,255,255,0.25); }
+        .btn-icon.recording { background: #ef4444; color: white; transform: scale(1.05); }
 
         .disclaimer-banner {
             background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
@@ -371,6 +372,7 @@
             </div>
         </div>
         <div class="header-actions">
+            <button class="btn-icon" title="Voice Search" id="voiceBtn" onclick="toggleVoiceSearch()"><i class="fas fa-microphone"></i></button>
             <button class="btn-icon" title="Clear Chat" onclick="clearChat()"><i class="fas fa-trash-alt"></i></button>
             <button class="btn-icon" title="About" onclick="showAbout()"><i class="fas fa-info-circle"></i></button>
         </div>
@@ -1049,8 +1051,121 @@
             addMessage(aboutContent, false);
         }
 
+        let recognition = null;
+        let isRecording = false;
+
+        async function ensureMicrophoneAccess() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                return true;
+            }
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(track => track.stop());
+                return true;
+            } catch (error) {
+                console.warn('Microphone permission denied', error);
+                alert('Microphone access is required for voice search. Please allow microphone permissions and try again.');
+                return false;
+            }
+        }
+
+        function initSpeechRecognition() {
+            if (recognition) return;
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+
+            recognition = new SpeechRecognition();
+            recognition.lang = navigator.language || 'en-US';
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            recognition.continuous = false;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                const voiceBtn = document.getElementById('voiceBtn');
+                if (voiceBtn) voiceBtn.classList.add('recording');
+                document.getElementById('chatInput').placeholder = 'Listening... Speak clearly into your microphone.';
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0].transcript)
+                    .join('')
+                    .trim();
+
+                const input = document.getElementById('chatInput');
+                input.value = transcript;
+
+                if (event.results[0].isFinal) {
+                    sendMessage(transcript);
+                }
+            };
+
+            recognition.onspeechend = () => {
+                if (recognition && isRecording) {
+                    recognition.stop();
+                }
+            };
+
+            recognition.onerror = async (event) => {
+                console.warn('Speech recognition error', event.error);
+                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                    const hasAccess = await ensureMicrophoneAccess();
+                    if (hasAccess && recognition && !isRecording) {
+                        recognition.start();
+                    }
+                }
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                const voiceBtn = document.getElementById('voiceBtn');
+                if (voiceBtn) voiceBtn.classList.remove('recording');
+                document.getElementById('chatInput').placeholder = 'Ask about symptoms, wellness tips, or any health topic...';
+            };
+        }
+
+        async function toggleVoiceSearch() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Voice search is not supported in this browser.');
+                return;
+            }
+
+            initSpeechRecognition();
+            if (!recognition) return;
+
+            if (isRecording) {
+                recognition.stop();
+                return;
+            }
+
+            try {
+                recognition.start();
+            } catch (error) {
+                console.warn('Voice recognition start failed', error);
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                    const hasAccess = await ensureMicrophoneAccess();
+                    if (hasAccess) {
+                        try {
+                            recognition.start();
+                        } catch (err) {
+                            console.warn('Second start attempt failed', err);
+                        }
+                    }
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('chatInput').focus();
+            const voiceBtn = document.getElementById('voiceBtn');
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (voiceBtn && !SpeechRecognition) {
+                voiceBtn.disabled = true;
+                voiceBtn.style.opacity = '0.4';
+                voiceBtn.title = 'Voice search not supported in this browser.';
+            }
         });
     </script>
 </body>
