@@ -35,9 +35,7 @@
     html, body {
       margin: 0;
       min-height: 100%;
-      background: radial-gradient(circle at top left, rgba(112, 98, 255, 0.16), transparent 18%),
-                  radial-gradient(circle at bottom right, rgba(68, 154, 255, 0.12), transparent 18%),
-                  linear-gradient(180deg, #060b1d 0%, #091533 100%);
+      background-color: #7dc5e8;
       color: var(--text);
     }
 
@@ -881,7 +879,7 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-icon">CM</div>
+        <div class="brand-icon">UM</div>
         <div class="brand-info">
           <h1>unify🌍medic AI</h1>
           <p>Clinical Intelligence Platform</p>
@@ -890,34 +888,34 @@
 
       <div class="nav-section">
         <div class="nav-group">
-          <div class="nav-item active"><span class="nav-icon">🏠</span>Dashboard</div>
-          <a href="imedic_ai (1).html" class="nav-item"><span class="nav-icon">🤖</span>AI Clinical Assistant<span class="badge">New</span></a>
-          <a href="disease_diagnosis_app front 3a.html" class="nav-item"><span class="nav-icon">🩺</span>Symptom Analysis</a>
-          <div class="nav-item"><span class="nav-icon">🧠</span>Clinical Reasoning</div>
-          <div class="nav-item"><span class="nav-icon">🧑‍⚕️</span>Virtual Patients</div>
-          <div class="nav-item"><span class="nav-icon">📁</span>Clinical Cases</div>
-          <div class="nav-item"><span class="nav-icon">🧬</span>Differential Diagnosis</div>
+          <div class="nav-item active"><span class="nav-icon">🏠</span>Clinical Dashboard</div>
+          <a href="imedic_ai (1).html" class="nav-item"><span class="nav-icon">🤖</span>Clinical Reasoning Assistant<span class="badge">New</span></a>
+          <a href="disease_diagnosis_app front 3a.html" class="nav-item"><span class="nav-icon">🩺</span>Patient Assessment</a>
+          <div class="nav-item"><span class="nav-icon">🧠</span>Clinical Reasoning Workspace</div>
+          <div class="nav-item"><span class="nav-icon">🧑‍⚕️</span>Virtual Clinical Cases</div>
+          <div class="nav-item"><span class="nav-icon">📁</span>Case-Based Learning</div>
+          <div class="nav-item"><span class="nav-icon">🧬</span>Differential Clinical Reasoning</div>
         </div>
 
         <div class="nav-group">
           <h2>Learning Center</h2>
-          <div class="nav-item"><span class="nav-icon">📚</span>Disease Library</div>
-          <div class="nav-item"><span class="nav-icon">🧍</span>Body Systems</div>
-          <div class="nav-item"><span class="nav-icon">🖼️</span>Medical Images</div>
-          <div class="nav-item"><span class="nav-icon">🎓</span>AI Tutor</div>
-          <div class="nav-item"><span class="nav-icon">📄</span>Flashcards</div>
-          <div class="nav-item"><span class="nav-icon">🔖</span>Notes &amp; Bookmarks</div>
-          <div class="nav-item"><span class="nav-icon">🧮</span>Clinical Calculators</div>
+          <div class="nav-item"><span class="nav-icon">📚</span>Medical Knowledge Base</div>
+          <div class="nav-item"><span class="nav-icon">🧍</span>Human Body Systems</div>
+          <div class="nav-item"><span class="nav-icon">🖼️</span>Diagnostic Imaging Library</div>
+          <div class="nav-item"><span class="nav-icon">🎓</span>Clinical Learning Tutor</div>
+          <div class="nav-item"><span class="nav-icon">📄</span>Clinical Flashcards</div>
+          <div class="nav-item"><span class="nav-icon">🔖</span>Study Notes &amp; Bookmarks</div>
+          <div class="nav-item"><span class="nav-icon">🧮</span>Clinical Decision Calculators</div>
         </div>
 
         <div class="nav-group">
           <h2>Progress &amp; More</h2>
-          <div class="nav-item"><span class="nav-icon">📊</span>Progress Dashboard</div>
-          <div class="nav-item"><span class="nav-icon">🏆</span>Leaderboard</div>
-          <div class="nav-item"><span class="nav-icon">🥇</span>Achievements</div>
-          <div class="nav-item"><span class="nav-icon">🔬</span>Research Assistant</div>
-          <div class="nav-item"><span class="nav-icon">🗓️</span>Study Planner</div>
-          <div class="nav-item"><span class="nav-icon">🌐</span>Community</div>
+          <div class="nav-item"><span class="nav-icon">📊</span>Learning Progress Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🏆</span>Learning Leaderboard</div>
+          <div class="nav-item"><span class="nav-icon">🥇</span>Learning Achievements</div>
+          <div class="nav-item"><span class="nav-icon">🔬</span>Evidence-Based Research</div>
+          <div class="nav-item"><span class="nav-icon">🗓️</span>Clinical Study Planner</div>
+          <div class="nav-item"><span class="nav-icon">🌐</span>Medical Learning Community</div>
         </div>
       </div>
 
@@ -944,6 +942,7 @@
             <strong>Precious O.</strong>
             <span>Nursing Student</span>
           </div>
+          <button type="button" onclick="location.href='index.html'" class="upgrade-button" style="background: linear-gradient(135deg, #7b5bff 0%, #3c6cff 100%);">Logout</button>
         </div>
       </div>
 
@@ -975,7 +974,7 @@
       <section class="assistant-panel">
         <iframe
           src="imedic_ai (1).html"
-          title="AI Clinical Assistant"
+          title="Clinical Reasoning Assistant"
           style="width:100%; min-height:760px; border:0; border-radius:24px; background:#fff;"
         ></iframe>
       </section>
@@ -984,7 +983,7 @@
         <div class="small-card">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
             <div>
-              <h3>Continue Learning</h3>
+              <h3>Continue Clinical Learning</h3>
               <p>View recommended clinical content and complete your current module.</p>
             </div>
             <span style="font-size:0.86rem; color: var(--muted);">View all</span>
@@ -1010,10 +1009,10 @@
             <span style="font-size:0.86rem; color: var(--muted);">4 tools</span>
           </div>
           <div class="tool-grid">
-            <div class="tool-box"><div class="tool-icon">🔎</div><strong>Symptom Checker</strong><span>Review symptoms quickly.</span></div>
+            <div class="tool-box"><div class="tool-icon">🔎</div><strong>Clinical Assessment Tool</strong><span>Review symptoms quickly.</span></div>
             <div class="tool-box"><div class="tool-icon">🧍</div><strong>Body Map</strong><span>Visualize anatomical findings.</span></div>
-            <div class="tool-box"><div class="tool-icon">🧮</div><strong>Clinical Calculators</strong><span>Fast risk scoring.</span></div>
-            <div class="tool-box"><div class="tool-icon">💊</div><strong>Drug Library</strong><span>Browse medication data.</span></div>
+            <div class="tool-box"><div class="tool-icon">🧮</div><strong>Clinical Decision Calculators</strong><span>Fast risk scoring.</span></div>
+            <div class="tool-box"><div class="tool-icon">💊</div><strong>Therapeutics &amp; Drug Reference</strong><span>Browse medication data.</span></div>
           </div>
         </div>
 
