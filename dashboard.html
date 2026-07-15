@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>unify🌍medic AI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081327;
+      --panel: rgba(14, 25, 54, 0.85);
+      --panel-strong: rgba(22, 37, 79, 0.95);
+      --panel-soft: rgba(25, 42, 84, 0.78);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f7f9ff;
+      --muted: #97a4c6;
+      --accent: #7b5bff;
+      --accent-soft: rgba(123, 91, 255, 0.15);
+      --green: #26d0ab;
+      --green-soft: rgba(38, 208, 171, 0.15);
+      --blue: #3c6cff;
+      --purple: #7b5bff;
+      --orange: #ffb46e;
+      --shadow: 0 30px 80px rgba(1, 7, 29, 0.35);
+      font-family: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at top left, rgba(112, 98, 255, 0.16), transparent 18%),
+                  radial-gradient(circle at bottom right, rgba(68, 154, 255, 0.12), transparent 18%),
+                  linear-gradient(180deg, #060b1d 0%, #091533 100%);
+      color: var(--text);
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 320px;
+      gap: 18px;
+      min-height: calc(100vh - 48px);
+    }
+
+    .sidebar,
+    .rightbar,
+    .main {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      padding: 26px 20px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #7b5bff 0%, #3c6cff 100%);
+      font-weight: 800;
+      color: white;
+      font-size: 1.05rem;
+    }
+
+    .brand-info h1 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-info p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .nav-section {
+      display: grid;
+      gap: 20px;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 12px;
+    }
+
+    .nav-group h2 {
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s ease;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(123, 91, 255, 0.18);
+    }
+
+    .nav-icon {
+      width: 1.4rem;
+      height: 1.4rem;
+      display: grid;
+      place-items: center;
+      color: #d6d9ff;
+    }
+
+    .badge {
+      margin-left: auto;
+      background: rgba(123, 91, 255, 0.14);
+      color: #c8c3ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .upgrade-card {
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(123, 91, 255, 0.26), rgba(37, 48, 92, 0.9));
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 16px;
+    }
+
+    .upgrade-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .upgrade-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .upgrade-card .upgrade-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #7b5bff, #3c6cff);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .main {
+      display: grid;
+      gap: 18px;
+      padding: 28px;
+    }
+
+    .main-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 4px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 22px;
+      padding: 28px;
+      background: rgba(6, 14, 36, 0.82);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .hero-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .hero-title h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+      letter-spacing: -0.03em;
+    }
+
+    .hero-title p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      padding: 18px 20px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat-card strong {
+      font-size: 1.3rem;
+      display: block;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.06);
+      color: #b5bef2;
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .panel-top .search-field {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-field input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      padding: 14px 18px 14px 50px;
+      font-size: 0.95rem;
+    }
+
+    .search-field svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .profile-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7b5bff, #3c6cff);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: white;
+    }
+
+    .profile-info {
+      display: grid;
+      gap: 4px;
+    }
+
+    .profile-info strong {
+      font-size: 0.95rem;
+    }
+
+    .profile-info span {
+      color: var(--muted);
+      font-size: 0.87rem;
+    }
+
+    .assistant-panel {
+      display: grid;
+      gap: 20px;
+      padding: 24px;
+      border-radius: 30px;
+      background: rgba(7, 14, 33, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .assistant-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .assistant-header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .assistant-header .beta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(123, 91, 255, 0.17);
+      color: #d7ccff;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .chat-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .chat-card {
+      display: grid;
+      gap: 18px;
+      padding: 24px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .chat-message {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-message .message {
+      max-width: 84%;
+      padding: 18px 20px;
+      border-radius: 24px;
+      line-height: 1.7;
+      font-size: 0.96rem;
+    }
+
+    .message.bot {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .message.user {
+      margin-left: auto;
+      background: linear-gradient(135deg, rgba(52, 75, 218, 0.24), rgba(123, 91, 255, 0.28));
+      border: 1px solid rgba(123, 91, 255, 0.22);
+      position: relative;
+    }
+
+    .chat-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .action-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .compose-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .compose-row input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+      font-size: 0.96rem;
+    }
+
+    .compose-row button {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(135deg, #7b5bff, #3c6cff);
+      color: white;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 18px;
+    }
+
+    .small-card,
+    .wide-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .small-card h3,
+    .wide-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .small-card p,
+    .wide-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .tool-box {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 12px;
+      color: var(--text);
+    }
+
+    .tool-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(123, 91, 255, 0.18);
+      color: #fff;
+    }
+
+    .tool-box strong {
+      font-size: 0.96rem;
+      display: block;
+    }
+
+    .tool-box span {
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+
+    .activity-chart {
+      height: 100%;
+      min-height: 180px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .chart-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .chart-legend {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .chart-graph {
+      position: relative;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .chart-graph::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(124, 89, 255, 0.12), transparent 35%);
+    }
+
+    .chart-line {
+      position: absolute;
+      bottom: 12px;
+      left: 10px;
+      right: 10px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 30%, rgba(124,89,255,0.1) 100%);
+      border-radius: 24px;
+      background-image: linear-gradient(to right,
+        transparent 0%, transparent 10%, rgba(123,91,255,0.12) 10%, rgba(123,91,255,0.12) 20%, transparent 20%, transparent 30%, rgba(123,91,255,0.12) 30%, rgba(123,91,255,0.12) 40%, transparent 40%, transparent 50%, rgba(123,91,255,0.12) 50%, rgba(123,91,255,0.12) 60%, transparent 60%, transparent 70%, rgba(123,91,255,0.12) 70%, rgba(123,91,255,0.12) 80%, transparent 80%, transparent 90%, rgba(123,91,255,0.12) 90%, rgba(123,91,255,0.12) 100%);
+    }
+
+    .chart-line svg {
+      width: 100%;
+      height: 100%;
+      transform: translateY(5px);
+    }
+
+    .recommendation-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 0;
+    }
+
+    .recommendation-card {
+      border-radius: 28px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      min-height: 180px;
+    }
+
+    .recommendation-card img {
+      width: 100%;
+      height: 112px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .recommendation-body {
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .recommendation-body strong {
+      font-size: 0.98rem;
+    }
+
+    .recommendation-body span {
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    .recommendation-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px 18px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .rightbar {
+      padding: 28px 24px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .panel {
+      padding: 22px 22px 24px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .task-item strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .task-row p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .task-row strong {
+      color: #d7d8ff;
+      font-size: 0.94rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 66%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7b5bff 0%, #3c6cff 100%);
+    }
+
+    .reminder-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .reminder-item {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .reminder-item strong {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .reminder-item span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .achievement-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .achievement-item strong {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .achievement-meta {
+      display: grid;
+      gap: 3px;
+      text-align: right;
+    }
+
+    .achievement-meta span {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .insight-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .insight-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.92rem;
+    }
+
+    .insight-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(123,91,255,0.15);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #d0c8ff;
+      width: fit-content;
+      font-weight: 700;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.83rem;
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    @media (max-width: 1300px) {
+      .app {
+        grid-template-columns: 280px minmax(0, 1fr);
+      }
+
+      .rightbar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        padding: 16px;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .main,
+      .sidebar,
+      .rightbar {
+        min-height: auto;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cards-row,
+      .recommendation-row,
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .sidebar {
+        padding: 18px;
+      }
+
+      .main {
+        padding: 18px;
+      }
+
+      .panel,
+      .assistant-panel,
+      .chat-card,
+      .small-card,
+      .wide-card,
+      .recommendation-card,
+      .upgrade-card {
+        border-radius: 24px;
+        padding: 18px;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">CM</div>
+        <div class="brand-info">
+          <h1>unify🌍medic AI</h1>
+          <p>Clinical Intelligence Platform</p>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-group">
+          <div class="nav-item active"><span class="nav-icon">🏠</span>Dashboard</div>
+          <a href="imedic_ai (1).html" class="nav-item"><span class="nav-icon">🤖</span>AI Clinical Assistant<span class="badge">New</span></a>
+          <a href="disease_diagnosis_app front 3a.html" class="nav-item"><span class="nav-icon">🩺</span>Symptom Analysis</a>
+          <div class="nav-item"><span class="nav-icon">🧠</span>Clinical Reasoning</div>
+          <div class="nav-item"><span class="nav-icon">🧑‍⚕️</span>Virtual Patients</div>
+          <div class="nav-item"><span class="nav-icon">📁</span>Clinical Cases</div>
+          <div class="nav-item"><span class="nav-icon">🧬</span>Differential Diagnosis</div>
+        </div>
+
+        <div class="nav-group">
+          <h2>Learning Center</h2>
+          <div class="nav-item"><span class="nav-icon">📚</span>Disease Library</div>
+          <div class="nav-item"><span class="nav-icon">🧍</span>Body Systems</div>
+          <div class="nav-item"><span class="nav-icon">🖼️</span>Medical Images</div>
+          <div class="nav-item"><span class="nav-icon">🎓</span>AI Tutor</div>
+          <div class="nav-item"><span class="nav-icon">📄</span>Flashcards</div>
+          <div class="nav-item"><span class="nav-icon">🔖</span>Notes &amp; Bookmarks</div>
+          <div class="nav-item"><span class="nav-icon">🧮</span>Clinical Calculators</div>
+        </div>
+
+        <div class="nav-group">
+          <h2>Progress &amp; More</h2>
+          <div class="nav-item"><span class="nav-icon">📊</span>Progress Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">🏆</span>Leaderboard</div>
+          <div class="nav-item"><span class="nav-icon">🥇</span>Achievements</div>
+          <div class="nav-item"><span class="nav-icon">🔬</span>Research Assistant</div>
+          <div class="nav-item"><span class="nav-icon">🗓️</span>Study Planner</div>
+          <div class="nav-item"><span class="nav-icon">🌐</span>Community</div>
+        </div>
+      </div>
+
+      <div class="upgrade-card">
+        <h3>Upgrade to Premium</h3>
+        <p>Unlock unlimited AI, advanced cases, and premium features.</p>
+        <a href="#" class="upgrade-button">Upgrade Now</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="main-header">
+        <div>
+          <div class="hero-title">
+            <div>
+              <h1>Good morning, Precious! 👋</h1>
+              <p>Ready to strengthen your clinical reasoning today?</p>
+            </div>
+          </div>
+        </div>
+        <div class="profile-card">
+          <div class="profile-avatar">P</div>
+          <div class="profile-info">
+            <strong>Precious O.</strong>
+            <span>Nursing Student</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="hero">
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="tag-pill">Cases Solved</span>
+            <strong>128</strong>
+            <span>+18% this week</span>
+          </div>
+          <div class="stat-card">
+            <span class="tag-pill">Study Streak</span>
+            <strong>14 Days</strong>
+            <span>Keep it up!</span>
+          </div>
+          <div class="stat-card">
+            <span class="tag-pill">Correct Diagnoses</span>
+            <strong>87%</strong>
+            <span>+9% this week</span>
+          </div>
+          <div class="stat-card">
+            <span class="tag-pill">XP Points</span>
+            <strong>2,450</strong>
+            <span>Level 2</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="assistant-panel">
+        <iframe
+          src="imedic_ai (1).html"
+          title="AI Clinical Assistant"
+          style="width:100%; min-height:760px; border:0; border-radius:24px; background:#fff;"
+        ></iframe>
+      </section>
+
+      <div class="cards-row">
+        <div class="small-card">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div>
+              <h3>Continue Learning</h3>
+              <p>View recommended clinical content and complete your current module.</p>
+            </div>
+            <span style="font-size:0.86rem; color: var(--muted);">View all</span>
+          </div>
+          <div style="display:grid; gap: 16px;">
+            <div style="display:flex; gap: 16px; align-items:center;">
+              <div style="width:72px; height:72px; border-radius: 22px; background: linear-gradient(135deg, #2a4d94, #1a2b57); display:grid; place-items:center; color:white; font-size:0.82rem;">Lung</div>
+              <div>
+                <strong>Pneumonia</strong>
+                <p style="margin:6px 0 0; color: var(--muted);">79% Complete</p>
+              </div>
+            </div>
+            <button class="upgrade-button" style="width: fit-content; padding: 12px 18px;">Continue</button>
+          </div>
+        </div>
+
+        <div class="small-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+            <div>
+              <h3>Quick Tools</h3>
+              <p>Jump into fast resources and diagnostic aides.</p>
+            </div>
+            <span style="font-size:0.86rem; color: var(--muted);">4 tools</span>
+          </div>
+          <div class="tool-grid">
+            <div class="tool-box"><div class="tool-icon">🔎</div><strong>Symptom Checker</strong><span>Review symptoms quickly.</span></div>
+            <div class="tool-box"><div class="tool-icon">🧍</div><strong>Body Map</strong><span>Visualize anatomical findings.</span></div>
+            <div class="tool-box"><div class="tool-icon">🧮</div><strong>Clinical Calculators</strong><span>Fast risk scoring.</span></div>
+            <div class="tool-box"><div class="tool-icon">💊</div><strong>Drug Library</strong><span>Browse medication data.</span></div>
+          </div>
+        </div>
+
+        <div class="small-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+            <div>
+              <h3>Learning Activity</h3>
+              <p>This Week</p>
+            </div>
+            <span style="font-size:0.86rem; color: var(--muted);">3h 45m</span>
+          </div>
+          <div class="activity-chart">
+            <div class="chart-top">
+              <span style="color: var(--muted);">Activity</span>
+              <span class="chart-legend">Study time</span>
+            </div>
+            <div class="chart-graph">
+              <div class="chart-line">
+                <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 80 C25 60, 45 78, 70 45 C95 12, 115 55, 140 52 C165 50, 180 38, 200 30" stroke="#7b5bff" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="recommendation-row">
+        <div class="recommendation-card">
+          <img src="https://images.unsplash.com/photo-1580281658620-1eca491b12a5?auto=format&fit=crop&w=800&q=80" alt="Asthma" />
+          <div class="recommendation-body">
+            <strong>Asthma</strong>
+            <span>Clinical Case • 20 min • Beginner</span>
+          </div>
+          <div class="recommendation-footer"><span>Clinical Case</span><span>Beginner</span></div>
+        </div>
+        <div class="recommendation-card">
+          <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=800&q=80" alt="Heart Failure" />
+          <div class="recommendation-body">
+            <strong>Heart Failure</strong>
+            <span>Clinical Case • 30 min • Intermediate</span>
+          </div>
+          <div class="recommendation-footer"><span>Clinical Case</span><span>Intermediate</span></div>
+        </div>
+        <div class="recommendation-card">
+          <img src="https://images.unsplash.com/photo-1514136649219-99bf0e4d4527?auto=format&fit=crop&w=800&q=80" alt="Diabetes" />
+          <div class="recommendation-body">
+            <strong>Diabetes Mellitus</strong>
+            <span>Clinical Case • 25 min • Beginner</span>
+          </div>
+          <div class="recommendation-footer"><span>Clinical Case</span><span>Beginner</span></div>
+        </div>
+        <div class="recommendation-card">
+          <img src="https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=800&q=80" alt="Stroke" />
+          <div class="recommendation-body">
+            <strong>Stroke</strong>
+            <span>Clinical Case • 25 min • Advanced</span>
+          </div>
+          <div class="recommendation-footer"><span>Clinical Case</span><span>Advanced</span></div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="rightbar">
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <h3>Today's Plan</h3>
+          <span style="color: var(--muted); font-size:0.88rem;">May 25, 2026</span>
+        </div>
+        <div class="task-list">
+          <div class="task-row"><span>Complete 2 Clinical Cases</span><strong>●</strong></div>
+          <div class="task-row"><span>Study Respiratory System</span><strong>●</strong></div>
+          <div class="task-row"><span>Review 10 Flashcards</span><strong>●</strong></div>
+          <div class="task-row"><span>AI Tutor Session</span><strong>●</strong></div>
+        </div>
+        <div>
+          <div class="task-item"><span>Progress</span><strong>66%</strong></div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="panel reminder-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;"><h3>Upcoming Classes / Reminders</h3><span style="color: var(--muted); font-size:0.88rem;">View all</span></div>
+        <div class="reminder-item"><strong>Pathophysiology Lecture</strong><span>Today, 2:00 PM</span></div>
+        <div class="reminder-item"><strong>Clinical Posting - Ward 3</strong><span>Tomorrow, 7:00 AM</span></div>
+        <div class="reminder-item"><strong>Pharmacology Quiz</strong><span>May 27, 2025 - 10:00 AM</span></div>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;"><h3>Recent Achievements</h3><span style="color: var(--muted); font-size:0.88rem;">View all</span></div>
+        <div class="achievement-list">
+          <div class="achievement-item"><strong>First Diagnosis</strong><div class="achievement-meta"><span>Completed your first clinical case</span></div></div>
+          <div class="achievement-item"><strong>Streak Master</strong><div class="achievement-meta"><span>7 days study streak</span></div></div>
+          <div class="achievement-item"><strong>Case Solver</strong><div class="achievement-meta"><span>Solved 10 clinical cases</span></div></div>
+        </div>
+      </div>
+
+      <div class="panel insight-panel">
+        <span class="insight-label">AI Insight</span>
+        <p>“Focus on understanding patterns, not just memorizing facts.” — CliniMind AI</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="footer">Disclaimer: This platform is for educational purposes only and does not replace professional medical judgment.</div>
+</body>
+</html>
