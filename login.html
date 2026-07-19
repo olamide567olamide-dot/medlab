@@ -448,7 +448,7 @@
             apiError.classList.remove('show');
 
             try {
-                const API_BASE = window.UNIFY_MEDICAL_AI_API_BASE || (window.location.protocol === 'file:' ? 'http://localhost:3001' : window.location.origin);
+                const API_BASE = window.UNIFY_MEDICAL_AI_API_BASE || (window.location.protocol === 'file:' ? 'http://localhost:3002' : window.location.origin);
                 const response = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
                     headers: {

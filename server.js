@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const net = require('net');
 const path = require('path');
 const { Server } = require('socket.io');
 const cors = require('cors');
@@ -290,7 +291,43 @@ io.on('connection', socket => {
   });
 });
 
-const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Analytics backend running on port ${PORT}`);
+function findFreePort(startPort, maxPort) {
+  return new Promise((resolve, reject) => {
+    const tryPort = port => {
+      if (port > maxPort) {
+        return reject(new Error(`No free port found between ${startPort} and ${maxPort}`));
+      }
+
+      const tester = net.createServer();
+      tester.once('error', () => {
+        tester.close();
+        tryPort(port + 1);
+      });
+      tester.once('listening', () => {
+        tester.close();
+        resolve(port);
+      });
+      tester.listen(port, '127.0.0.1');
+    };
+
+    tryPort(startPort);
+  });
+}
+
+async function startServer() {
+  const basePort = Number(process.env.PORT || 3001);
+  const port = await findFreePort(basePort, basePort + 20);
+
+  server.listen(port, '127.0.0.1', () => {
+    console.log(`Analytics backend running on port ${port}`);
+  });
+}
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+startServer().catch(err => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
 });
