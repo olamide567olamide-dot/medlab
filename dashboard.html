@@ -710,6 +710,83 @@
       font-size: 0.94rem;
     }
 
+    .activity-feed-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .feed-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .feed-summary-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 8px;
+    }
+
+    .feed-summary-card strong {
+      font-size: 1.4rem;
+      color: var(--text);
+    }
+
+    .feed-summary-card span {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .feed-summary-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+
+    .feed-item-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feed-item {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 8px;
+    }
+
+    .feed-item-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .feed-item-detail {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .feed-item-meta {
+      color: #b5bef2;
+      font-size: 0.82rem;
+    }
+
+    .feed-empty {
+      color: var(--muted);
+      font-size: 0.92rem;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
     .progress-bar {
       width: 100%;
       height: 10px;
@@ -930,31 +1007,6 @@
         </div>
       </div>
 
-      <section class="hero">
-        <div class="hero-stats">
-          <div class="stat-card">
-            <span class="tag-pill">Cases Solved</span>
-            <strong id="statCasesSolved">128</strong>
-            <span id="statCasesSolvedNote">+18% this week</span>
-          </div>
-          <div class="stat-card">
-            <span class="tag-pill">Study Streak</span>
-            <strong id="statStudyStreak">14 Days</strong>
-            <span id="statStudyStreakNote">Keep it up!</span>
-          </div>
-          <div class="stat-card">
-            <span class="tag-pill">Correct Diagnoses</span>
-            <strong id="statCorrectPercent">87%</strong>
-            <span id="statCorrectNote">+9% this week</span>
-          </div>
-          <div class="stat-card">
-            <span class="tag-pill">XP Points</span>
-            <strong id="statXpPoints">2,450</strong>
-            <span id="statXpNote">Level 2</span>
-          </div>
-        </div>
-      </section>
-
       <section class="assistant-panel">
         <iframe
           src="imedic_ai (1).html"
@@ -1055,6 +1107,38 @@
         </div>
       </div>
 
+      <div class="panel activity-feed-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <h3>Live Activity Feed</h3>
+          <span style="color: var(--muted); font-size:0.88rem;">Realtime</span>
+        </div>
+        <div class="feed-summary-grid">
+          <div class="feed-summary-card">
+            <strong id="liveActivityCount">0</strong>
+            <span>Last Hour</span>
+            <p id="liveActivityNote">Waiting for live actions.</p>
+          </div>
+          <div class="feed-summary-card">
+            <strong id="feedYesterdayCount">0</strong>
+            <span>Yesterday</span>
+            <p>Recent clinical activity.</p>
+          </div>
+          <div class="feed-summary-card">
+            <strong id="feedLast7DaysCount">0</strong>
+            <span>Last 7 Days</span>
+            <p>Weekly learning momentum.</p>
+          </div>
+          <div class="feed-summary-card">
+            <strong id="feedLast30DaysCount">0</strong>
+            <span>Last 30 Days</span>
+            <p>Monthly progress overview.</p>
+          </div>
+        </div>
+        <div class="feed-item-list" id="liveFeedList">
+          <div class="feed-empty">No activity available yet. Your live feed will show recent learning actions here.</div>
+        </div>
+      </div>
+
       <div class="panel reminder-card">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;"><h3>Upcoming Classes / Reminders</h3><span style="color: var(--muted); font-size:0.88rem;">View all</span></div>
         <div class="reminder-item"><strong>Pathophysiology Lecture</strong><span>Today, 2:00 PM</span></div>
@@ -1099,6 +1183,12 @@
       const progressFill = document.getElementById('progressFill');
       const achievementList = document.getElementById('achievementList');
       const insightText = document.getElementById('insightText');
+      const liveActivityCount = document.getElementById('liveActivityCount');
+      const liveActivityNote = document.getElementById('liveActivityNote');
+      const feedYesterdayCount = document.getElementById('feedYesterdayCount');
+      const feedLast7DaysCount = document.getElementById('feedLast7DaysCount');
+      const feedLast30DaysCount = document.getElementById('feedLast30DaysCount');
+      const liveFeedList = document.getElementById('liveFeedList');
 
       function getStoredProfiles() {
         try {
@@ -1260,15 +1350,42 @@
         renderAchievements(analytics);
       }
 
-      function renderAchievements(analytics) {
-        const items = [
-          { title: 'Learning Momentum', subtitle: `${analytics.learningStreak || 0} day streak` },
-          { title: 'Reasoning Sessions', subtitle: `${analytics.reasoningSessions || 0} sessions completed` },
-          { title: 'AI Conversations', subtitle: `${analytics.totalAIConversations || 0} interactions` }
-        ];
+      function formatActivityTime(timestamp) {
+        try {
+          return new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+          }).format(new Date(timestamp));
+        } catch (error) {
+          return 'Unknown time';
+        }
+      }
 
-        achievementList.innerHTML = items.map(item => `
-          <div class="achievement-item"><strong>${item.title}</strong><div class="achievement-meta"><span>${item.subtitle}</span></div></div>
+      function renderActivityFeed(feed) {
+        const lastHourCount = feed?.lastHour?.length || 0;
+        const yesterdayCount = feed?.yesterday?.length || 0;
+        const last7DaysCount = feed?.last7Days?.length || 0;
+        const last30DaysCount = feed?.last30Days?.length || 0;
+
+        liveActivityCount.textContent = lastHourCount;
+        feedYesterdayCount.textContent = yesterdayCount;
+        feedLast7DaysCount.textContent = last7DaysCount;
+        feedLast30DaysCount.textContent = last30DaysCount;
+        liveActivityNote.textContent = lastHourCount ? `${lastHourCount} actions in the last hour` : 'No live activity recorded yet';
+
+        const rows = feed?.lastHour?.slice(0, 8) || feed?.last7Days?.slice(0, 8) || feed?.last30Days?.slice(0, 8) || [];
+        if (!rows.length) {
+          liveFeedList.innerHTML = '<div class="feed-empty">No recent activity yet. Complete clinical work to populate the live feed.</div>';
+          return;
+        }
+
+        liveFeedList.innerHTML = rows.map(activity => `
+          <div class="feed-item">
+            <div class="feed-item-title">${activity.activityType}</div>
+            <div class="feed-item-detail">${activity.description || activity.moduleName || 'Activity recorded'}</div>
+            <div class="feed-item-meta">${formatActivityTime(activity.timestamp)} • ${activity.moduleName || activity.browser || 'Unknown source'}</div>
+          </div>
         `).join('');
       }
 
@@ -1284,9 +1401,8 @@
             updateDashboardFromAnalytics(payload.analytics);
           }
 
-          if (payload.feed && payload.feed.lastHour) {
-            const recentCount = payload.feed.lastHour.length;
-            insightText.textContent = `You completed ${recentCount} actions in the last hour; your learning path is updating live.`;
+          if (payload.feed) {
+            renderActivityFeed(payload.feed);
           }
         });
 
@@ -1350,6 +1466,10 @@
 
           if (data.analytics) {
             updateDashboardFromAnalytics(data.analytics);
+          }
+
+          if (data.feed) {
+            renderActivityFeed(data.feed);
           }
 
           joinSocket(userId);
