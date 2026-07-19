@@ -328,6 +328,7 @@
         }
 
     </style>
+<script src="/config.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -447,7 +448,8 @@
             apiError.classList.remove('show');
 
             try {
-                const response = await fetch('http://localhost:3001/api/login', {
+                const API_BASE = window.UNIFY_MEDICAL_AI_API_BASE || (window.location.protocol === 'file:' ? 'http://localhost:3001' : window.location.origin);
+                const response = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -470,7 +472,7 @@
                 localStorage.setItem('isLoggedIn', 'true');
                 window.location.href = 'dashboard.html';
             } catch (error) {
-                apiError.textContent = 'Network error. Make sure the analytics server is running at http://localhost:3001';
+                apiError.textContent = 'Network error. Unable to reach the authentication server. Please check your connection and try again.';
                 apiError.classList.add('show');
             }
         });

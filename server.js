@@ -1,8 +1,11 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+
+const API_BASE_URL = process.env.API_BASE_URL || '';
 
 const app = express();
 const server = http.createServer(app);
@@ -19,8 +22,60 @@ app.use(cors({
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.options('*', cors());
+app.disable('x-powered-by');
+
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') || req.path === '/config.js') {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
+app.get('/config.js', (req, res) => {
+  const apiBase = API_BASE_URL || '';
+  res.type('application/javascript');
+  res.send(`window.UNIFY_MEDICAL_AI_API_BASE = '${apiBase}';`);
+});
+
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname)));
+
+app.post('/api/forgot-password', (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Email address is required.' });
+  }
+
+  const user = Array.from(users.values()).find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!user) {
+    return res.json({ success: true, message: 'If an account exists for that email, a reset link has been sent.' });
+  }
+
+  return res.json({ success: true, message: 'Reset instructions have been sent to your email address.' });
+});
+
+app.post('/api/reset-password', (req, res) => {
+  const { email, token, newPassword } = req.body;
+  if (!email || !token || !newPassword) {
+    return res.status(400).json({ success: false, message: 'Email, token, and new password are required.' });
+  }
+
+  const user = Array.from(users.values()).find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found. Please request a new password reset link.' });
+  }
+
+  if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(newPassword)) {
+    return res.status(400).json({ success: false, message: 'Choose a stronger password with at least 8 characters and numbers.' });
+  }
+
+  user.password = newPassword;
+  return res.json({ success: true, message: 'Password has been reset successfully.' });
+});
 
 const users = new Map();
 const activities = new Map();
