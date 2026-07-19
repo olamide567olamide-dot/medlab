@@ -617,20 +617,49 @@
 
             if (!isValid) return;
 
-            // Prepare user data (localStorage demo)
+            apiError.textContent = '';
+            apiError.classList.remove('show');
+
             const userData = {
-                firstName: firstNameInput.value.trim(),
-                lastName: lastNameInput.value.trim(),
+                fullName: `${firstNameInput.value.trim()} ${lastNameInput.value.trim()}`,
+                username: `${firstNameInput.value.trim().toLowerCase()}.${lastNameInput.value.trim().toLowerCase()}`.replace(/\s+/g, ''),
                 email: emailInput.value.trim(),
-                phone: phoneInput.value.trim() || ''
+                password: passwordInput.value,
+                role: 'Nursing Student',
+                course: 'Clinical Reasoning',
+                profession: 'Nursing Student',
+                university: 'Unify Medical AI Academy',
+                country: '',
+                profilePhoto: ''
             };
 
-            localStorage.setItem('userEmail', userData.email);
-            localStorage.setItem('userName', `${userData.firstName} ${userData.lastName}`);
-            localStorage.setItem('isLoggedIn', 'true');
+            try {
+                const response = await fetch('http://localhost:3001/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
 
-            // Redirect to diagnosis page
-            window.location.href = 'disease_diagnosis_app front 3a.html';
+                const data = await response.json();
+                if (!response.ok) {
+                    apiError.textContent = data.error || 'Unable to create account at this time.';
+                    apiError.classList.add('show');
+                    return;
+                }
+
+                localStorage.setItem('currentUserToken', data.token);
+                localStorage.setItem('currentUserId', data.userId);
+                localStorage.setItem('currentUserEmail', data.profile.email);
+                localStorage.setItem('currentUserProfile', JSON.stringify(data.profile));
+                localStorage.setItem('userName', data.profile.fullName);
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                apiError.textContent = 'Network error. Make sure the analytics server is running at http://localhost:3001';
+                apiError.classList.add('show');
+            }
         });
 
         // Clear terms error when checked

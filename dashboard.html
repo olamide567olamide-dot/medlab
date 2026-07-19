@@ -908,18 +908,25 @@
         <div>
           <div class="hero-title">
             <div>
-              <h1>Good morning, Precious! 👋</h1>
+              <h1 id="greetingText">Good morning, Precious! 👋</h1>
               <p>Ready to strengthen your clinical reasoning today?</p>
             </div>
           </div>
         </div>
         <div class="profile-card">
-          <div class="profile-avatar">P</div>
+          <div class="profile-avatar" id="profileAvatar">P</div>
           <div class="profile-info">
-            <strong>Precious O.</strong>
-            <span>Nursing Student</span>
+            <strong id="profileFullName">Precious O.</strong>
+            <span id="profileRole">Nursing Student</span>
+            <span id="profileUsername">@precious</span>
+            <span id="profileEmail">precious@example.com</span>
+            <span id="profileCourse">Clinical Reasoning</span>
+            <span id="profileProfession">Nursing Student</span>
+            <span id="profileUniversity">Unify Medical AI Academy</span>
+            <span id="profileCountry">Country</span>
+            <span id="profileLocalTime">Local Time: --</span>
           </div>
-          <button type="button" onclick="location.href='index.html'" class="upgrade-button" style="background: linear-gradient(135deg, #7b5bff 0%, #3c6cff 100%);">Logout</button>
+          <button type="button" id="logoutButton" class="upgrade-button" style="background: linear-gradient(135deg, #7b5bff 0%, #3c6cff 100%);">Logout</button>
         </div>
       </div>
 
@@ -927,23 +934,23 @@
         <div class="hero-stats">
           <div class="stat-card">
             <span class="tag-pill">Cases Solved</span>
-            <strong>128</strong>
-            <span>+18% this week</span>
+            <strong id="statCasesSolved">128</strong>
+            <span id="statCasesSolvedNote">+18% this week</span>
           </div>
           <div class="stat-card">
             <span class="tag-pill">Study Streak</span>
-            <strong>14 Days</strong>
-            <span>Keep it up!</span>
+            <strong id="statStudyStreak">14 Days</strong>
+            <span id="statStudyStreakNote">Keep it up!</span>
           </div>
           <div class="stat-card">
             <span class="tag-pill">Correct Diagnoses</span>
-            <strong>87%</strong>
-            <span>+9% this week</span>
+            <strong id="statCorrectPercent">87%</strong>
+            <span id="statCorrectNote">+9% this week</span>
           </div>
           <div class="stat-card">
             <span class="tag-pill">XP Points</span>
-            <strong>2,450</strong>
-            <span>Level 2</span>
+            <strong id="statXpPoints">2,450</strong>
+            <span id="statXpNote">Level 2</span>
           </div>
         </div>
       </section>
@@ -1043,8 +1050,8 @@
           <div class="task-row"><span>AI Tutor Session</span><strong>●</strong></div>
         </div>
         <div>
-          <div class="task-item"><span>Progress</span><strong>66%</strong></div>
-          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <div class="task-item"><span>Progress</span><strong id="taskProgressLabel">66%</strong></div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         </div>
       </div>
 
@@ -1057,7 +1064,7 @@
 
       <div class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;"><h3>Recent Achievements</h3><span style="color: var(--muted); font-size:0.88rem;">View all</span></div>
-        <div class="achievement-list">
+        <div class="achievement-list" id="achievementList">
           <div class="achievement-item"><strong>First Diagnosis</strong><div class="achievement-meta"><span>Completed your first clinical case</span></div></div>
           <div class="achievement-item"><strong>Streak Master</strong><div class="achievement-meta"><span>7 days study streak</span></div></div>
           <div class="achievement-item"><strong>Case Solver</strong><div class="achievement-meta"><span>Solved 10 clinical cases</span></div></div>
@@ -1066,11 +1073,337 @@
 
       <div class="panel insight-panel">
         <span class="insight-label">AI Insight</span>
-        <p>“Focus on understanding patterns, not just memorizing facts.” — CliniMind AI</p>
+        <p id="insightText">“Focus on understanding patterns, not just memorizing facts.” — CliniMind AI</p>
       </div>
     </aside>
   </div>
 
   <div class="footer">Disclaimer: This platform is for educational purposes only and does not replace professional medical judgment.</div>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    (function () {
+      const API_BASE = 'http://localhost:3001';
+      const greetingText = document.getElementById('greetingText');
+      const profileAvatar = document.getElementById('profileAvatar');
+      const profileFullName = document.getElementById('profileFullName');
+      const profileRole = document.getElementById('profileRole');
+      const profileUsername = document.getElementById('profileUsername');
+      const profileEmail = document.getElementById('profileEmail');
+      const profileCourse = document.getElementById('profileCourse');
+      const profileProfession = document.getElementById('profileProfession');
+      const profileUniversity = document.getElementById('profileUniversity');
+      const profileCountry = document.getElementById('profileCountry');
+      const profileLocalTime = document.getElementById('profileLocalTime');
+      const logoutButton = document.getElementById('logoutButton');
+      const taskProgressLabel = document.getElementById('taskProgressLabel');
+      const progressFill = document.getElementById('progressFill');
+      const achievementList = document.getElementById('achievementList');
+      const insightText = document.getElementById('insightText');
+
+      function getStoredProfiles() {
+        try {
+          return JSON.parse(localStorage.getItem('userProfiles') || '[]');
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function deriveUsername(fullName) {
+        if (!fullName) return 'user';
+        const parts = fullName.trim().split(/\s+/);
+        const first = parts[0].toLowerCase();
+        const last = parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
+        return `${first}${last ? '.' + last : ''}`.replace(/[^a-z0-9.]/g, '');
+      }
+
+      function getFirstName(fullName) {
+        if (!fullName) return 'User';
+        return fullName.trim().split(/\s+/)[0] || fullName;
+      }
+
+      function getGreeting(hour) {
+        if (hour >= 5 && hour < 12) return 'Good Morning';
+        if (hour >= 12 && hour < 17) return 'Good Afternoon';
+        if (hour >= 17 && hour < 21) return 'Good Evening';
+        return 'Good Night';
+      }
+
+      function formatTime(timezone) {
+        return new Intl.DateTimeFormat('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true,
+          timeZone: timezone,
+        }).format(new Date());
+      }
+
+      function getTimezone() {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      }
+
+      function inferCountryFromTimezone(timezone) {
+        const map = {
+          'America/New_York': 'United States',
+          'America/Chicago': 'United States',
+          'America/Los_Angeles': 'United States',
+          'America/Toronto': 'Canada',
+          'Europe/London': 'United Kingdom',
+          'Europe/Berlin': 'Germany',
+          'Europe/Paris': 'France',
+          'Asia/Tokyo': 'Japan',
+          'Asia/Kolkata': 'India',
+          'Australia/Sydney': 'Australia',
+          'Europe/Madrid': 'Spain',
+          'America/Sao_Paulo': 'Brazil',
+          'Africa/Johannesburg': 'South Africa'
+        };
+        return map[timezone] || null;
+      }
+
+      function inferCountryFromLocale(locale) {
+        if (!locale || !locale.includes('-')) return null;
+        const region = locale.split('-')[1];
+        if (!region) return null;
+        try {
+          return new Intl.DisplayNames(['en'], { type: 'region' }).of(region.toUpperCase());
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function getAuthHeaders() {
+        const token = localStorage.getItem('currentUserToken');
+        return token ? { Authorization: `Bearer ${token}` } : {};
+      }
+
+      function getActiveUserProfile() {
+        const storedProfile = localStorage.getItem('currentUserProfile');
+        if (storedProfile) {
+          try {
+            return JSON.parse(storedProfile);
+          } catch (error) {
+            return null;
+          }
+        }
+
+        const currentEmail = localStorage.getItem('currentUserEmail');
+        if (!currentEmail) return null;
+
+        const profiles = getStoredProfiles();
+        let user = profiles.find(profile => profile.email.toLowerCase() === currentEmail.toLowerCase());
+
+        if (!user) {
+          const legacyEmail = localStorage.getItem('userEmail');
+          const legacyName = localStorage.getItem('userName');
+          if (legacyEmail && legacyName && legacyEmail.toLowerCase() === currentEmail.toLowerCase()) {
+            user = {
+              fullName: legacyName,
+              username: deriveUsername(legacyName),
+              email: currentEmail,
+              role: 'Healthcare Learner',
+              course: 'Clinical Reasoning',
+              profession: 'Medical Student',
+              university: 'Unify Medical AI Academy',
+              country: '',
+              profilePhoto: ''
+            };
+          }
+        }
+
+        return user;
+      }
+
+      function setProfileFields(user, timezone, country) {
+        profileAvatar.textContent = user.profilePhoto || getFirstName(user.fullName).charAt(0).toUpperCase();
+        profileAvatar.setAttribute('aria-label', `${user.fullName} profile photo`);
+        profileFullName.textContent = user.fullName || 'Unify Medical AI User';
+        profileRole.textContent = user.role || 'Healthcare Learner';
+        profileUsername.textContent = `@${user.username || deriveUsername(user.fullName)}`;
+        profileEmail.textContent = user.email || 'No email provided';
+        profileCourse.textContent = user.course || 'Clinical Reasoning';
+        profileProfession.textContent = user.profession || 'Healthcare Learner';
+        profileUniversity.textContent = user.university || 'Unify Medical AI Academy';
+        profileCountry.textContent = country || user.country || inferCountryFromLocale(navigator.language) || 'Unknown';
+        profileLocalTime.textContent = `${formatTime(timezone)} • ${timezone}`;
+      }
+
+      function updateGreeting(timezone, fullName) {
+        const hour = Number(new Intl.DateTimeFormat('en-US', {
+          hour: 'numeric',
+          hour12: false,
+          timeZone: timezone,
+        }).format(new Date()));
+        greetingText.textContent = `${getGreeting(hour)}, ${getFirstName(fullName)}! 👋`;
+      }
+
+      function updateDashboardFromAnalytics(analytics) {
+        const casesSolved = analytics.clinicalCasesCompleted || 0;
+        const streakDays = analytics.learningStreak || 0;
+        const accuracy = Math.min(100, Math.max(0, 70 + (analytics.averageSessionDuration || 0)));
+        const xpPoints = Math.round((analytics.totalLearningHours || 0) * 120);
+        const progress = Math.min(100, Math.max(0, streakDays && analytics.longestStudyStreak ? Math.round((streakDays / Math.max(analytics.longestStudyStreak, 1)) * 100) : 66));
+
+        document.getElementById('statCasesSolved').textContent = casesSolved;
+        document.getElementById('statCasesSolvedNote').textContent = analytics.monthlyImprovement ? `${analytics.monthlyImprovement} this month` : 'Live progress';
+        document.getElementById('statStudyStreak').textContent = `${streakDays} Days`;
+        document.getElementById('statStudyStreakNote').textContent = analytics.longestStudyStreak ? `Longest ${analytics.longestStudyStreak} days` : 'Keep it up!';
+        document.getElementById('statCorrectPercent').textContent = `${accuracy}%`;
+        document.getElementById('statCorrectNote').textContent = analytics.weeklyImprovement ? `${analytics.weeklyImprovement} this week` : 'Clinical reasoning growth';
+        document.getElementById('statXpPoints').textContent = xpPoints;
+        document.getElementById('statXpNote').textContent = analytics.totalLearningHours ? `${analytics.totalLearningHours} learning hours` : 'Study time';
+
+        taskProgressLabel.textContent = `${progress}%`;
+        progressFill.style.width = `${progress}%`;
+
+        insightText.textContent = analytics.insights && analytics.insights.length ? analytics.insights[0] : 'Your dashboard is synced with live performance metrics.';
+        renderAchievements(analytics);
+      }
+
+      function renderAchievements(analytics) {
+        const items = [
+          { title: 'Learning Momentum', subtitle: `${analytics.learningStreak || 0} day streak` },
+          { title: 'Reasoning Sessions', subtitle: `${analytics.reasoningSessions || 0} sessions completed` },
+          { title: 'AI Conversations', subtitle: `${analytics.totalAIConversations || 0} interactions` }
+        ];
+
+        achievementList.innerHTML = items.map(item => `
+          <div class="achievement-item"><strong>${item.title}</strong><div class="achievement-meta"><span>${item.subtitle}</span></div></div>
+        `).join('');
+      }
+
+      function joinSocket(userId) {
+        const socket = io(API_BASE, { transports: ['websocket'] });
+
+        socket.on('connect', () => {
+          socket.emit('join', userId);
+        });
+
+        socket.on('activityUpdate', payload => {
+          if (payload.analytics) {
+            updateDashboardFromAnalytics(payload.analytics);
+          }
+
+          if (payload.feed && payload.feed.lastHour) {
+            const recentCount = payload.feed.lastHour.length;
+            insightText.textContent = `You completed ${recentCount} actions in the last hour; your learning path is updating live.`;
+          }
+        });
+
+        socket.on('connect_error', () => {
+          console.warn('Unable to connect to live analytics socket.');
+        });
+      }
+
+      async function reportDashboardView(userId) {
+        try {
+          await fetch(`${API_BASE}/api/activity`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...getAuthHeaders()
+            },
+            body: JSON.stringify({
+              type: 'Dashboard Viewed',
+              moduleName: 'Dashboard',
+              description: 'User opened the analytics dashboard',
+              meta: {
+                browser: navigator.userAgent,
+                timezone: getTimezone(),
+                country: inferCountryFromLocale(navigator.language) || 'Unknown',
+                duration: 2,
+                status: 'completed'
+              }
+            })
+          });
+        } catch (error) {
+          console.warn('Failed to report dashboard activity.', error);
+        }
+      }
+
+      async function fetchDashboard(user) {
+        const userId = localStorage.getItem('currentUserId');
+        if (!userId) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/api/dashboard/${userId}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              ...getAuthHeaders()
+            }
+          });
+
+          if (!response.ok) {
+            window.location.href = 'login.html';
+            return;
+          }
+
+          const data = await response.json();
+          if (data.profile) {
+            localStorage.setItem('currentUserProfile', JSON.stringify(data.profile));
+            setProfileFields(data.profile, getTimezone(), inferCountryFromTimezone(getTimezone()) || inferCountryFromLocale(navigator.language) || 'Unknown');
+            updateGreeting(getTimezone(), data.profile.fullName);
+          }
+
+          if (data.analytics) {
+            updateDashboardFromAnalytics(data.analytics);
+          }
+
+          joinSocket(userId);
+          reportDashboardView(userId);
+        } catch (error) {
+          console.warn('Unable to load dashboard analytics.', error);
+        }
+      }
+
+      function initializeDashboard() {
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const user = getActiveUserProfile();
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const timezone = getTimezone();
+        const country = inferCountryFromTimezone(timezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
+        setProfileFields(user, timezone, country);
+        updateGreeting(timezone, user.fullName);
+        fetchDashboard(user);
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            () => {
+              const updatedTimezone = getTimezone();
+              const updatedCountry = inferCountryFromTimezone(updatedTimezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
+              setProfileFields(user, updatedTimezone, updatedCountry);
+              updateGreeting(updatedTimezone, user.fullName);
+            },
+            () => {
+              /* keep working with browser timezone */
+            },
+            { timeout: 8000 }
+          );
+        }
+      }
+
+      logoutButton.addEventListener('click', function () {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUserEmail');
+        localStorage.removeItem('currentUserProfile');
+        localStorage.removeItem('currentUserId');
+        localStorage.removeItem('currentUserToken');
+        window.location.href = 'login.html';
+      });
+
+      initializeDashboard();
+    })();
+  </script>
 </body>
 </html>

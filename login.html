@@ -377,6 +377,7 @@
         const passwordInput = document.getElementById('password');
         const emailError = document.getElementById('emailError');
         const passwordError = document.getElementById('passwordError');
+        const apiError = document.getElementById('apiError');
 
         // Email validation
         function validateEmail(email) {
@@ -412,7 +413,7 @@
         });
 
         // Form submission
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const email = emailInput.value.trim();
@@ -440,14 +441,37 @@
                 passwordError.classList.remove('show');
             }
 
-            // If valid, redirect to disease diagnosis page
-            if (isValid) {
-                // Store user data in localStorage for demo purposes
-                localStorage.setItem('userEmail', email);
+            if (!isValid) return;
+
+            apiError.textContent = '';
+            apiError.classList.remove('show');
+
+            try {
+                const response = await fetch('http://localhost:3001/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    apiError.textContent = data.error || 'Unable to login at this time. Please try again later.';
+                    apiError.classList.add('show');
+                    return;
+                }
+
+                localStorage.setItem('currentUserToken', data.token);
+                localStorage.setItem('currentUserId', data.userId);
+                localStorage.setItem('currentUserEmail', data.profile.email);
+                localStorage.setItem('currentUserProfile', JSON.stringify(data.profile));
+                localStorage.setItem('userName', data.profile.fullName);
                 localStorage.setItem('isLoggedIn', 'true');
-                
-                // Redirect to disease diagnosis page
                 window.location.href = 'dashboard.html';
+            } catch (error) {
+                apiError.textContent = 'Network error. Make sure the analytics server is running at http://localhost:3001';
+                apiError.classList.add('show');
             }
         });
 
@@ -455,10 +479,14 @@
         emailInput.addEventListener('input', function() {
             this.classList.remove('error');
             emailError.classList.remove('show');
+            apiError.textContent = '';
+            apiError.classList.remove('show');
         });
 
         passwordInput.addEventListener('input', function() {
             this.classList.remove('error');
             passwordError.classList.remove('show');
+            apiError.textContent = '';
+            apiError.classList.remove('show');
         });
     </script>
