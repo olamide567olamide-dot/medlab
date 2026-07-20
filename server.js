@@ -1,12 +1,14 @@
 const express = require('express');
 const http = require('http');
 const net = require('net');
+const fs = require('fs');
 const path = require('path');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 
 const API_BASE_URL = process.env.API_BASE_URL || '';
+let currentApiBase = API_BASE_URL;
 
 const app = express();
 const server = http.createServer(app);
@@ -28,6 +30,7 @@ app.disable('x-powered-by');
 
 app.use((req, res, next) => {
   if (req.path.startsWith('/api') || req.path === '/config.js') {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
@@ -37,10 +40,15 @@ app.use((req, res, next) => {
 });
 
 app.get('/config.js', (req, res) => {
-  const apiBase = API_BASE_URL || '';
+  const apiBase = currentApiBase || '';
   res.type('application/javascript');
   res.send(`window.UNIFY_MEDICAL_AI_API_BASE = '${apiBase}';`);
 });
+
+async function writeConfigFile(apiBase) {
+  const configContent = `window.UNIFY_MEDICAL_AI_API_BASE = '${apiBase}';\n`;
+  await fs.promises.writeFile(path.join(__dirname, 'config.js'), configContent, 'utf-8');
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -317,14 +325,32 @@ function findFreePort(startPort, maxPort) {
 async function startServer() {
   const basePort = Number(process.env.PORT || 3001);
   const port = await findFreePort(basePort, basePort + 20);
+  const host = process.env.HOST || '127.0.0.1';
+  currentApiBase = API_BASE_URL || `http://${host}:${port}`;
 
-  server.listen(port, '127.0.0.1', () => {
-    console.log(`Analytics backend running on port ${port}`);
+  try {
+    await writeConfigFile(currentApiBase);
+    console.log(`Wrote config.js with API base ${currentApiBase}`);
+  } catch (err) {
+    console.warn('Warning: failed to write config.js locally:', err.message);
+  }
+
+  server.listen(port, host, () => {
+    console.log(`Analytics backend running on ${currentApiBase}`);
+    if (port !== basePort) {
+      console.log(`Port ${basePort} was unavailable; using free port ${port}`);
+    }
   });
 }
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 startServer().catch(err => {
