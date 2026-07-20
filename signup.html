@@ -291,6 +291,29 @@
             background-color: rgba(220, 38, 38, 0.05);
         }
 
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 2.4rem;
+            right: 0.75rem;
+            padding: 0.35rem 0.75rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 999px;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         @media (max-width: 640px) {
             body {
                 padding: 1.2rem;
@@ -390,18 +413,20 @@
                 <div class="error-message" id="phoneError">Please enter a valid phone number</div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group password-wrapper">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                <button type="button" class="password-toggle" id="togglePassword">Show</button>
                 <div class="password-strength">
                     <div class="password-strength-bar" id="strengthBar"></div>
                 </div>
                 <div class="error-message" id="passwordError">Password must be at least 8 characters with uppercase, lowercase, and numbers</div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group password-wrapper">
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                <button type="button" class="password-toggle" id="toggleConfirmPassword">Show</button>
                 <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
             </div>
 
@@ -431,6 +456,8 @@
         const phoneInput = document.getElementById('phone');
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
+        const togglePasswordButton = document.getElementById('togglePassword');
+        const toggleConfirmPasswordButton = document.getElementById('toggleConfirmPassword');
         const termsInput = document.getElementById('terms');
         const strengthBar = document.getElementById('strengthBar');
         const signupBtn = document.getElementById('signupBtn');
@@ -651,6 +678,21 @@
             localStorage.setItem('userName', userData.fullName);
             localStorage.setItem('isLoggedIn', 'true');
             window.location.href = 'dashboard.html';
+        });
+
+        function togglePasswordVisibility(input, button) {
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            button.textContent = isHidden ? 'Hide' : 'Show';
+            input.focus();
+        }
+
+        togglePasswordButton.addEventListener('click', function() {
+            togglePasswordVisibility(passwordInput, this);
+        });
+
+        toggleConfirmPasswordButton.addEventListener('click', function() {
+            togglePasswordVisibility(confirmPasswordInput, this);
         });
 
         // Clear terms error when checked
