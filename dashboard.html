@@ -1163,11 +1163,8 @@
   </div>
 
   <div class="footer">Disclaimer: This platform is for educational purposes only and does not replace professional medical judgment.</div>
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <script src="config.js"></script>
   <script>
     (function () {
-      const API_BASE = window.UNIFY_MEDICAL_AI_API_BASE || window.location.origin;
       const greetingText = document.getElementById('greetingText');
       const profileAvatar = document.getElementById('profileAvatar');
       const profileFullName = document.getElementById('profileFullName');
@@ -1263,11 +1260,6 @@
         }
       }
 
-      function getAuthHeaders() {
-        const token = localStorage.getItem('currentUserToken');
-        return token ? { Authorization: `Bearer ${token}` } : {};
-      }
-
       function getActiveUserProfile() {
         const storedProfile = localStorage.getItem('currentUserProfile');
         if (storedProfile) {
@@ -1351,6 +1343,21 @@
         renderAchievements(analytics);
       }
 
+      function renderAchievements(analytics) {
+        const achievements = [
+          { title: 'First Diagnosis', detail: analytics.clinicalCasesCompleted ? 'Completed your first clinical case' : 'Begin your first case today' },
+          { title: 'Streak Master', detail: `${analytics.learningStreak || 0} days study streak` },
+          { title: 'Case Solver', detail: `${analytics.clinicalCasesCompleted || 0} clinical cases completed` }
+        ];
+
+        achievementList.innerHTML = achievements.map(item => `
+          <div class="achievement-item">
+            <strong>${item.title}</strong>
+            <div class="achievement-meta"><span>${item.detail}</span></div>
+          </div>
+        `).join('');
+      }
+
       function formatActivityTime(timestamp) {
         try {
           return new Intl.DateTimeFormat('en-US', {
@@ -1390,94 +1397,60 @@
         `).join('');
       }
 
-      function joinSocket(userId) {
-        const socket = io(API_BASE, { transports: ['websocket', 'polling'] });
-
-        socket.on('connect', () => {
-          socket.emit('join', userId);
-        });
-
-        socket.on('activityUpdate', payload => {
-          if (payload.analytics) {
-            updateDashboardFromAnalytics(payload.analytics);
-          }
-
-          if (payload.feed) {
-            renderActivityFeed(payload.feed);
-          }
-        });
-
-        socket.on('connect_error', () => {
-          console.warn('Unable to connect to live analytics socket.');
-        });
+      function buildMockAnalytics() {
+        return {
+          totalLearningHours: 18,
+          totalAIConversations: 14,
+          clinicalCasesCompleted: 8,
+          reasoningSessions: 6,
+          questionsAsked: 22,
+          averageSessionDuration: 42,
+          learningStreak: 5,
+          longestStudyStreak: 10,
+          favoriteBodySystem: 'Cardiovascular',
+          favoriteDiseaseCategory: 'Respiratory',
+          mostUsedTool: 'Clinical Assessment Tool',
+          weakestSubject: 'Neurology',
+          strongestSubject: 'Cardiology',
+          monthlyImprovement: '18%',
+          weeklyImprovement: '14%',
+          insights: ['Your diagnostic accuracy is improving steadily.']
+        };
       }
 
-      async function reportDashboardView(userId) {
-        try {
-          await fetch(`${API_BASE}/api/activity`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              ...getAuthHeaders()
-            },
-            body: JSON.stringify({
-              type: 'Dashboard Viewed',
-              moduleName: 'Dashboard',
-              description: 'User opened the analytics dashboard',
-              meta: {
-                browser: navigator.userAgent,
-                timezone: getTimezone(),
-                country: inferCountryFromLocale(navigator.language) || 'Unknown',
-                duration: 2,
-                status: 'completed'
-              }
-            })
-          });
-        } catch (error) {
-          console.warn('Failed to report dashboard activity.', error);
-        }
+      function buildMockFeed() {
+        const now = new Date();
+        return {
+          lastHour: [
+            { activityType: 'Clinical Case Completed', moduleName: 'Cardiology Case', description: 'Completed a simulated patient scenario', timestamp: now.toISOString() },
+            { activityType: 'AI Conversation', moduleName: 'Diagnostic Assistant', description: 'Reviewed clinical reasoning suggestions', timestamp: new Date(now.getTime() - 10 * 60000).toISOString() }
+          ],
+          yesterday: [
+            { activityType: 'Clinical Reasoning Session', moduleName: 'Respiratory Assessment', description: 'Practiced differential diagnosis', timestamp: new Date(now.getTime() - 24 * 60 * 60000).toISOString() },
+            { activityType: 'Flashcard Review', moduleName: 'Pharmacology', description: 'Reviewed 12 flashcards', timestamp: new Date(now.getTime() - 26 * 60 * 60000).toISOString() }
+          ],
+          last7Days: [
+            { activityType: 'Clinical Case Completed', moduleName: 'Neurology Case', description: 'Completed a stroke management scenario', timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60000).toISOString() },
+            { activityType: 'Study Session', moduleName: 'Pathophysiology', description: 'Completed a guided review', timestamp: new Date(now.getTime() - 4 * 24 * 60 * 60000).toISOString() }
+          ],
+          last30Days: [
+            { activityType: 'AI Conversation', moduleName: 'Exam Prep', description: 'Reviewed sample questions', timestamp: new Date(now.getTime() - 8 * 24 * 60 * 60000).toISOString() },
+            { activityType: 'Clinical Case Completed', moduleName: 'Emergency Medicine', description: 'Answered rapid triage scenarios', timestamp: new Date(now.getTime() - 15 * 24 * 60 * 60000).toISOString() }
+          ]
+        };
       }
 
-      async function fetchDashboard(user) {
-        const userId = localStorage.getItem('currentUserId');
-        if (!userId) {
+      function fetchDashboard(user) {
+        if (!user) {
           window.location.href = 'login.html';
           return;
         }
 
-        try {
-          const response = await fetch(`${API_BASE}/api/dashboard/${userId}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              ...getAuthHeaders()
-            }
-          });
-
-          if (!response.ok) {
-            window.location.href = 'login.html';
-            return;
-          }
-
-          const data = await response.json();
-          if (data.profile) {
-            localStorage.setItem('currentUserProfile', JSON.stringify(data.profile));
-            setProfileFields(data.profile, getTimezone(), inferCountryFromTimezone(getTimezone()) || inferCountryFromLocale(navigator.language) || 'Unknown');
-            updateGreeting(getTimezone(), data.profile.fullName);
-          }
-
-          if (data.analytics) {
-            updateDashboardFromAnalytics(data.analytics);
-          }
-
-          if (data.feed) {
-            renderActivityFeed(data.feed);
-          }
-
-          joinSocket(userId);
-          reportDashboardView(userId);
-        } catch (error) {
-          console.warn('Unable to load dashboard analytics.', error);
-        }
+        setProfileFields(user, getTimezone(), inferCountryFromTimezone(getTimezone()) || inferCountryFromLocale(navigator.language) || 'Unknown');
+        updateGreeting(getTimezone(), user.fullName);
+        const analytics = buildMockAnalytics();
+        updateDashboardFromAnalytics(analytics);
+        renderActivityFeed(buildMockFeed());
       }
 
       function initializeDashboard() {

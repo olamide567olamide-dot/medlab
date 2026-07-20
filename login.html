@@ -328,7 +328,6 @@
         }
 
     </style>
-<script src="config.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -448,31 +447,29 @@
             apiError.classList.remove('show');
 
             try {
-                const API_BASE = window.UNIFY_MEDICAL_AI_API_BASE || window.location.origin;
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
+                        const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
+                const user = storedProfiles.find(profile => profile.email.toLowerCase() === email.toLowerCase() && profile.password === password);
 
-                const data = await response.json();
-                if (!response.ok) {
-                    apiError.textContent = data.error || 'Unable to login at this time. Please try again later.';
+                if (!user) {
+                    apiError.textContent = 'Invalid email or password. Please try again or sign up for a new account.';
                     apiError.classList.add('show');
                     return;
                 }
 
-                localStorage.setItem('currentUserToken', data.token);
-                localStorage.setItem('currentUserId', data.userId);
-                localStorage.setItem('currentUserEmail', data.profile.email);
-                localStorage.setItem('currentUserProfile', JSON.stringify(data.profile));
-                localStorage.setItem('userName', data.profile.fullName);
+                const userId = user.userId || (crypto?.randomUUID?.() || `user-${Date.now()}`);
+                const token = user.token || Math.random().toString(36).slice(2);
+                user.userId = userId;
+                user.token = token;
+                localStorage.setItem('userProfiles', JSON.stringify(storedProfiles));
+                localStorage.setItem('currentUserToken', token);
+                localStorage.setItem('currentUserId', userId);
+                localStorage.setItem('currentUserEmail', user.email);
+                localStorage.setItem('currentUserProfile', JSON.stringify(user));
+                localStorage.setItem('userName', user.fullName);
                 localStorage.setItem('isLoggedIn', 'true');
                 window.location.href = 'dashboard.html';
             } catch (error) {
-                apiError.textContent = 'Network error. Unable to reach the authentication server. Please check your connection and try again.';
+                apiError.textContent = 'Unexpected error. Please refresh the page and try again.';
                 apiError.classList.add('show');
             }
         });

@@ -352,7 +352,6 @@
             }
         }
     </style>
-<script src="config.js"></script>
 </head>
 <body>
     <div class="signup-container">
@@ -634,34 +633,24 @@
                 profilePhoto: ''
             };
 
-            try {
-                const API_BASE = window.UNIFY_MEDICAL_AI_API_BASE || window.location.origin;
-                const response = await fetch(`${API_BASE}/api/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(userData)
-                });
-
-                const data = await response.json();
-                if (!response.ok) {
-                    apiError.textContent = data.error || 'Unable to create account at this time.';
-                    apiError.classList.add('show');
-                    return;
-                }
-
-                localStorage.setItem('currentUserToken', data.token);
-                localStorage.setItem('currentUserId', data.userId);
-                localStorage.setItem('currentUserEmail', data.profile.email);
-                localStorage.setItem('currentUserProfile', JSON.stringify(data.profile));
-                localStorage.setItem('userName', data.profile.fullName);
-                localStorage.setItem('isLoggedIn', 'true');
-                window.location.href = 'dashboard.html';
-            } catch (error) {
-                apiError.textContent = 'Network error. Unable to reach the registration server. Please check your connection and try again.';
+            const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
+            if (storedProfiles.some(profile => profile.email.toLowerCase() === userData.email.toLowerCase())) {
+                apiError.textContent = 'An account with this email already exists. Please log in instead.';
                 apiError.classList.add('show');
+                return;
             }
+
+            userData.userId = crypto?.randomUUID?.() || `user-${Date.now()}`;
+            userData.token = Math.random().toString(36).slice(2);
+            storedProfiles.push(userData);
+            localStorage.setItem('userProfiles', JSON.stringify(storedProfiles));
+            localStorage.setItem('currentUserToken', userData.token);
+            localStorage.setItem('currentUserId', userData.userId);
+            localStorage.setItem('currentUserEmail', userData.email);
+            localStorage.setItem('currentUserProfile', JSON.stringify(userData));
+            localStorage.setItem('userName', userData.fullName);
+            localStorage.setItem('isLoggedIn', 'true');
+            window.location.href = 'dashboard.html';
         });
 
         // Clear terms error when checked

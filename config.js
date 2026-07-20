@@ -1,1 +1,0 @@
-window.UNIFY_MEDICAL_AI_API_BASE = 'http://127.0.0.1:3002';
