@@ -327,6 +327,16 @@
       border-radius: 22px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+    }
+
+    .profile-info {
+      display: none;
+      gap: 4px;
+    }
+
+    .profile-info.visible {
+      display: grid;
     }
 
     .profile-avatar {
@@ -338,11 +348,6 @@
       place-items: center;
       font-weight: 700;
       color: white;
-    }
-
-    .profile-info {
-      display: grid;
-      gap: 4px;
     }
 
     .profile-info strong {
@@ -950,6 +955,135 @@
         padding: 22px;
       }
     }
+
+    /* Fluid container and centered layout for large screens */
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Make profile card wrap on narrow screens */
+    .profile-card {
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .profile-info {
+      min-width: 0;
+    }
+
+    /* Responsive iframe overrides (lower min-height on small devices) */
+    iframe[title="Clinical Reasoning Assistant"] {
+      width: 100%;
+      min-height: 420px !important;
+    }
+
+    /* Use auto-fit grids so cards wrap gracefully */
+    .hero-stats {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .recommendation-row {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .tool-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .cards-row {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        gap: 12px;
+      }
+
+      .sidebar {
+        min-width: 0;
+      }
+
+      .brand-info h1 {
+        font-size: 0.95rem;
+      }
+
+      .profile-card {
+        padding: 10px;
+      }
+
+      .upgrade-button {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 12px;
+      }
+
+      .hero-title h1 {
+        font-size: 1.4rem;
+      }
+
+      .hero-title p {
+        max-width: none;
+      }
+
+      .main-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .profile-card {
+        justify-content: space-between;
+      }
+
+      .profile-info {
+        order: 2;
+        width: 100%;
+      }
+
+      .profile-avatar {
+        order: 1;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .cards-row {
+        grid-template-columns: 1fr;
+      }
+
+      .recommendation-row {
+        grid-template-columns: 1fr;
+      }
+
+      .rightbar {
+        display: none;
+      }
+
+      .sidebar {
+        display: block;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      iframe[title="Clinical Reasoning Assistant"] {
+        min-height: 360px !important;
+      }
+    }
+
+    /* Accessibility / touch target improvements */
+    .icon-button, .upgrade-button, .compose-row button, .nav-item {
+      touch-action: manipulation;
+    }
   </style>
 </head>
 <body>
@@ -968,16 +1102,7 @@
           <div class="nav-item active"><span class="nav-icon">🏠</span>Clinical Dashboard</div>
           <a href="imedic_ai (1).html" class="nav-item"><span class="nav-icon">🤖</span>Clinical Reasoning Assistant<span class="badge">New</span></a>
           <a href="disease_diagnosis_app front 3a.html" class="nav-item"><span class="nav-icon">🩺</span>Patient Assessment</a>
-          <div class="nav-item"><span class="nav-icon">🧠</span>Clinical Reasoning Workspace</div>
-          <div class="nav-item"><span class="nav-icon">🧑‍⚕️</span>Virtual Clinical Cases</div>
-          <div class="nav-item"><span class="nav-icon">📁</span>Case-Based Learning</div>
         </div>
-
-      <div class="upgrade-card">
-        <h3>Upgrade to Premium</h3>
-        <p>Unlock unlimited AI, advanced cases, and premium features.</p>
-        <a href="#" class="upgrade-button">Upgrade Now</a>
-      </div>
     </aside>
 
     <main class="main">
@@ -1017,26 +1142,6 @@
 
       <div class="cards-row">
         <div class="small-card">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-            <div>
-              <h3>Continue Clinical Learning</h3>
-              <p>View recommended clinical content and complete your current module.</p>
-            </div>
-            <span style="font-size:0.86rem; color: var(--muted);">View all</span>
-          </div>
-          <div style="display:grid; gap: 16px;">
-            <div style="display:flex; gap: 16px; align-items:center;">
-              <div style="width:72px; height:72px; border-radius: 22px; background: linear-gradient(135deg, #2a4d94, #1a2b57); display:grid; place-items:center; color:white; font-size:0.82rem;">Lung</div>
-              <div>
-                <strong>Pneumonia</strong>
-                <p style="margin:6px 0 0; color: var(--muted);">79% Complete</p>
-              </div>
-            </div>
-            <button class="upgrade-button" style="width: fit-content; padding: 12px 18px;">Continue</button>
-          </div>
-        </div>
-
-        <div class="small-card">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
             <div>
               <h3>Quick Tools</h3>
@@ -1045,7 +1150,7 @@
             <span style="font-size:0.86rem; color: var(--muted);">4 tools</span>
           </div>
           <div class="tool-grid">
-            <div class="tool-box"><div class="tool-icon">🔎</div><strong>Clinical Assessment Tool</strong><span>Review symptoms quickly.</span></div>
+            <a href="disease_diagnosis_app front 3a.html" class="tool-box"><div class="tool-icon">🔎</div><strong>Clinical Assessment Tool</strong><span>Review symptoms quickly.</span></a>
             <div class="tool-box"><div class="tool-icon">🧍</div><strong>Body Map</strong><span>Visualize anatomical findings.</span></div>
             <div class="tool-box"><div class="tool-icon">🧮</div><strong>Clinical Decision Calculators</strong><span>Fast risk scoring.</span></div>
             <div class="tool-box"><div class="tool-icon">💊</div><strong>Therapeutics &amp; Drug Reference</strong><span>Browse medication data.</span></div>
@@ -1053,40 +1158,6 @@
         </div>
 
        
-      <section class="recommendation-row">
-        <div class="recommendation-card">
-          <img src="https://images.unsplash.com/photo-1580281658620-1eca491b12a5?auto=format&fit=crop&w=800&q=80" alt="Asthma" />
-          <div class="recommendation-body">
-            <strong>Asthma</strong>
-            <span>Clinical Case • 20 min • Beginner</span>
-          </div>
-          <div class="recommendation-footer"><span>Clinical Case</span><span>Beginner</span></div>
-        </div>
-        <div class="recommendation-card">
-          <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=800&q=80" alt="Heart Failure" />
-          <div class="recommendation-body">
-            <strong>Heart Failure</strong>
-            <span>Clinical Case • 30 min • Intermediate</span>
-          </div>
-          <div class="recommendation-footer"><span>Clinical Case</span><span>Intermediate</span></div>
-        </div>
-        <div class="recommendation-card">
-          <img src="https://images.unsplash.com/photo-1514136649219-99bf0e4d4527?auto=format&fit=crop&w=800&q=80" alt="Diabetes" />
-          <div class="recommendation-body">
-            <strong>Diabetes Mellitus</strong>
-            <span>Clinical Case • 25 min • Beginner</span>
-          </div>
-          <div class="recommendation-footer"><span>Clinical Case</span><span>Beginner</span></div>
-        </div>
-        <div class="recommendation-card">
-          <img src="https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=800&q=80" alt="Stroke" />
-          <div class="recommendation-body">
-            <strong>Stroke</strong>
-            <span>Clinical Case • 25 min • Advanced</span>
-          </div>
-          <div class="recommendation-footer"><span>Clinical Case</span><span>Advanced</span></div>
-        </div>
-      </section>
     </main>
 
     <aside class="rightbar">
@@ -1166,6 +1237,7 @@
   <script>
     (function () {
       const greetingText = document.getElementById('greetingText');
+      const profileCard = document.querySelector('.profile-card');
       const profileAvatar = document.getElementById('profileAvatar');
       const profileFullName = document.getElementById('profileFullName');
       const profileRole = document.getElementById('profileRole');
@@ -1224,6 +1296,10 @@
           hour12: true,
           timeZone: timezone,
         }).format(new Date());
+      }
+
+      function updateProfileLocalTime(user, timezone, country) {
+        profileLocalTime.textContent = `${formatTime(timezone)} • ${country || user.country || inferCountryFromLocale(navigator.language) || 'Unknown'}`;
       }
 
       function getTimezone() {
@@ -1308,7 +1384,7 @@
         profileProfession.textContent = user.profession || 'Healthcare Learner';
         profileUniversity.textContent = user.university || 'Unify Medical AI Academy';
         profileCountry.textContent = country || user.country || inferCountryFromLocale(navigator.language) || 'Unknown';
-        profileLocalTime.textContent = `${formatTime(timezone)} • ${timezone}`;
+        profileLocalTime.textContent = `${formatTime(timezone)} • ${country || user.country || inferCountryFromLocale(navigator.language) || 'Unknown'}`;
       }
 
       function updateGreeting(timezone, fullName) {
@@ -1446,7 +1522,7 @@
           return;
         }
 
-        setProfileFields(user, getTimezone(), inferCountryFromTimezone(getTimezone()) || inferCountryFromLocale(navigator.language) || 'Unknown');
+        setProfileFields(user, getTimezone(), user.country || inferCountryFromTimezone(getTimezone()) || inferCountryFromLocale(navigator.language) || 'Unknown');
         updateGreeting(getTimezone(), user.fullName);
         const analytics = buildMockAnalytics();
         updateDashboardFromAnalytics(analytics);
@@ -1466,16 +1542,29 @@
         }
 
         const timezone = getTimezone();
-        const country = inferCountryFromTimezone(timezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
+        const inferredCountry = inferCountryFromTimezone(timezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
+        const country = user.country || inferredCountry;
         setProfileFields(user, timezone, country);
         updateGreeting(timezone, user.fullName);
         fetchDashboard(user);
+
+        const profileInfo = document.querySelector('.profile-info');
+        profileCard.addEventListener('click', function () {
+          profileInfo.classList.toggle('visible');
+        });
+
+        updateProfileLocalTime(user, timezone, country);
+        setInterval(() => {
+          const currentTimezone = getTimezone();
+          const currentCountry = user.country || inferCountryFromTimezone(currentTimezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
+          updateProfileLocalTime(user, currentTimezone, currentCountry);
+        }, 1000);
 
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             () => {
               const updatedTimezone = getTimezone();
-              const updatedCountry = inferCountryFromTimezone(updatedTimezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
+              const updatedCountry = user.country || inferCountryFromTimezone(updatedTimezone) || inferCountryFromLocale(navigator.language) || 'Unknown';
               setProfileFields(user, updatedTimezone, updatedCountry);
               updateGreeting(updatedTimezone, user.fullName);
             },

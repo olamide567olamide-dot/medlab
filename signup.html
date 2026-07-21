@@ -94,7 +94,9 @@
         input[type="text"],
         input[type="email"],
         input[type="password"],
-        input[type="tel"] {
+        input[type="tel"],
+        input[type="file"],
+        select {
             width: 100%;
             padding: 1rem;
             border: 2px solid var(--border-color);
@@ -108,7 +110,8 @@
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="password"]:focus,
-        input[type="tel"]:focus {
+        input[type="tel"]:focus,
+        select:focus {
             outline: none;
             border-color: var(--primary-color);
             background-color: var(--white);
@@ -402,6 +405,12 @@
             </div>
 
             <div class="form-group">
+                <label for="profilePhoto">Profile Photo</label>
+                <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*">
+                <div class="error-message" id="profilePhotoError">Please upload a profile photo</div>
+            </div>
+
+            <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 <div class="error-message" id="emailError">Please enter a valid email address</div>
@@ -411,6 +420,47 @@
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
                 <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="profession">Profession</label>
+                    <select id="profession" name="profession" required>
+                        <option value="">Select profession</option>
+                        <option value="Medical Student">Medical Student</option>
+                        <option value="Nursing Student">Nursing Student</option>
+                        <option value="Physician">Physician</option>
+                        <option value="Clinical Educator">Clinical Educator</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div class="error-message" id="professionError">Profession is required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="roleType">Role Type</label>
+                    <select id="roleType" name="roleType" required>
+                        <option value="">Select role type</option>
+                        <option value="Student Learner">Student Learner</option>
+                        <option value="Practicing Clinician">Practicing Clinician</option>
+                        <option value="Educator">Educator</option>
+                        <option value="Administrator">Administrator</option>
+                    </select>
+                    <div class="error-message" id="roleTypeError">Role type is required</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="university">University / Facility</label>
+                    <input type="text" id="university" name="university" placeholder="Harvard Medical" required>
+                    <div class="error-message" id="universityError">Institution is required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country" placeholder="United States" required>
+                    <div class="error-message" id="countryError">Country is required</div>
+                </div>
             </div>
 
             <div class="form-group password-wrapper">
@@ -452,8 +502,13 @@
         const signupForm = document.getElementById('signupForm');
         const firstNameInput = document.getElementById('firstName');
         const lastNameInput = document.getElementById('lastName');
+        const profilePhotoInput = document.getElementById('profilePhoto');
         const emailInput = document.getElementById('email');
         const phoneInput = document.getElementById('phone');
+        const professionInput = document.getElementById('profession');
+        const roleTypeInput = document.getElementById('roleType');
+        const universityInput = document.getElementById('university');
+        const countryInput = document.getElementById('country');
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const togglePasswordButton = document.getElementById('togglePassword');
@@ -483,6 +538,15 @@
             if (password.length < 8) return 'weak';
             if (password.length < 12 || !(/[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password))) return 'fair';
             return 'strong';
+        }
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(file);
+            });
         }
 
         // Password strength meter
@@ -523,6 +587,26 @@
         phoneInput.addEventListener('input', function() {
             this.classList.remove('error');
             document.getElementById('phoneError').classList.remove('show');
+        });
+
+        professionInput.addEventListener('change', function() {
+            this.classList.remove('error');
+            document.getElementById('professionError').classList.remove('show');
+        });
+
+        roleTypeInput.addEventListener('change', function() {
+            this.classList.remove('error');
+            document.getElementById('roleTypeError').classList.remove('show');
+        });
+
+        universityInput.addEventListener('input', function() {
+            this.classList.remove('error');
+            document.getElementById('universityError').classList.remove('show');
+        });
+
+        countryInput.addEventListener('input', function() {
+            this.classList.remove('error');
+            document.getElementById('countryError').classList.remove('show');
         });
 
         // Password validation
@@ -614,6 +698,54 @@
                 document.getElementById('phoneError').classList.remove('show');
             }
 
+            // Validate profession and role type
+            if (!professionInput.value) {
+                professionInput.classList.add('error');
+                document.getElementById('professionError').classList.add('show');
+                isValid = false;
+            } else {
+                professionInput.classList.remove('error');
+                document.getElementById('professionError').classList.remove('show');
+            }
+
+            if (!roleTypeInput.value) {
+                roleTypeInput.classList.add('error');
+                document.getElementById('roleTypeError').classList.add('show');
+                isValid = false;
+            } else {
+                roleTypeInput.classList.remove('error');
+                document.getElementById('roleTypeError').classList.remove('show');
+            }
+
+            // Validate institution and country
+            if (!universityInput.value.trim()) {
+                universityInput.classList.add('error');
+                document.getElementById('universityError').classList.add('show');
+                isValid = false;
+            } else {
+                universityInput.classList.remove('error');
+                document.getElementById('universityError').classList.remove('show');
+            }
+
+            if (!countryInput.value.trim()) {
+                countryInput.classList.add('error');
+                document.getElementById('countryError').classList.add('show');
+                isValid = false;
+            } else {
+                countryInput.classList.remove('error');
+                document.getElementById('countryError').classList.remove('show');
+            }
+
+            // Validate profile photo
+            if (profilePhotoInput.files.length && !profilePhotoInput.files[0].type.startsWith('image/')) {
+                profilePhotoInput.classList.add('error');
+                document.getElementById('profilePhotoError').classList.add('show');
+                isValid = false;
+            } else {
+                profilePhotoInput.classList.remove('error');
+                document.getElementById('profilePhotoError').classList.remove('show');
+            }
+
             // Validate password
             if (!passwordInput.value || !validatePassword(passwordInput.value)) {
                 passwordInput.classList.add('error');
@@ -651,14 +783,19 @@
                 fullName: `${firstNameInput.value.trim()} ${lastNameInput.value.trim()}`,
                 username: `${firstNameInput.value.trim().toLowerCase()}.${lastNameInput.value.trim().toLowerCase()}`.replace(/\s+/g, ''),
                 email: emailInput.value.trim(),
+                phone: phoneInput.value.trim(),
                 password: passwordInput.value,
-                role: 'Nursing Student',
+                role: roleTypeInput.value,
                 course: 'Clinical Reasoning',
-                profession: 'Nursing Student',
-                university: 'Unify Medical AI Academy',
-                country: '',
+                profession: professionInput.value,
+                university: universityInput.value.trim(),
+                country: countryInput.value.trim(),
                 profilePhoto: ''
             };
+
+            if (profilePhotoInput.files.length) {
+                userData.profilePhoto = await readFileAsDataURL(profilePhotoInput.files[0]);
+            }
 
             const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
             if (storedProfiles.some(profile => profile.email.toLowerCase() === userData.email.toLowerCase())) {
