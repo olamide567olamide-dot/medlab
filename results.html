@@ -130,10 +130,10 @@
 </head>
 <body>
   <div class="container">
-    <header>
+      <header>
       <h1>UNIFY🌎MEDIC🩺</h1>
-      <h2>⚕️ Medical Diagnosis Report 🧬</h2>
-      <p>💊 AI-Powered Disease Analysis & Recommendations 🩺</p>
+      <h2>⚕️ Clinical Case Assessment Report 🧬</h2>
+      <p>💊 AI-Powered Clinical Reasoning & Decision Support Platform 🩺</p>
     </header>
 
     <main>
@@ -141,8 +141,8 @@
       <div class="margin-bottom-30">
         <div class="button-group">
           <button class="btn-secondary" onclick="goBackToDiagnosis()">← Back to Diagnosis Form</button>
-          <button class="btn-primary" onclick="window.print()" style="background: linear-gradient(135deg,  #2b7a9d 0%,  #2b7a9d 100%); color: white;">🖨️ Print Report</button>
-          <button class="btn-primary" onclick="downloadPDF()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">📥 Download as PDF</button>
+          <button class="btn-primary" onclick="window.print()" style="background: linear-gradient(135deg,  #2b7a9d 0%,  #2b7a9d 100%); color: white;">🖨️ Print Clinical Reasoning Report</button>
+          <button class="btn-primary" onclick="downloadPDF()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">📥 Download Clinical Reasoning Report (PDF)</button>
         </div>
       </div>
 
@@ -201,8 +201,8 @@
       let reportHTML = `
         <div class="results-header">
           <h1>UNIFY🌎MEDIC🩺</h1>
-          <h2>📊 Our AI helps healthcare students and professionals develop clinical reasoning by analyzing symptoms, explaining why certain diseases are more likely than others, and guiding users through the diagnostic thought process 📈📉</h2>
-          <h3 style="margin-top: 15px; color: #0d5a7a;">Generated on ${diagnosisData.timestamp}</h3>
+          <h2>📊 Our AI assists healthcare students and professionals in developing evidence-based clinical reasoning by analyzing patient information, generating differential diagnoses, explaining supporting and opposing clinical findings, identifying red-flag features, and guiding users through the clinical decision-making process.</h2>
+          <h3 style="margin-top: 15px; color: #0d5a7a;">Clinical Reasoning Report Generated On ${diagnosisData.timestamp}</h3>
           <div class="patient-info">
             <div class="info-item">
               <div class="info-label">👤 Patient Name</div>
@@ -213,7 +213,7 @@
               <div class="result-highlight">${patientData.age} years old, ${escapeHtml(patientData.gender)}</div>
             </div>
             <div class="info-item">
-              <div class="info-label">🔍 Symptoms Reported</div>
+              <div class="info-label">🔍 Presenting Symptoms</div>
               <div class="result-highlight">${symptoms.length} reported</div>
             </div>
             <div class="info-item">
@@ -375,7 +375,7 @@
               <div class="result-highlight">${patientData.age} years old, ${escapeHtml(patientData.gender)}</div>
             </div>
             <div class="info-item">
-              <div class="info-label">🔍 Symptoms Reported</div>
+              <div class="info-label">🔍 Presenting Symptoms</div>
               <div class="result-highlight">${symptoms.length} reported</div>
             </div>
           </div>

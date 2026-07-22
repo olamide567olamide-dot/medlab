@@ -327,16 +327,6 @@
       border-radius: 22px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
-      cursor: pointer;
-    }
-
-    .profile-info {
-      display: none;
-      gap: 4px;
-    }
-
-    .profile-info.visible {
-      display: grid;
     }
 
     .profile-avatar {
@@ -348,6 +338,11 @@
       place-items: center;
       font-weight: 700;
       color: white;
+    }
+
+    .profile-info {
+      display: grid;
+      gap: 4px;
     }
 
     .profile-info strong {
@@ -1237,7 +1232,6 @@
   <script>
     (function () {
       const greetingText = document.getElementById('greetingText');
-      const profileCard = document.querySelector('.profile-card');
       const profileAvatar = document.getElementById('profileAvatar');
       const profileFullName = document.getElementById('profileFullName');
       const profileRole = document.getElementById('profileRole');
@@ -1547,11 +1541,6 @@
         setProfileFields(user, timezone, country);
         updateGreeting(timezone, user.fullName);
         fetchDashboard(user);
-
-        const profileInfo = document.querySelector('.profile-info');
-        profileCard.addEventListener('click', function () {
-          profileInfo.classList.toggle('visible');
-        });
 
         updateProfileLocalTime(user, timezone, country);
         setInterval(() => {
