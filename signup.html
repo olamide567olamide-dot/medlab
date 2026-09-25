@@ -621,7 +621,6 @@
     </div>
 
     <script>
-        const API_BASE = ''; // set to the backend's full origin if hosted separately
         const signupForm = document.getElementById('signupForm');
         const firstNameInput = document.getElementById('firstName');
         const lastNameInput = document.getElementById('lastName');
@@ -931,34 +930,34 @@
                     localProfileExtras.profilePhoto = await readFileAsDataURL(profilePhotoInput.files[0]);
                 }
 
-                const response = await fetch(`${API_BASE}/api/signup`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        firstName,
-                        lastName,
-                        email,
-                        phone: phoneInput.value.trim(),
-                        password: passwordInput.value
-                    })
-                });
-                const data = await response.json().catch(() => ({}));
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const emailExists = users.some(user => user.email?.toLowerCase() === email.toLowerCase());
 
-                if (!response.ok || !data.success) {
-                    apiError.textContent = data.message || 'Unable to create account. Please try again.';
+                if (emailExists) {
+                    apiError.textContent = 'An account with this email already exists. Please log in instead.';
                     apiError.classList.add('show');
                     signupBtn.textContent = originalText;
                     signupBtn.disabled = false;
                     return;
                 }
 
-                const mergedProfile = { ...localProfileExtras, ...data.user, fullName };
+                const user = {
+                    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+                    firstName,
+                    lastName,
+                    email,
+                    password: passwordInput.value
+                };
+                users.push(user);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                const mergedProfile = { ...localProfileExtras, ...user, fullName };
                 delete mergedProfile.password;
                 const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
                 storedProfiles.push(mergedProfile);
                 localStorage.setItem('userProfiles', JSON.stringify(storedProfiles));
-                localStorage.setItem('currentUserId', data.user.id);
-                localStorage.setItem('currentUserEmail', data.user.email);
+                localStorage.setItem('currentUserId', user.id);
+                localStorage.setItem('currentUserEmail', user.email);
                 localStorage.setItem('currentUserProfile', JSON.stringify(mergedProfile));
                 localStorage.setItem('userName', fullName);
                 localStorage.setItem('isLoggedIn', 'true');

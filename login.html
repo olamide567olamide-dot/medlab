@@ -518,7 +518,6 @@
         </div>
     </div>
  <script>
-     const API_BASE = ''; // set to the backend's full origin if hosted separately
         const loginForm = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
@@ -561,7 +560,7 @@
         });
 
         // Form submission
-        loginForm.addEventListener('submit', async function(e) {
+        loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const email = emailInput.value.trim();
@@ -594,26 +593,22 @@
             apiError.textContent = '';
             apiError.classList.remove('show');
 
-            try {
-                loginBtn.textContent = 'Logging in...';
-                loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
 
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await response.json().catch(() => ({}));
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(storedUser =>
+                storedUser.email?.toLowerCase() === email.toLowerCase() && storedUser.password === password
+            );
 
-                if (!response.ok || !data.success) {
-                    apiError.textContent = 'Invalid email or password. Please try again or sign up for a new account.';
-                    apiError.classList.add('show');
-                    loginBtn.textContent = 'Login to Unify Medical AI';
-                    loginBtn.disabled = false;
-                    return;
-                }
+            if (!user) {
+                apiError.textContent = 'Invalid email or password. Please try again or sign up for a new account.';
+                apiError.classList.add('show');
+                loginBtn.textContent = 'Login to Unify Medical AI';
+                loginBtn.disabled = false;
+                return;
+            }
 
-                const user = data.user;
                 const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
                 const cachedProfile = storedProfiles.find(profile => profile.email?.toLowerCase() === user.email.toLowerCase()) || {};
                 const fullName = `${user.firstName} ${user.lastName}`.trim();
@@ -625,12 +620,6 @@
                 localStorage.setItem('userName', fullName);
                 localStorage.setItem('isLoggedIn', 'true');
                 window.location.href = 'dashboard.html';
-            } catch (error) {
-                apiError.textContent = 'Network error. Please check your connection and try again.';
-                apiError.classList.add('show');
-                loginBtn.textContent = 'Login to Unify Medical AI';
-                loginBtn.disabled = false;
-            }
         });
 
         // Clear errors on input
