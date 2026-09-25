@@ -2,5 +2,28 @@
   "name": "unify-medical-ai",
   "version": "1.0.0",
   "description": "Unify Medical AI landing page and static frontend.",
-  "private": true
+  "private": true,
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olamide567olamide-dot/medlab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/olamide567olamide-dot/medlab/issues"
+  },
+  "homepage": "https://github.com/olamide567olamide-dot/medlab#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.3.0",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^10.0.10"
+  }
 }

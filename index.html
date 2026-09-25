@@ -1,11 +1,40 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unify Medical AI - Clinical Reasoning & Medical Learning Platform</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Unify Medic - Clinical Reasoning & Medical Learning Platform</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231D5A76'/%3E%3Cpath d='M19 15v19a13 13 0 0 0 26 0V15' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round'/%3E%3Cpath d='M32 24v14M25 31h14' stroke='%23E8896B' stroke-width='4.6' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --ink: #0E3B47;
+            --teal: #2B7A9D;
+            --teal-deep: #1D5A76;
+            --aqua: #8FE0D3;
+            --aqua-soft: #E4F6F2;
+            --sand: #F7F5F0;
+            --sand-deep: #EFEBE2;
+            --coral: #E8896B;
+            --coral-soft: #FBEAE4;
+            --line: #DDD8CC;
+            --white: #FFFFFF;
+            --radius-s: 10px;
+            --radius-m: 16px;
+            --radius-l: 28px;
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Inter', 'Segoe UI', sans-serif;
+            --muted: #B9CDD2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -21,8 +50,8 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: #fff;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            background: var(--white);
+            box-shadow: none;
         }
 
         .navbar-container {
@@ -45,7 +74,7 @@
             justify-content: center;
             font-weight: 800;
             font-size: 1.1rem;
-            color: #0f172a;
+            color: var(--ink);
             letter-spacing: 0.3px;
         }
 
@@ -59,7 +88,7 @@
             transition: flex-direction 0.3s ease;
         }
         
-        .navbar-menu.horizontal {
+        .navbar-menu.vertical {
             position: fixed;
             top: 70px;
             left: 0;
@@ -69,15 +98,15 @@
             align-items: flex-start;
             gap: 12px;
             padding: 20px 24px;
-            background: #f8f9fa;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            background: var(--sand);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
             margin-top: 0;
             z-index: 999;
         }
 
         .nav-link {
-            color: #0f172a;
+            color: var(--teal-deep);
             text-decoration: none;
             font-weight: 600;
             padding: 8px 2px;
@@ -87,7 +116,7 @@
 
         .nav-link:hover,
         .nav-link.active {
-            color: #0f172a;
+            color: var(--ink);
         }
 
         .nav-link.active::after {
@@ -97,7 +126,7 @@
             right: 0;
             bottom: 0;
             height: 2px;
-            background: #ffffff;
+            background: var(--white);
             border-radius: 999px;
         }
 
@@ -108,12 +137,11 @@
             gap: 8px;
             padding: 11px 18px;
             border-radius: 999px;
-            background: #ffffff;
-            color: #0f172a;
+            background: var(--ink);
+            color: var(--white);
             text-decoration: none;
             font-weight: 700;
-            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
-            border: 1px solid rgba(15, 23, 42, 0.08);
+            border: 0;
         }
 
         .hamburger-menu {
@@ -132,13 +160,13 @@
         }
 
         .hamburger-menu:hover {
-            background: rgba(15, 23, 42, 0.05);
+            background: var(--aqua-soft);
         }
 
         .hamburger-menu span {
             width: 24px;
             height: 2px;
-            background: #0f172a;
+            background: var(--ink);
             border-radius: 999px;
             transition: transform 0.25s ease, opacity 0.25s ease;
             display: block;
@@ -163,8 +191,8 @@
             right: 0;
             width: min(82vw, 320px);
             height: 100vh;
-            background: #fff;
-            box-shadow: -20px 0 40px rgba(15, 23, 42, 0.18);
+            background: var(--white);
+            box-shadow: none;
             padding: 96px 24px 24px;
             display: flex;
             flex-direction: column;
@@ -186,20 +214,20 @@
             padding: 14px 16px;
             text-decoration: none;
             border-radius: 12px;
-            color: #0f172a;
+            color: var(--teal-deep);
             font-weight: 600;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         .mobile-nav-link:hover {
-            background: #f1f5f9;
-            color: #0f172a;
+            background: var(--sand);
+            color: var(--ink);
         }
 
         .mobile-nav-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.5);
+            background: var(--line);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -217,8 +245,8 @@
             width: fit-content;
             padding: 12px 18px;
             border-radius: 999px;
-            background: #111827;
-            color: #fff;
+            background: var(--ink);
+            color: var(--white);
             font-size: 1rem;
             font-weight: 700;
         }
@@ -291,6 +319,327 @@
                 transform: translateY(-50%) translateX(-16px);
             }
         }
+        /* Self-contained landing-page layout and design system */
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            line-height: 1.6;
+            background: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        img, picture, video, canvas, svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        section, header, footer, .navbar-container, .hero-container,
+        .reviews-section, .services-grid, .about-container, .about-stats,
+        .blog-grid, .testimonials-grid, .footer-container, .review-card,
+        .blog-card, .testimonial-card, .Nurse-card {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .navbar {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .navbar-logo {
+            font: 500 1.5rem var(--font-display);
+            color: var(--ink);
+            gap: 0.55rem;
+        }
+
+        .logo-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--teal), var(--aqua));
+            color: transparent;
+            font-size: 0;
+            position: relative;
+        }
+
+        .logo-icon::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--teal), var(--aqua));
+        }
+
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--teal-deep);
+            font: 500 14.5px var(--font-body);
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ink);
+            border-bottom-color: var(--teal);
+        }
+
+        .login-signup-btn {
+            border-radius: 999px;
+            background: var(--ink);
+            color: var(--white);
+            border: 0;
+            transition: var(--transition);
+        }
+
+        .login-signup-btn:hover {
+            background: var(--teal-deep);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .navbar-menu.vertical {
+            display: flex;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--sand);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            z-index: 999;
+        }
+
+        .hero {
+            padding: 6rem 2rem;
+            background: var(--sand);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            grid-column: 1 / -1;
+            max-width: 820px;
+        }
+
+        .hero-title {
+            font: 500 clamp(2.75rem, 5vw, 3rem) / 1.15 var(--font-display);
+            color: var(--ink);
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title .highlight { color: var(--teal); }
+
+        .hero-description {
+            max-width: 760px;
+            color: var(--teal-deep);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .badge {
+            padding: 0.75rem 1.2rem;
+            border: 1.5px solid var(--line);
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--teal-deep);
+            font: 500 0.9rem var(--font-body);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .badge:hover {
+            border-color: var(--teal);
+            transform: translateY(-2px);
+        }
+
+        .badge.diagnosis-badge, .badge.monitoring-badge {
+            background: var(--ink);
+            color: var(--white);
+            border-color: var(--ink);
+        }
+
+        .badge.diagnosis-badge:hover, .badge.monitoring-badge:hover {
+            background: var(--teal-deep);
+        }
+
+        .reviews-section, .services, .about, .doctors, .testimonials, .blog {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+
+        .reviews-section, .about-container, .services-grid, .blog-container,
+        .testimonials-container, .footer-container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .reviews-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .reviews-header, .review-carousel { display: flex; gap: 1rem; align-items: center; }
+        .reviews-header { flex-direction: column; align-items: flex-start; }
+        .review-stat { display: flex; align-items: center; gap: 1rem; }
+        .stat-number { font-size: 2.5rem; color: var(--teal); }
+        .stat-label, .reviews-text { color: var(--teal-deep); }
+        .reviews-text { max-width: 320px; }
+        .reviews-container { display: flex; gap: 1rem; flex: 1; overflow-x: auto; }
+        .carousel-btn {
+            width: 45px;
+            height: 45px;
+            border: 1.5px solid var(--line);
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--ink);
+            cursor: pointer;
+        }
+        .carousel-btn:hover { background: var(--ink); color: var(--white); }
+        .review-card {
+            flex-shrink: 0;
+            width: 150px;
+            height: 150px;
+            display: grid;
+            place-items: center;
+            border-radius: var(--radius-m);
+            border: 1px solid var(--line);
+            background: var(--aqua-soft);
+            color: var(--coral);
+            font-size: 2rem;
+        }
+
+        .services-header, .blog-container h2, .testimonials-container h2,
+        .doctors h3 { text-align: center; }
+        .services-header { max-width: 760px; margin: 0 auto 3rem; }
+        .services-header h2, .about-label { color: var(--teal); }
+        .services-header h3, .about-content h2 { color: var(--ink); font-size: 2.5rem; }
+        .services-header p, .about-content p { color: var(--teal-deep); }
+        .services-grid, .testimonials-grid, .blog-grid, .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .service-card, .testimonial-card, .blog-card, .Nurse-card {
+            border-radius: var(--radius-m);
+            border: 1px solid var(--line);
+            background: var(--white);
+            box-shadow: none;
+            overflow: hidden;
+        }
+        .service-card:hover, .testimonial-card:hover, .blog-card:hover, .Nurse-card:hover {
+            transform: translateY(-4px);
+        }
+        .service-image {
+            min-height: 260px;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+            color: var(--white);
+            font-weight: 600;
+            text-align: center;
+        }
+        .symptoms-img { background: var(--teal); }
+        .assessment-img { background: var(--teal-deep); }
+        .diagnosis-img { background: var(--aqua); color: var(--ink); }
+        .about-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-image img { width: 100%; border-radius: var(--radius-m); }
+        .about-content h2 { line-height: 1.25; margin: 0.75rem 0 1.25rem; }
+        .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .about-stats h3 { color: var(--teal); font-size: 2rem; }
+        .about-stats p, .Nurse-card p { color: var(--teal-deep); }
+        .read-more-btn { color: var(--teal); font-weight: 600; text-decoration: none; display: inline-flex; gap: 0.5rem; margin-bottom: 2rem; }
+        .doctors h3 { margin-bottom: 2rem; color: var(--ink); }
+        .Nurse-card { max-width: 320px; margin: 0 auto; padding: 1.5rem; text-align: center; }
+        .Nurse-card img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin: 0 auto 1rem; }
+        .testimonial-card, .blog-card { padding: 1.5rem; }
+        .testimonial-card .stars { color: var(--coral); margin-bottom: 1rem; }
+        .testimonial-card p, .blog-card p { color: var(--teal-deep); }
+        .testimonial-card h4, .blog-card h3 { color: var(--ink); }
+        .blog-card { padding: 0 0 1.5rem; }
+        .blog-card img { width: 100%; height: 240px; object-fit: cover; }
+        .blog-card h3, .blog-card p, .blog-card a { margin-left: 1.5rem; margin-right: 1.5rem; }
+        .blog-card h3 { margin-top: 1.25rem; }
+        .blog-card a { color: var(--teal); font-weight: 600; text-decoration: none; }
+        .cta { background: var(--ink); color: var(--white); padding: 5rem 2rem; text-align: center; }
+        .cta-content { max-width: 760px; margin: 0 auto; }
+        .cta-content h2 { color: var(--white); font-size: 2.5rem; }
+        .cta-content p { color: var(--muted); margin: 1rem 0 2rem; }
+        .cta-button { display: inline-block; padding: 1rem 2rem; border-radius: 999px; background: var(--aqua); color: var(--ink); font-weight: 700; text-decoration: none; }
+        .cta-button:hover { background: var(--white); transform: translateY(-2px); }
+        .footer { background: var(--ink); color: var(--white); padding: 4rem 2rem 2rem; }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; }
+        .footer-section h4 { color: var(--white); margin-bottom: 1rem; }
+        .footer-section p, .footer-section a, .footer-bottom { color: var(--muted); }
+        .footer-section a { text-decoration: none; }
+        .footer-section a:hover { color: var(--aqua); }
+        .footer-section ul { list-style: none; }
+        .footer-section li { margin-bottom: 0.5rem; }
+        .social-links { display: flex; gap: 1rem; }
+        .footer-bottom { max-width: 1200px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--teal-deep); text-align: center; }
+
+        @media (max-width: 768px) {
+            .navbar-menu, .login-signup-btn { display: none; }
+            .hamburger-menu { display: inline-flex; }
+            .hero-container, .about-container, .reviews-section { grid-template-columns: 1fr; }
+            .hero-content { grid-column: auto; }
+            .hero-title { font-size: 2.5rem; }
+            .service-badges { flex-direction: column; }
+            .badge { width: 100%; }
+            .reviews-section { gap: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero, .reviews-section, .services, .about, .doctors, .testimonials, .blog, .cta { padding-left: 1rem; padding-right: 1rem; }
+            .hero-title { font-size: 2rem; }
+            .about-stats { grid-template-columns: 1fr; }
+            .cta-content h2, .services-header h3, .about-content h2 { font-size: 1.8rem; }
+        }
+
+                /* Unify Medic brand logo */
+                .navbar-logo { display: flex; align-items: center; }
+                .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+                .brand-mark { flex: 0 0 auto; display: block; }
+                .brand-word { font: 600 1.45rem/1 var(--font-display); color: var(--ink); letter-spacing: -0.01em; }
+                .brand-word span { color: var(--teal); margin-left: 0.2em; font-weight: 500; }
+                @media (max-width: 480px) {
+                    .brand-word { font-size: 1.2rem; }
+                    .brand-mark { width: 32px; height: 32px; }
+                }
     </style>
 </head>
 <body>
@@ -298,7 +647,22 @@
     <header class="navbar">
         <div class="navbar-container">
             <div class="navbar-logo">
-                <span class="logo-icon">Unify Medical AI</span> 
+                                <a href="#home" class="brand" aria-label="Unify Medic home">
+                                    <svg class="brand-mark" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">
+                                        <defs>
+                                            <linearGradient id="um-bg" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0" stop-color="#2B7A9D"/>
+                                                <stop offset="1" stop-color="#0E3B47"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <rect width="64" height="64" rx="16" fill="url(#um-bg)"/>
+                                        <path d="M19 15v19a13 13 0 0 0 26 0V15" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="19" cy="15" r="4.2" fill="#8FE0D3"/>
+                                        <circle cx="45" cy="15" r="4.2" fill="#8FE0D3"/>
+                                        <path d="M32 24v14M25 31h14" stroke="#E8896B" stroke-width="4.6" stroke-linecap="round"/>
+                                    </svg>
+                                    <span class="brand-word">Unify<span>Medic</span></span>
+                                </a>
             </div>
             <nav class="navbar-menu">
                 <a href="#home" class="nav-link">Home</a>
@@ -344,11 +708,6 @@
                     <button class="badge monitoring-badge">Patient Assessment & Symptom Analysis</button>
                     <button class="badge quick-diagnosis">AI Clinical Reasoning</button>
                     <button class="badge specialist">Evidence-Based Clinical Guidance</button>
-                </div>
-            </div>
-           
-                    </div>
-                    
                 </div>
             </div>
         </div>
@@ -409,9 +768,9 @@
                 <img src="image.jpg" alt="About iMEDIC Assistant">
             </div>
             <div class="about-content">
-                <h4 class="about-label">About Unify Medical AI</h4>
-                <h2>EXCELLENCE IN CLINICAL REASONING AND MEDICAL LEARNING</h2>
-                <p>Unify Medical AI is an AI-powered Clinical Reasoning and Medical Learning Platform designed for nursing students, medical students, physicians, and healthcare professionals.
+                <h4 class="about-label">About Unify Medic</h4>
+                    <h2>EXCELLENCE IN CLINICAL REASONING AND MEDICAL LEARNING</h2>
+                    <p>Unify Medic is an AI-powered Clinical Reasoning and Medical Learning Platform designed for nursing students, medical students, physicians, and healthcare professionals.
                 The platform helps users strengthen clinical reasoning by guiding them through structured patient assessments, differential clinical reasoning, evidence-based recommendations, and interactive clinical learning experiences.
                 It is intended for education and clinical decision support and should not replace professional medical judgment.</p>
                 <a href="#" class="read-more-btn">
@@ -433,7 +792,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
     </section>
  
     <!-- Doctors Section -->
@@ -445,7 +804,6 @@
                 <h4>Nur.Oladipupo Precious</h4>
                 <p>Pre-Licensure Nursing Student</p>
             </div>
-        </div>
     </section>
   
     <!-- Testimonials Section -->
@@ -517,7 +875,7 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
-                <h4>About Unify Medical AI</h4>
+                <h4>About Unify Medic</h4>
                 <p>Our AI helps healthcare students and professionals develop clinical reasoning by analyzing patient cases, explaining differential reasoning, and guiding users through evidence-based decision support.</p>
             </div>
             <div class="footer-section">
@@ -545,7 +903,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Unify Medical AI. All rights reserved.</p>
+            <p>&copy; 2026 Unify Medic. All rights reserved.</p>
         </div>
     </footer>
 

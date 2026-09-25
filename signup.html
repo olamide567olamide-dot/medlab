@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - UNIFY🌍MEDIC</title>
+    <title>Sign Up - UNIFY MEDIC</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231D5A76'/%3E%3Cpath d='M19 15v19a13 13 0 0 0 26 0V15' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round'/%3E%3Cpath d='M32 24v14M25 31h14' stroke='%23E8896B' stroke-width='4.6' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,16 +17,31 @@
         }
 
         :root {
-            --primary-color: #2b7a9d;
-            --primary-dark: #1f5a7a;
-            --accent-blue: #6bb3d4;
-            --light-bg: #f5f9fb;
-            --white: #ffffff;
-            --text-dark: #333333;
-            --text-light: #666666;
-            --border-color: #e0e0e0;
+            --ink: #0E3B47;
+            --teal: #2B7A9D;
+            --teal-deep: #1D5A76;
+            --aqua: #8FE0D3;
+            --aqua-soft: #E4F6F2;
+            --sand: #F7F5F0;
+            --sand-deep: #EFEBE2;
+            --coral: #E8896B;
+            --coral-soft: #FBEAE4;
+            --line: #DDD8CC;
+            --radius-s: 10px;
+            --radius-m: 16px;
+            --radius-l: 28px;
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Inter', 'Segoe UI', sans-serif;
+            --primary-color: var(--teal);
+            --primary-dark: var(--teal-deep);
+            --accent-blue: var(--aqua);
+            --light-bg: var(--sand);
+            --white: #FFFFFF;
+            --text-dark: var(--ink);
+            --text-light: var(--teal-deep);
+            --border-color: var(--line);
             --transition: all 0.3s ease;
-            --success-color: #10b981;
+            --success-color: var(--aqua);
         }
 
         html {
@@ -32,17 +51,71 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--font-body);
             color: var(--text-dark);
             line-height: 1.6;
-            background: linear-gradient(135deg, #f5f9fb 0%, #e8f4f8 100%);
+            background: linear-gradient(135deg, var(--sand) 0%, var(--aqua-soft) 100%);
             min-height: 100vh;
             width: 100%;
             min-width: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 6rem 2rem 2rem;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--line);
+            z-index: 10;
+        }
+
+        .site-nav .navbar-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: var(--ink);
+            font: 500 1.35rem var(--font-display);
+            text-decoration: none;
+        }
+
+        .site-nav .logo-icon {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            border-radius: var(--radius-s);
+            color: var(--ink);
+            background: linear-gradient(135deg, var(--teal), var(--aqua));
+            font: 600 0.9rem var(--font-body);
+        }
+
+        .site-nav .nav-cta {
+            padding: 0.65rem 1.15rem;
+            border-radius: 999px;
+            background: var(--ink);
+            color: var(--white);
+            text-decoration: none;
+            font: 600 0.9rem var(--font-body);
+            transition: var(--transition);
+        }
+
+        .site-nav .nav-cta:hover {
+            background: var(--teal-deep);
+            transform: translateY(-2px);
         }
 
         * {
@@ -52,7 +125,7 @@
         .signup-container {
             background: var(--white);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: none;
             max-width: 500px;
             width: 100%;
             padding: 3rem 2rem;
@@ -115,7 +188,7 @@
             outline: none;
             border-color: var(--primary-color);
             background-color: var(--white);
-            box-shadow: 0 0 0 4px rgba(43, 122, 157, 0.1);
+            box-shadow: none;
         }
 
         .form-row {
@@ -141,12 +214,12 @@
 
         .password-strength-bar.weak {
             width: 33%;
-            background-color: #dc2626;
+            background-color: var(--coral);
         }
 
         .password-strength-bar.fair {
             width: 66%;
-            background-color: #f59e0b;
+            background-color: var(--coral);
         }
 
         .password-strength-bar.strong {
@@ -201,7 +274,7 @@
 
         .signup-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(43, 122, 157, 0.3);
+            box-shadow: none;
         }
 
         .signup-btn:disabled {
@@ -210,13 +283,13 @@
         }
 
         .api-error {
-            background-color: rgba(220, 38, 38, 0.1);
-            border-left: 4px solid #dc2626;
+            background-color: var(--line);
+            border-left: 4px solid var(--coral);
             padding: 0.75rem 1rem;
             border-radius: 8px;
             margin-bottom: 1.5rem;
             font-size: 0.85rem;
-            color: #dc2626;
+            color: var(--coral);
             display: none;
         }
 
@@ -279,7 +352,7 @@
         }
 
         .error-message {
-            color: #dc2626;
+            color: var(--coral);
             font-size: 0.85rem;
             margin-top: 0.5rem;
             display: none;
@@ -290,8 +363,8 @@
         }
 
         input.error {
-            border-color: #dc2626;
-            background-color: rgba(220, 38, 38, 0.05);
+            border-color: var(--coral);
+            background-color: var(--line);
         }
 
         .password-wrapper {
@@ -304,7 +377,7 @@
             right: 0.75rem;
             padding: 0.35rem 0.75rem;
             border: none;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--line);
             color: var(--text-light);
             font-size: 0.9rem;
             font-weight: 700;
@@ -314,7 +387,7 @@
         }
 
         .password-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--line);
         }
 
         @media (max-width: 640px) {
@@ -377,14 +450,63 @@
                 gap: 0.5rem;
             }
         }
+        .login-btn, .signup-btn { border-radius: 999px; background: var(--ink); color: var(--white); }
+        .login-btn:hover:not(:disabled), .signup-btn:hover:not(:disabled) { background: var(--teal-deep); transform: translateY(-2px); }
+        .login-container, .signup-container { border-radius: var(--radius-m); border: 1px solid var(--line); box-shadow: none; }
+                /* Unify Medic brand logo */
+                .navbar-logo { display: flex; align-items: center; }
+                .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+                .brand-mark { flex: 0 0 auto; display: block; }
+                .brand-word { font: 600 1.45rem/1 var(--font-display); color: var(--ink); letter-spacing: -0.01em; }
+                .brand-word span { color: var(--teal); margin-left: 0.2em; font-weight: 500; }
+                @media (max-width: 480px) {
+                    .brand-word { font-size: 1.2rem; }
+                    .brand-mark { width: 32px; height: 32px; }
+                }
     </style>
 </head>
 <body>
+    <header class="site-nav">
+                <div class="navbar-logo">
+                        <a href="index.html" class="brand" aria-label="Unify Medic home">
+                            <svg class="brand-mark" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="um-bg" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0" stop-color="#2B7A9D"/>
+                                        <stop offset="1" stop-color="#0E3B47"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="64" height="64" rx="16" fill="url(#um-bg)"/>
+                                <path d="M19 15v19a13 13 0 0 0 26 0V15" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="19" cy="15" r="4.2" fill="#8FE0D3"/>
+                                <circle cx="45" cy="15" r="4.2" fill="#8FE0D3"/>
+                                <path d="M32 24v14M25 31h14" stroke="#E8896B" stroke-width="4.6" stroke-linecap="round"/>
+                            </svg>
+                            <span class="brand-word">Unify<span>Medic</span></span>
+                        </a>
+                </div>
+        <a class="nav-cta" href="login.html">Log in</a>
+    </header>
     <div class="signup-container">
         <a href="index.html" class="back-link">← Back to Home</a>
 
         <div class="signup-header">
-            <div class="logo">Unify Medical AI</div>
+            <a href="index.html" class="brand" aria-label="Unify Medic home">
+                <svg class="brand-mark" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="um-bg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#2B7A9D"/>
+                            <stop offset="1" stop-color="#0E3B47"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="64" height="64" rx="16" fill="url(#um-bg)"/>
+                    <path d="M19 15v19a13 13 0 0 0 26 0V15" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="19" cy="15" r="4.2" fill="#8FE0D3"/>
+                    <circle cx="45" cy="15" r="4.2" fill="#8FE0D3"/>
+                    <path d="M32 24v14M25 31h14" stroke="#E8896B" stroke-width="4.6" stroke-linecap="round"/>
+                </svg>
+                <span class="brand-word">Unify<span>Medic</span></span>
+            </a>
             <h1>Create Account</h1>
             <p>Join thousands building clinical reasoning expertise with AI-assisted case learning.</p>
         </div>
@@ -499,6 +621,7 @@
     </div>
 
     <script>
+        const API_BASE = ''; // set to the backend's full origin if hosted separately
         const signupForm = document.getElementById('signupForm');
         const firstNameInput = document.getElementById('firstName');
         const lastNameInput = document.getElementById('lastName');
@@ -779,12 +902,18 @@
             apiError.textContent = '';
             apiError.classList.remove('show');
 
-            const userData = {
-                fullName: `${firstNameInput.value.trim()} ${lastNameInput.value.trim()}`,
-                username: `${firstNameInput.value.trim().toLowerCase()}.${lastNameInput.value.trim().toLowerCase()}`.replace(/\s+/g, ''),
-                email: emailInput.value.trim(),
-                phone: phoneInput.value.trim(),
-                password: passwordInput.value,
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const email = emailInput.value.trim();
+            const fullName = `${firstName} ${lastName}`.trim();
+
+            // These profile extras are cached locally only and will not follow the account to another device until the backend is extended.
+            const localProfileExtras = {
+                firstName,
+                lastName,
+                email,
+                fullName,
+                username: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`.replace(/\s+/g, ''),
                 role: roleTypeInput.value,
                 course: 'Clinical Reasoning',
                 profession: professionInput.value,
@@ -793,28 +922,53 @@
                 profilePhoto: ''
             };
 
-            if (profilePhotoInput.files.length) {
-                userData.profilePhoto = await readFileAsDataURL(profilePhotoInput.files[0]);
-            }
+            const originalText = signupBtn.textContent;
+            signupBtn.textContent = 'Creating account...';
+            signupBtn.disabled = true;
 
-            const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
-            if (storedProfiles.some(profile => profile.email.toLowerCase() === userData.email.toLowerCase())) {
-                apiError.textContent = 'An account with this email already exists. Please log in instead.';
+            try {
+                if (profilePhotoInput.files.length) {
+                    localProfileExtras.profilePhoto = await readFileAsDataURL(profilePhotoInput.files[0]);
+                }
+
+                const response = await fetch(`${API_BASE}/api/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email,
+                        phone: phoneInput.value.trim(),
+                        password: passwordInput.value
+                    })
+                });
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok || !data.success) {
+                    apiError.textContent = data.message || 'Unable to create account. Please try again.';
+                    apiError.classList.add('show');
+                    signupBtn.textContent = originalText;
+                    signupBtn.disabled = false;
+                    return;
+                }
+
+                const mergedProfile = { ...localProfileExtras, ...data.user, fullName };
+                delete mergedProfile.password;
+                const storedProfiles = JSON.parse(localStorage.getItem('userProfiles') || '[]');
+                storedProfiles.push(mergedProfile);
+                localStorage.setItem('userProfiles', JSON.stringify(storedProfiles));
+                localStorage.setItem('currentUserId', data.user.id);
+                localStorage.setItem('currentUserEmail', data.user.email);
+                localStorage.setItem('currentUserProfile', JSON.stringify(mergedProfile));
+                localStorage.setItem('userName', fullName);
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                apiError.textContent = 'Network error. Please check your connection and try again.';
                 apiError.classList.add('show');
-                return;
+                signupBtn.textContent = originalText;
+                signupBtn.disabled = false;
             }
-
-            userData.userId = crypto?.randomUUID?.() || `user-${Date.now()}`;
-            userData.token = Math.random().toString(36).slice(2);
-            storedProfiles.push(userData);
-            localStorage.setItem('userProfiles', JSON.stringify(storedProfiles));
-            localStorage.setItem('currentUserToken', userData.token);
-            localStorage.setItem('currentUserId', userData.userId);
-            localStorage.setItem('currentUserEmail', userData.email);
-            localStorage.setItem('currentUserProfile', JSON.stringify(userData));
-            localStorage.setItem('userName', userData.fullName);
-            localStorage.setItem('isLoggedIn', 'true');
-            window.location.href = 'dashboard.html';
         });
 
         function togglePasswordVisibility(input, button) {

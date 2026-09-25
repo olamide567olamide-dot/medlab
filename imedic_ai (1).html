@@ -3,30 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNIFY🌎Medic AI - Health Information Assistant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>UNIFY Medic AI - Health Information Assistant</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231D5A76'/%3E%3Cpath d='M19 15v19a13 13 0 0 0 26 0V15' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round'/%3E%3Cpath d='M32 24v14M25 31h14' stroke='%23E8896B' stroke-width='4.6' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --secondary: #10b981;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --bg: #f0f9ff;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            --ink: #0E3B47;
+            --teal: #2B7A9D;
+            --teal-deep: #1D5A76;
+            --aqua: #8FE0D3;
+            --aqua-soft: #E4F6F2;
+            --sand: #F7F5F0;
+            --sand-deep: #EFEBE2;
+            --coral: #E8896B;
+            --coral-soft: #FBEAE4;
+            --line: #DDD8CC;
+            --white: #FFFFFF;
+            --radius-s: 10px;
+            --radius-m: 16px;
+            --radius-l: 28px;
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Inter', 'Segoe UI', sans-serif;
+            --primary: var(--teal);
+            --primary-dark: var(--teal-deep);
+            --secondary: var(--aqua);
+            --accent: var(--coral);
+            --danger: var(--coral);
+            --bg: var(--aqua-soft);
+            --card: var(--white);
+            --text: var(--ink);
+            --text-light: var(--teal-deep);
+            --border: var(--line);
+            --shadow: none;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0ea5e9;
+            font-family: var(--font-body);
+            background: var(--sand);
             color: var(--text);
             min-height: 100vh;
             display: flex;
@@ -56,21 +72,21 @@
         .header-actions { display: flex; gap: 12px; }
         .btn-icon {
             width: 40px; height: 40px; border-radius: 10px; border: none;
-            background: rgba(255,255,255,0.15); color: white; cursor: pointer;
+            background: var(--line); color: white; cursor: pointer;
             transition: all 0.2s; display: flex; align-items: center; justify-content: center;
         }
-        .btn-icon:hover { background: rgba(255,255,255,0.25); }
-        .btn-icon.recording { background: #ef4444; color: white; transform: scale(1.05); }
+        .btn-icon:hover { background: var(--line); }
+        .btn-icon.recording { background: var(--coral); color: white; transform: scale(1.05); }
 
         .disclaimer-banner {
-            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+            background: linear-gradient(90deg, var(--sand-deep) 0%, var(--sand-deep) 100%);
             border-left: 4px solid var(--accent);
             padding: 12px 24px;
             display: flex; align-items: center; gap: 12px;
-            font-size: 0.875rem; color: #92400e;
+            font-size: 0.875rem; color: var(--teal-deep);
         }
         .disclaimer-banner i { font-size: 1.25rem; color: var(--accent); }
-        .disclaimer-banner strong { color: #78350f; }
+        .disclaimer-banner strong { color: var(--teal-deep); }
 
         .main-container {
             flex: 1; display: flex; max-width: 1400px;
@@ -93,19 +109,19 @@
         }
         .quick-topic:hover { background: var(--bg); }
         .quick-topic i { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
-        .quick-topic .icon-fever { background: #fef2f2; color: var(--danger); }
-        .quick-topic .icon-cough { background: #f0fdf4; color: var(--secondary); }
-        .quick-topic .icon-headache { background: #eff6ff; color: var(--primary); }
-        .quick-topic .icon-stomach { background: #fffbeb; color: var(--accent); }
-        .quick-topic .icon-sleep { background: #f5f3ff; color: #8b5cf6; }
-        .quick-topic .icon-stress { background: #fdf2f8; color: #ec4899; }
+        .quick-topic .icon-fever { background: var(--coral-soft); color: var(--danger); }
+        .quick-topic .icon-cough { background: var(--aqua-soft); color: var(--secondary); }
+        .quick-topic .icon-headache { background: var(--aqua-soft); color: var(--primary); }
+        .quick-topic .icon-stomach { background: var(--white)beb; color: var(--accent); }
+        .quick-topic .icon-sleep { background: var(--aqua-soft); color: var(--teal); }
+        .quick-topic .icon-stress { background: var(--coral-soft); color: var(--coral); }
         .quick-topic span { font-size: 0.875rem; font-weight: 500; }
-        .emergency-card { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #fecaca; }
+        .emergency-card { background: linear-gradient(135deg, var(--coral-soft) 0%, var(--coral-soft) 100%); border: 1px solid var(--coral-soft); }
         .emergency-card h3 { color: var(--danger); }
         .emergency-number {
             display: flex; align-items: center; gap: 10px;
             padding: 12px; background: white; border-radius: 10px;
-            margin-bottom: 8px; border: 1px solid #fecaca;
+            margin-bottom: 8px; border: 1px solid var(--coral-soft);
         }
         .emergency-number i { color: var(--danger); font-size: 1.25rem; }
         .emergency-number div { font-size: 0.875rem; }
@@ -131,7 +147,7 @@
             border-radius: 24px; display: flex;
             align-items: center; justify-content: center;
             color: white; font-size: 2.5rem;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+            box-shadow: none;
         }
         .welcome-screen h2 { font-size: 1.75rem; font-weight: 700; color: var(--text); }
         .welcome-screen p { color: var(--text-light); max-width: 500px; line-height: 1.6; }
@@ -196,29 +212,29 @@
         }
 
         .warning-box {
-            background: #fef3c7; border: 1px solid #fde68a;
+            background: var(--sand-deep); border: 1px solid var(--sand-deep);
             border-radius: 12px; padding: 14px; margin-top: 12px;
             display: flex; gap: 10px; align-items: flex-start;
         }
         .warning-box i { color: var(--accent); font-size: 1.25rem; margin-top: 2px; }
-        .warning-box div { font-size: 0.875rem; color: #92400e; }
-        .warning-box strong { color: #78350f; }
+        .warning-box div { font-size: 0.875rem; color: var(--teal-deep); }
+        .warning-box strong { color: var(--teal-deep); }
 
         .doctor-cta {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            border: 1px solid #a7f3d0; border-radius: 12px;
+            background: linear-gradient(135deg, var(--aqua-soft) 0%, var(--aqua-soft) 100%);
+            border: 1px solid var(--aqua); border-radius: 12px;
             padding: 14px; margin-top: 12px;
             display: flex; gap: 10px; align-items: center;
             cursor: pointer; transition: all 0.2s;
         }
-        .doctor-cta:hover { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+        .doctor-cta:hover { background: linear-gradient(135deg, var(--aqua-soft) 0%, var(--aqua) 100%); }
         .doctor-cta i { color: var(--secondary); font-size: 1.25rem; }
-        .doctor-cta div { font-size: 0.875rem; color: #065f46; }
-        .doctor-cta strong { color: #064e3b; }
+        .doctor-cta div { font-size: 0.875rem; color: var(--teal-deep); }
+        .doctor-cta strong { color: var(--teal-deep); }
 
         .sources-card {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border: 1px solid #bae6fd; border-radius: 12px;
+            background: linear-gradient(135deg, var(--aqua-soft) 0%, var(--aqua-soft) 100%);
+            border: 1px solid var(--aqua); border-radius: 12px;
             padding: 14px; margin-top: 12px;
         }
         .sources-card h4 {
@@ -230,7 +246,7 @@
         .source-link {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 14px; background: white;
-            border: 1px solid #bae6fd; border-radius: 8px;
+            border: 1px solid var(--aqua); border-radius: 8px;
             font-size: 0.8rem; color: var(--primary-dark);
             text-decoration: none; transition: all 0.2s; cursor: pointer;
         }
@@ -238,39 +254,39 @@
         .source-link i { font-size: 0.75rem; }
 
         .fallback-card {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border: 1px solid #f59e0b; border-radius: 12px;
+            background: linear-gradient(135deg, var(--sand-deep) 0%, var(--sand-deep) 100%);
+            border: 1px solid var(--coral); border-radius: 12px;
             padding: 16px; margin-top: 12px;
         }
         .fallback-card h4 {
-            font-size: 0.875rem; font-weight: 600; color: #92400e;
+            font-size: 0.875rem; font-weight: 600; color: var(--teal-deep);
             margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
         }
         .fallback-card p {
-            font-size: 0.875rem; color: #78350f; margin-bottom: 12px; line-height: 1.5;
+            font-size: 0.875rem; color: var(--teal-deep); margin-bottom: 12px; line-height: 1.5;
         }
         .search-btn {
             display: inline-flex; align-items: center; gap: 8px;
             padding: 10px 18px; background: white;
-            border: 1px solid #f59e0b; border-radius: 8px;
-            font-size: 0.875rem; color: #92400e; font-weight: 500;
+            border: 1px solid var(--coral); border-radius: 8px;
+            font-size: 0.875rem; color: var(--teal-deep); font-weight: 500;
             cursor: pointer; transition: all 0.2s; text-decoration: none;
         }
-        .search-btn:hover { background: #f59e0b; color: white; }
+        .search-btn:hover { background: var(--coral); color: white; }
 
         .auto-open-notice {
-            background: #ecfdf5; border: 1px solid #a7f3d0;
+            background: var(--aqua-soft); border: 1px solid var(--aqua);
             border-radius: 8px; padding: 10px 14px;
             margin-top: 10px; font-size: 0.8rem;
-            color: #065f46; display: flex; align-items: center; gap: 8px;
+            color: var(--teal-deep); display: flex; align-items: center; gap: 8px;
         }
         .auto-open-notice i { color: var(--secondary); }
 
         .live-badge {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 4px 10px; background: #ecfdf5;
-            border: 1px solid #a7f3d0; border-radius: 20px;
-            font-size: 0.75rem; color: #065f46; font-weight: 500;
+            padding: 4px 10px; background: var(--aqua-soft);
+            border: 1px solid var(--aqua); border-radius: 20px;
+            font-size: 0.75rem; color: var(--teal-deep); font-weight: 500;
             margin-bottom: 10px;
         }
         .live-badge .pulse {
@@ -278,9 +294,9 @@
             border-radius: 50%; animation: pulse-dot 2s infinite;
         }
         @keyframes pulse-dot {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { box-shadow: none; }
+            70% { box-shadow: none; }
+            100% { box-shadow: none; }
         }
 
         .confidence-bar {
@@ -342,7 +358,7 @@
         }
 
         .footer-disclaimer {
-            background: #f8fafc; border-top: 1px solid var(--border);
+            background: var(--sand); border-top: 1px solid var(--border);
             padding: 16px 24px; text-align: center;
             font-size: 0.75rem; color: var(--text-light);
         }
@@ -358,16 +374,59 @@
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--teal-deep); }
+        h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; }
+        .header {
+            background: var(--white);
+            color: var(--ink);
+            border-bottom: 1px solid var(--line);
+            box-shadow: none;
+        }
+        .logo-icon {
+            background: linear-gradient(135deg, var(--teal), var(--aqua));
+            color: var(--ink);
+            border-radius: var(--radius-s);
+        }
+        .logo-text h1 { font-family: var(--font-display); font-weight: 500; }
+        .btn-icon { background: var(--aqua-soft); color: var(--ink); border-radius: 999px; }
+        .btn-icon:hover { background: var(--aqua); }
+        .sidebar-card, .chat-container, .message-content, .info-card, .sources-card,
+        .fallback-card, .warning-box, .doctor-cta { border-radius: var(--radius-m); border: 1px solid var(--line); box-shadow: none; }
+        .send-btn, .search-btn { border-radius: 999px; background: var(--ink); color: var(--white); border-color: var(--ink); }
+        .send-btn:hover, .search-btn:hover { background: var(--teal-deep); transform: translateY(-2px); }
+                /* Unify Medic brand logo */
+                .navbar-logo { display: flex; align-items: center; }
+                .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+                .brand-mark { flex: 0 0 auto; display: block; }
+                .brand-word { font: 600 1.45rem/1 var(--font-display); color: var(--ink); letter-spacing: -0.01em; }
+                .brand-word span { color: var(--teal); margin-left: 0.2em; font-weight: 500; }
+                @media (max-width: 480px) {
+                    .brand-word { font-size: 1.2rem; }
+                    .brand-mark { width: 32px; height: 32px; }
+                }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <div class="logo-icon"><i class="fas fa-heart-pulse"></i></div>
+                        <a href="index.html" class="brand" aria-label="Unify Medic home">
+                            <svg class="brand-mark" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="um-bg" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0" stop-color="#2B7A9D"/>
+                                        <stop offset="1" stop-color="#0E3B47"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="64" height="64" rx="16" fill="url(#um-bg)"/>
+                                <path d="M19 15v19a13 13 0 0 0 26 0V15" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="19" cy="15" r="4.2" fill="#8FE0D3"/>
+                                <circle cx="45" cy="15" r="4.2" fill="#8FE0D3"/>
+                                <path d="M32 24v14M25 31h14" stroke="#E8896B" stroke-width="4.6" stroke-linecap="round"/>
+                            </svg>
+                            <span class="brand-word">Unify<span>Medic</span></span>
+                        </a>
             <div class="logo-text">
-                <h1>UNIFY🌍MEDIC AI</h1>
                 <span>Health Information Assistant</span>
             </div>
         </div>
@@ -404,7 +463,7 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
-                    <h2>Welcome to UNIFY🌎Medic AI</h2>
+                    <h2>Welcome to UNIFY Medic AI</h2>
                     <p>I answer health questions from verified sources. If I cannot answer confidently, I automatically search Google, NHS, and WHO for you!</p>
                     <div class="suggestion-chips">
                         <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
@@ -1018,7 +1077,7 @@
             chatMessages.innerHTML = `
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
-                    <h2>Welcome to UNIFY🌎Medic AI</h2>
+                    <h2>Welcome to UNIFY Medic AI</h2>
                     <p>I answer health questions from verified sources. If I cannot answer confidently, I automatically search Google, NHS, and WHO for you!</p>
                     <div class="suggestion-chips">
                         <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
@@ -1043,7 +1102,7 @@
                     <p style="font-size: 0.875rem; line-height: 1.6; margin-bottom: 16px;">
                         UNIFY🌍Medic AI uses a confidence-based system. When it can answer confidently, it provides verified health information. When it cannot, it automatically searches WHO, NHS, and Google for the most reliable information available.
                     </p>
-                    <div style="background: #fef3c7; border-radius: 10px; padding: 12px; font-size: 0.8rem; color: #92400e; text-align: left;">
+                    <div style="background: var(--sand-deep); border-radius: 10px; padding: 12px; font-size: 0.8rem; color: var(--teal-deep); text-align: left;">
                         <strong>Medical Disclaimer:</strong> This application does not provide medical diagnosis, treatment recommendations, or prescriptions. All information is for educational purposes only. Always consult a qualified healthcare professional for medical advice.
                     </div>
                 </div>

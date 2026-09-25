@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UNIFY🌍MEDIC Disease Diagnosis Assistant</title>
+  <title>Unify Medic Disease Diagnosis Assistant</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231D5A76'/%3E%3Cpath d='M19 15v19a13 13 0 0 0 26 0V15' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round'/%3E%3Cpath d='M32 24v14M25 31h14' stroke='%23E8896B' stroke-width='4.6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: white; min-height: 100vh; padding: 20px; width: 100%; overflow-x: hidden; }
@@ -40,24 +44,24 @@
     .hero-section { background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f2 100%); padding: 50px 40px; text-align: center; position: relative; overflow: hidden; }
     .hero-section::before { content: ''; position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(43, 122, 157, 0.1) 0%, transparent 70%); border-radius: 50%; }
     .hero-content { position: relative; z-index: 1; }
-    .hero-content h2 { color: #000000; font-size: 2.8em; margin-bottom: 15px; font-weight: 700; }
-    .hero-content p { color: #000000; font-size: 1.2em; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+    .hero-content h2 { color: #0f3d4f; font-size: 2.8em; margin-bottom: 15px; font-weight: 700; }
+    .hero-content p { color: #0f3d4f; font-size: 1.2em; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.6; }
     .hero-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; margin-top: 40px; justify-items: center; width: 100%; }
     .hero-image-box { width: 100%; max-width: 220px; height: 180px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(48, 233, 254, 0.2); transition: transform 0.3s ease; border: 4px solid #30E9FE; }
     .hero-image-box:hover { transform: translateY(-10px); }
     .hero-image-box img { width: 100%; height: 100%; object-fit: cover; }
     .disease-showcase { background: linear-gradient(to bottom, #ffffff 0%, #f5f9fb 100%); padding: 50px 40px; }
     .showcase-title { text-align: center; margin-bottom: 40px; }
-    .showcase-title h3 { color: #000000; font-size: 2em; margin-bottom: 10px; font-weight: 700; }
-    .showcase-title p { color: #000000; font-size: 1.05em; }
+    .showcase-title h3 { color: #0f3d4f; font-size: 2em; margin-bottom: 10px; font-weight: 700; }
+    .showcase-title p { color: #0f3d4f; font-size: 1.05em; }
     .disease-showcase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; }
     .disease-showcase-item { background: white; padding: 20px; border-radius: 15px; text-align: center; border: 2px solid #d4e9f2; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1); }
     .disease-showcase-item:hover { border-color: #2b7a9d; transform: translateY(-8px); box-shadow: 0 12px 30px rgba(48, 233, 254, 0.3); }
     .disease-showcase-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
-    .disease-showcase-item h4 { color: #000000; font-size: 0.95em; font-weight: 700; }
+    .disease-showcase-item h4 { color: #0f3d4f; font-size: 0.95em; font-weight: 700; }
     .form-section { padding: 50px 40px; background: white; width: 100%; box-sizing: border-box; }
-    .form-section h2 { color: #000000; font-size: 2.2em; margin-bottom: 10px; font-weight: 700; }
-    .form-section > p { color: #000000; font-size: 1.05em; margin-bottom: 35px; }
+    .form-section h2 { color: #0f3d4f; font-size: 2.2em; margin-bottom: 10px; font-weight: 700; }
+    .form-section > p { color: #0f3d4f; font-size: 1.05em; margin-bottom: 35px; }
     .form-group { margin-bottom: 25px; }
     .disclaimer-box { background: #fff3cd; padding: 20px; border-radius: 12px; margin-top: 30px; border-left: 5px solid #ffc107; }
     .disclaimer-strong { color: #856404; }
@@ -65,15 +69,18 @@
     .page-padding-large { padding: 50px 40px; }
     .margin-bottom-30 { margin-bottom: 30px; }
     .result-highlight { color: #047857; font-weight: 600; font-size: 1.05em; }
-    label { display: block; margin-bottom: 10px; font-weight: 700; color: #000000; font-size: 1.05em; }
+    label { display: block; margin-bottom: 10px; font-weight: 700; color: #ffffff; font-size: 1.05em; }
     input[type="text"], input[type="email"], input[type="number"], select, textarea { width: 100%; padding: 14px 18px; border: 2px solid #b3d9ea; border-radius: 10px; font-size: 1em; font-family: inherit; background: white; transition: all 0.3s ease; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: #30E9FE; background: white; box-shadow: 0 0 0 4px rgba(48, 233, 254, 0.15); }
     textarea { resize: vertical; min-height: 100px; }
 
-    input::placeholder, textarea::placeholder { color: #333333; font-weight: 700; opacity: 1; }
+    input::placeholder, textarea::placeholder { color: #6b7280; font-weight: 400; opacity: 1; }
+    .form-error { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; margin: 10px 0; line-height: 1.4; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 3px solid #0d5a7a; outline-offset: 3px; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
     .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
     .form-section-box { background:  #2b7a9d; padding: 30px; border-radius: 30px; border-left: 5px solid  #2b7a9d; margin-bottom: 30px; width: 100%; box-sizing: border-box; }
-    .form-section-box h3 { color: #000000; margin-bottom: 25px; font-weight: 700; font-size: 1.3em; }
+    .form-section-box h3 { color: #ffffff; margin-bottom: 25px; font-weight: 700; font-size: 1.3em; }
     .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
     button { padding: 15px 45px; font-size: 1.05em; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; transition: all 0.3s ease; }
     .btn-primary { background: linear-gradient(135deg,  #2b7a9d 0%,  #2b7a9d 100%); color: white; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.3); }
@@ -81,20 +88,20 @@
     .btn-secondary { background: #eff6ff; color:  #2b7a9d; border: 2px solid #30E9FE; }
     .btn-secondary:hover { background: #dbeafe; transform: translateY(-3px); }
     .results-header { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 5px solid #30E9FE; }
-    .results-header h2 { color: #000000; font-size: 1.8em; }
+    .results-header h2 { color: #0f3d4f; font-size: 1.8em; }
     .patient-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
     .info-item { background: white; padding: 15px; border-radius: 10px; border: 2px solid #b3d9ea; }
-    .info-label { font-weight: 700; color: #000000; }
+    .info-label { font-weight: 700; color: #0f3d4f; }
     .disease-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
     .disease-card { background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1); }
     .disease-card:hover { border-color: #30E9FE; box-shadow: 0 12px 30px rgba(48, 233, 254, 0.3); transform: translateY(-5px); }
-    .disease-card h3 { color: #000000; margin-bottom: 8px; font-size: 1.3em; font-weight: 700; }
+    .disease-card h3 { color: #0f3d4f; margin-bottom: 8px; font-size: 1.3em; font-weight: 700; }
     .disease-card p { color: #4a7a95; }
     .severity.low { background: #b3d9ea; color: #1a4d6d; }
     .severity.medium { background: #ffe0b2; color: #e65100; }
     .severity.high { background: #ffcdd2; color: #b71c1c; }
     .detail-section { margin: 30px 0; background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); padding: 25px; border-radius: 15px; border-left: 5px solid #30E9FE; }
-    .detail-section h3 { color: #000000; margin-bottom: 15px; font-size: 1.4em; font-weight: 700; }
+    .detail-section h3 { color: #0f3d4f; margin-bottom: 15px; font-size: 1.4em; font-weight: 700; }
     .detail-section ul, .detail-section ol { margin-left: 20px; }
     .detail-section li { margin: 10px 0; color: #4a7a95; }
     .disease-detail img { max-width: 100%; height: auto; border-radius: 15px; margin: 20px 0; max-height: 400px; box-shadow: 0 10px 30px rgba(48, 233, 254, 0.2); }
@@ -500,160 +507,99 @@
       .detail-section { page-break-inside: avoid; }
       .disease-detail img { max-height: 300px; }
     }
+
+    /* Premium clinical app refresh */
+    :root {
+      --navy:#0E3B47; --navy-2:#1D5A76; --ink:#0E3B47; --ink-soft:#3F6B7A;
+      --teal:#2B7A9D; --teal-dark:#1D5A76; --teal-light:#E4F6F2; --teal-line:#BFE9DF;
+      --bg:#F7F5F0; --surface:#ffffff; --border:#E1DCCF;
+      --amber-bg:#fff8e8; --amber-border:#f0cf7d; --amber-text:#7a5c07;
+      --danger-bg:#fdecec; --danger-border:#f3b6b6; --danger-text:#9c2626;
+      --low-bg:#e3f3ea; --low-text:#1c6b46; --medium-bg:#fdf0dc; --medium-text:#9a5b0a;
+      --high-bg:#fbe3e2; --high-text:#a3231f; --radius-sm:8px; --radius:14px; --radius-lg:22px;
+      --shadow-sm:0 1px 2px rgba(14,59,71,.06),0 1px 4px rgba(14,59,71,.06);
+      --shadow-md:0 10px 26px rgba(14,59,71,.10); --shadow-lg:0 24px 56px rgba(14,59,71,.16);
+      --font-display:'Fraunces', serif;
+    }
+    h1,h2,h3,.brand-name,.step-card h3,.tool-card h3,.card-section h2,.results-header-card h2,
+    .detail-banner h2,.detail-section h3,.result-card h3,.library-card h3,.about-grid h2 {
+      font-family: var(--font-display); font-weight: 500;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; padding:0; min-height:100vh; background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; }
+    button,input,select,textarea { font:inherit; }
+    button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible { outline:3px solid var(--teal); outline-offset:3px; }
+    .app-shell { min-height:100vh; }
+    .topbar { position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 5%; background:rgba(11,46,69,.97); backdrop-filter:blur(14px); color:var(--surface); }
+    .brand-link { display:flex; align-items:center; gap:12px; color:var(--surface); text-decoration:none; }
+    .brand-mark { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg,var(--teal),var(--teal-dark)); }
+    .brand-mark svg,.nav-icon,.section-icon { width:24px; height:24px; }
+    .brand-name { display:block; font-weight:800; line-height:1.1; } .brand-subtitle { display:block; color:#b7d1dc; font-size:.72rem; }
+    .nav-actions { display:flex; align-items:center; gap:6px; } .nav-toggle { display:none; border:0; background:transparent; color:var(--surface); padding:8px; }
+    .nav-button { border:0; border-radius:10px; padding:10px 13px; background:transparent; color:#c3d8e0; cursor:pointer; font-weight:600; }
+    .nav-button:hover,.nav-button.active { background:var(--teal); color:var(--surface); }
+    .page { display:none!important; position:static!important; visibility:hidden!important; opacity:0!important; pointer-events:none!important; }
+    .page.active { display:block!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important; }
+    .hero { padding:72px 5% 52px; background:linear-gradient(135deg,var(--navy),var(--navy-2)); color:var(--surface); }
+    .hero-inner,.section-inner { width:min(1180px,100%); margin:0 auto; }
+    .hero-copy { max-width:760px; } .eyebrow,.pill { display:inline-flex; align-items:center; gap:7px; border:1px solid rgba(191,230,238,.35); border-radius:999px; padding:6px 11px; color:#c6e9ee; font-size:.78rem; font-weight:700; }
+    .hero h1 { max-width:780px; margin:18px 0 14px; font-size:clamp(2.4rem,6vw,4.8rem); line-height:1.02; } .hero p { max-width:680px; color:#c3d8e0; font-size:1.05rem; }
+    .hero-actions,.button-row { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; } .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid transparent; border-radius:10px; padding:12px 17px; cursor:pointer; font-weight:700; text-decoration:none; }
+    .btn-primary { background:var(--teal); color:var(--surface); } .btn-primary:hover { background:var(--teal-dark); } .btn-ghost { border-color:#79b8c6; background:transparent; color:var(--surface); } .btn-ghost:hover { background:rgba(255,255,255,.1); }
+    .stat-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:34px; } .stat-chip { padding:10px 14px; border:1px solid rgba(191,230,238,.3); border-radius:999px; color:#c3d8e0; font-size:.82rem; } .stat-chip strong { color:var(--surface); margin-right:4px; }
+    .section { padding:42px 5%; } .section-heading { display:flex; align-items:center; gap:10px; margin-bottom:20px; color:var(--navy); } .section-heading svg { color:var(--teal); }
+    .steps,.feature-pills,.tool-grid,.results-grid,.library-grid { display:grid; gap:16px; } .steps { grid-template-columns:repeat(3,1fr); } .step-card,.tool-card,.library-card,.result-card,.toolbar,.info-card { border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow-sm); }
+    .step-card,.tool-card { padding:22px; } .step-number { color:var(--teal); font-size:.8rem; font-weight:800; } .step-card h3,.tool-card h3 { margin:8px 0; color:var(--navy); } .step-card p,.tool-card p { margin:0; color:var(--ink-soft); }
+    .feature-pills { grid-template-columns:repeat(3,1fr); margin-top:20px; } .feature-pills .pill { justify-content:center; border-color:var(--teal-line); color:var(--teal-dark); background:var(--teal-light); }
+    .cta-card { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:22px; padding:24px; border-radius:var(--radius-lg); background:var(--teal-light); border:1px solid var(--teal-line); } .cta-card p { color:var(--ink-soft); margin:6px 0 0; }
+    .assessment-wrap,.results-wrap,.detail-wrap,.library-wrap,.about-wrap { width:min(1180px,100%); margin:0 auto; } .assessment-wrap { padding:42px 5%; }
+    .card-section { padding:24px; margin-bottom:18px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow-sm); } .card-section h2 { display:flex; align-items:center; gap:9px; color:var(--navy); font-size:1.35rem; margin-bottom:20px; }
+    .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; } .field { display:grid; gap:7px; } .field.full { grid-column:1/-1; } label { color:var(--ink); font-size:.86rem; font-weight:700; } input,select,textarea { width:100%; border:1px solid var(--border); border-radius:var(--radius-sm); background:#f9fcfd; color:var(--ink); padding:12px 13px; } input:focus,select:focus,textarea:focus { outline:0; border-color:var(--teal); box-shadow:0 0 0 4px rgba(13,143,166,.13); } textarea { min-height:105px; resize:vertical; }
+    .disclaimer { display:flex; gap:12px; padding:16px; border:1px solid var(--amber-border); border-radius:var(--radius); background:var(--amber-bg); color:var(--amber-text); } .disclaimer svg { flex:0 0 auto; color:var(--amber-text); } .disclaimer p { margin:3px 0 0; }
+    .form-error { margin:14px 0; padding:12px 14px; border:1px solid var(--danger-border); border-radius:var(--radius-sm); background:var(--danger-bg); color:var(--danger-text); }
+    .results-wrap,.detail-wrap,.library-wrap,.about-wrap { padding:42px 5%; } .results-toolbar { display:flex; justify-content:space-between; gap:14px; align-items:center; margin-bottom:18px; } .results-header-card,.detail-banner { padding:24px; border-radius:var(--radius-lg); background:linear-gradient(135deg,var(--navy),var(--navy-2)); color:var(--surface); } .results-header-card h2,.detail-banner h2 { margin:0 0 8px; } .results-header-card p,.detail-banner p { color:#c3d8e0; }
+    .info-tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px; } .info-tile { padding:12px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--surface); color:var(--ink); } .info-tile small { display:block; color:var(--ink-soft); font-size:.75rem; } .info-tile strong { display:block; margin-top:2px; }
+    .results-grid,.library-grid { grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:18px; } .result-card,.library-card { padding:20px; cursor:pointer; transition:border-color .2s,transform .2s; } .result-card:hover,.library-card:hover { border-color:var(--teal); transform:translateY(-2px); } .result-card h3,.library-card h3 { color:var(--navy); margin-bottom:9px; } .tag-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; } .tag { display:inline-flex; border-radius:999px; padding:4px 8px; background:var(--teal-light); color:var(--teal-dark); font-size:.72rem; font-weight:700; } .severity.low { background:var(--low-bg); color:var(--low-text); } .severity.medium { background:var(--medium-bg); color:var(--medium-text); } .severity.high { background:var(--high-bg); color:var(--high-text); } .result-card p,.library-card p { color:var(--ink-soft); font-size:.86rem; } .score-row { display:flex; justify-content:space-between; gap:10px; color:var(--ink-soft); font-size:.78rem; font-weight:700; } .progress { height:7px; margin:7px 0 0; overflow:hidden; border-radius:999px; background:var(--teal-light); } .progress span { display:block; height:100%; border-radius:inherit; background:var(--teal); }
+    .toolbar { display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; padding:16px; } .result-count { margin:18px 0 0; color:var(--ink-soft); font-weight:600; } .load-more { display:block; margin:22px auto 0; }
+    .detail-banner { margin-bottom:18px; } .detail-section { padding:20px; margin:14px 0; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); } .detail-section h3 { display:flex; align-items:center; gap:9px; color:var(--navy); margin-bottom:10px; } .detail-section p,.detail-section li { color:var(--ink-soft); } .detail-section ul,.detail-section ol { margin:0; padding-left:22px; } .detail-disclaimer { margin-top:18px; }
+    .about-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; } .about-grid .info-card { padding:22px; } .about-grid h2 { color:var(--navy); font-size:1.25rem; } .about-grid p,.about-grid li { color:var(--ink-soft); }
+    @media(max-width:860px) { .nav-toggle { display:block; } .nav-actions { display:none; position:absolute; top:70px; right:5%; left:5%; padding:8px; border-radius:var(--radius); background:var(--navy); box-shadow:var(--shadow-md); } .nav-actions.open { display:grid; } .nav-button { text-align:left; } .steps,.results-grid,.library-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:600px) { .topbar { padding:12px 4%; } .hero,.section,.assessment-wrap,.results-wrap,.detail-wrap,.library-wrap,.about-wrap { padding-left:4%; padding-right:4%; } .hero { padding-top:48px; } .form-grid,.toolbar,.about-grid,.info-tiles,.feature-pills,.steps,.results-grid,.library-grid { grid-template-columns:1fr; } .cta-card,.results-toolbar { align-items:flex-start; flex-direction:column; } }
+    @media print { .topbar,.hero-actions,.button-row,.toolbar,.load-more { display:none!important; } .page.active { display:block; } }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>UNIFY🌎MEDIC🩺</h1>
-      <h2>        ⚕️ AI Clinical Reasoning Platform 🧬</h2>
-      <p>💊 AI-Powered Clinical Reasoning & Decision Support Platform 🩺</p>
-    </header>
-    <a href="dashboard.html" class="cta-button" role="button" aria-label="Return to Home">
-    Logout
-</a>
-
+  <div class="app-shell">
+    <nav class="topbar" aria-label="Primary navigation">
+      <a class="brand-link" href="index.html" aria-label="Unify Medic home"><span class="brand-mark" style="background:none;padding:0"><svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><defs><linearGradient id="um-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2B7A9D"/><stop offset="1" stop-color="#0E3B47"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#um-bg)"/><path d="M19 15v19a13 13 0 0 0 26 0V15" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="15" r="4.2" fill="#8FE0D3"/><circle cx="45" cy="15" r="4.2" fill="#8FE0D3"/><path d="M32 24v14M25 31h14" stroke="#E8896B" stroke-width="4.6" stroke-linecap="round"/></svg></span><span><strong class="brand-name" style="font-size:1.1rem;letter-spacing:-0.01em">Unify<span style="color:#8FE0D3;font-weight:500;margin-left:.15em">Medic</span></strong><small class="brand-subtitle">Clinical Reasoning Assistant</small></span></a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navActions" aria-label="Toggle navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="nav-actions" id="navActions">
+        <button class="nav-button active" data-page="homePage" type="button">Home</button>
+        <button class="nav-button" data-page="assessmentPage" type="button">New Assessment</button>
+        <button class="nav-button" data-page="libraryPage" type="button">Disease Library</button>
+        <button class="nav-button" data-page="aboutPage" type="button">About &amp; Disclaimer</button>
+      </div>
+    </nav>
     <main>
-      <div id="landingPage" class="page active">
-        <!-- Hero Section with Doctor Image -->
-        <div class="hero-section">
-          <div class="hero-content">
-            <h2>💚💉Clinical Reasoning for Better Patient Care or Supporting Clinical Decision-Making 👨‍👨‍👦‍👦</h2>
-            <p>Analyze patient symptoms using AI-assisted clinical reasoning. Generate differential diagnoses, identify red-flag findings, recommend appropriate investigations, and support evidence-based clinical decision-making. Final clinical decisions remain the responsibility of qualified healthcare professionals.</p>
-            <div class="hero-images">
-                <img src="doctor consultation.jpg" alt="Doctor consultation">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Diagnosis Form Section -->
-        <div class="form-section">
-          <h2>🩺 Start Your Clinical Case Assessment </h2>
-          <p>💊🤦‍♀️🤦‍♂️ Fill in your information below to begin the medical assessment 🏥🚑</p>
-          <form id="diagnosisForm" onsubmit="handleFormSubmit(event)">
-            <!-- Personal Information Section -->
-            <div class="form-section-box">
-              <h3>📋 Patient Information</h3>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="patientName">Full Name *</label>
-                  <input type="text" id="patientName" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                  <label for="patientAge">Age (years) *</label>
-                  <input type="number" id="patientAge" min="1" max="150" placeholder="Your age" required>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="patientGender">Gender *</label>
-                  <select id="patientGender" required>
-                    <option value="">Select your gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="patientNotes">Medical History & Additional Notes</label>
-                <textarea id="patientNotes" placeholder="Any relevant medical history, allergies, current medications, etc."></textarea>
-              </div>
-            </div>
-
-            <!-- Symptoms Section -->
-            <div class="form-section-box">
-              <h3>🔍 Your Symptoms</h3>
-              <div class="form-group">
-                <label for="symptomsInput">Describe your symptoms (comma-separated) *</label>
-                <input type="text" id="symptomsInput" placeholder="e.g., fever, headache, cough, sore throat" list="symptomsList" required>
-                <datalist id="symptomsList"></datalist>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="durationDays">Symptom Duration (days)</label>
-                  <input type="number" id="durationDays" min="1" placeholder="e.g., 3 or 5 days">
-                </div>
-              </div>
-            </div>
-
-            <div class="button-group">
-              <button type="submit" class="btn-primary">🚀 Generate Clinical Reasoning Report</button>
-              <button type="reset" class="btn-secondary">Clear All</button>
-            </div>
-          </form>
-
-          <!-- Disclaimer -->
-          <div class="disclaimer-box">
-            <strong class="disclaimer-strong">⚠️ Medical Disclaimer:</strong>
-            <p class="disclaimer-text">This tool is for educational and medical informational assistant purposes for MBBS & BSN STUDENT, professionals and certified medical praticioner only, it is just a diseases diagnosis assistant that works based on symptoms provided. CLICK ON UNIFY MEDIC AI FAB BUTTON TO GET MORE INFORMATION ABOUT EACH DIAGNOSIS RESULT. </p>
-          </div>
-        </div>
+      <div id="homePage" class="page active">
+        <section class="hero"><div class="hero-inner"><div class="hero-copy"><span class="eyebrow">Clinical learning, made clearer</span><h1>Understand symptoms. Build clinical confidence.</h1><p>Use structured patient assessment and symptom-overlap reasoning as an educational reference for your next clinical learning session.</p><div class="hero-actions"><button class="btn btn-primary" type="button" onclick="goToPage('assessmentPage')">Start New Assessment</button><button class="btn btn-ghost" type="button" onclick="goToPage('libraryPage')">Browse Disease Library</button></div><div class="stat-row"><span class="stat-chip"><strong id="diseaseCount">0</strong> diseases</span><span class="stat-chip"><strong id="categoryCount">0</strong> categories</span><span class="stat-chip"><strong>AI-assisted</strong> symptom-overlap engine</span></div></div></div></section>
+        <section class="section"><div class="section-inner"><h2 class="section-heading"><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg>How it works</h2><div class="steps"><article class="step-card"><span class="step-number">01</span><h3>Describe the case</h3><p>Share patient context and presenting symptoms in a structured form.</p></article><article class="step-card"><span class="step-number">02</span><h3>Review overlap</h3><p>Compare reported symptoms with the embedded educational disease reference.</p></article><article class="step-card"><span class="step-number">03</span><h3>Study the detail</h3><p>Open matched conditions for causes, symptoms, first aid and treatment context.</p></article></div><div class="feature-pills"><span class="pill">Educational reference tool</span><span class="pill">Not a substitute for care</span><span class="pill">Red-flag aware</span></div><div class="cta-card"><div><h3>Explore the reference library</h3><p>Search conditions by name, symptom, category and typical severity.</p></div><button class="btn btn-primary" type="button" onclick="goToPage('libraryPage')">Open Disease Library</button></div></div></section>
       </div>
-
-      <div id="resultsPage" class="page">
-        <div class="fab-arrow">click to get more information</div>
-        <div class="page-padding-large">
-          <div class="margin-bottom-30" style="display: flex; gap: 15px; flex-wrap: wrap;">
-            <button class="btn-secondary" onclick="goBackToForm()">← Back to Form</button>
-            <button class="btn-primary" onclick="printResults()" style="background: linear-gradient(135deg, #30E9FE 0%, #30E9FE 100%); color: white;">🖨️ Print Clinical Reasoning Report</button>
-          </div>
-          <div class="results-header">
-            <h1>UNIFY🌎MEDIC🩺</h1>
-            <h2>📊 Diagnosis Report analysis📈📉</h2>
-            <h3> click iMEDIC AI to get more info</h3>
-            <div class="patient-info">
-              <div class="info-item">
-                <div class="info-label">👤 Patient Name</div>
-                <div id="resultPatientName" class="result-highlight"></div>
-              </div>
-              <div class="info-item">
-                <div class="info-label">📅 Age & Gender</div>
-                <div id="resultPatientAge" class="result-highlight"></div>
-              </div>
-              <div class="info-item">
-                  <div class="info-label">🔍 Presenting Symptoms</div>
-                <div id="resultSymptomCount" class="result-highlight"></div>
-              </div>
-            </div>
-          </div>
-          <div id="resultsContainer"></div>
-        </div>
-      </div>
-
-      <div id="detailPage" class="page">
-        <div class="page-padding-large">
-          <div class="margin-bottom-30">
-            <button class="btn-secondary" onclick="goBackToResults()">← Back to Results</button>
-          </div>
-          <div id="diseaseDetailContainer"></div>
-        </div>
-      </div>
+      <div id="assessmentPage" class="page"><section class="assessment-wrap"><div class="section-heading"><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg><h2>New patient assessment</h2></div><form id="diagnosisForm" novalidate onsubmit="handleFormSubmit(event)"><div class="card-section"><h2><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3"/><path d="M5 21a7 7 0 0 1 14 0"/></svg>Patient Information</h2><div class="form-grid"><div class="field"><label for="patientName">Full name</label><input type="text" id="patientName" placeholder="Enter patient name" required></div><div class="field"><label for="patientAge">Age (years)</label><input type="number" id="patientAge" min="0" max="120" placeholder="Age" required></div><div class="field"><label for="patientGender">Gender</label><select id="patientGender" required><option value="">Select gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div><div class="field"><label for="durationDays">Symptom duration (days)</label><input type="number" id="durationDays" min="1" placeholder="Optional"></div><div class="field full"><label for="patientNotes">Medical history and notes</label><textarea id="patientNotes" placeholder="Allergies, medications or relevant history"></textarea></div></div></div><div class="card-section"><h2><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M3 12h18"/></svg>Presenting Symptoms</h2><div class="field"><label for="symptomsInput">Symptoms, separated by commas</label><input type="text" id="symptomsInput" placeholder="e.g. fever, headache, cough" list="symptomsList" required><datalist id="symptomsList"></datalist></div></div><div id="formError" class="form-error" role="alert" aria-live="polite" hidden></div><div class="button-row"><button type="submit" id="submitDiagnosisButton" class="btn btn-primary" disabled>Generate Clinical Report</button><button type="reset" class="btn btn-ghost" style="color:var(--teal-dark);border-color:var(--teal-line)">Clear form</button></div></form><div class="disclaimer"><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5M12 17h.01"/></svg><div><strong>Medical disclaimer</strong><p>This tool is for educational and medical informational assistant purposes for MBBS &amp; BSN STUDENT, professionals and certified medical praticioner only, it is just a diseases diagnosis assistant that works based on symptoms provided. </p></div></div></section></div>
+      <div id="resultsPage" class="page"><section class="results-wrap"><div class="results-toolbar"><button class="btn btn-ghost" style="color:var(--teal-dark);border-color:var(--teal-line)" type="button" onclick="goBackToForm()">Back to assessment</button><button class="btn btn-primary" type="button" onclick="printResults()">Print report</button></div><div class="results-header-card"><h2>Clinical reasoning report</h2><p>Possible symptom-overlap matches for this assessment.</p><div class="info-tiles"><div class="info-tile"><small>Patient</small><strong id="resultPatientName"></strong></div><div class="info-tile"><small>Age and gender</small><strong id="resultPatientAge"></strong></div><div class="info-tile"><small>Reported symptoms</small><strong id="resultSymptomCount"></strong></div></div></div><div id="resultsContainer" class="results-grid"></div></section></div>
+      <div id="detailPage" class="page"><section class="detail-wrap"><div class="button-row" style="margin-top:0"><button class="btn btn-ghost" style="color:var(--teal-dark);border-color:var(--teal-line)" type="button" onclick="goBackToPreviousPage()">Back</button></div><div id="diseaseDetailContainer"></div></section></div>
+      <div id="libraryPage" class="page"><section class="library-wrap"><div class="section-heading"><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><h2>Disease Library</h2></div><div class="toolbar"><input id="librarySearch" type="search" placeholder="Search diseases or symptoms"><select id="libraryCategory"><option value="">All categories</option></select><select id="librarySeverity"><option value="">All severities</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><p class="result-count" id="libraryCount"></p><div class="library-grid" id="libraryGrid"></div><button class="btn btn-ghost load-more" id="loadMoreButton" style="color:var(--teal-dark);border-color:var(--teal-line)" type="button">Load more</button></section></div>
+      <div id="aboutPage" class="page"><section class="about-wrap"><div class="section-heading"><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg><h2>About this tool</h2></div><div class="about-grid"><article class="info-card"><h2>What this tool is</h2><p>An educational clinical reasoning reference that helps learners organize patient information and explore symptom-overlap matches from an embedded disease database.</p></article><article class="info-card"><h2>How the matching engine works</h2><ul><li>Normalizes symptom wording and common synonyms.</li><li>Weights more specific symptoms more strongly.</li><li>Detects red-flag symptoms for urgency guidance.</li><li>Sorts matches by weighted overlap and matched count.</li></ul></article><article class="info-card"><h2>What this tool is not</h2><p>It is not a diagnosis, emergency service, prescribing system or replacement for a qualified healthcare professional.</p></article><div class="disclaimer"><svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5M12 17h.01"/></svg><div><strong>Medical disclaimer</strong><p>This information is provided for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider for accurate diagnosis and appropriate treatment of any health condition.</p></div></div></div></section></div>
     </main>
   </div>
-
-    <button class="fab-button" id="fabButton" onclick="openAIChat()" title="UNIFY🌎Medic AI">
-      UNIFY🌍Medic AI
-    </button>
-
-    <div class="modal-overlay" id="modalOverlay" onclick="closeAIChat()"></div>
-
-      <div class="modal-chat" id="modalChat">
-      <div class="modal-header">
-        <h3>unify🌍Medic AI</h3>
-        <button class="modal-close-btn" onclick="closeAIChat()">✕</button>
-      </div>
-      <iframe
-        src="imedic_ai (1).html"
-        title="UNIFY🌎Medic AI"
-      ></iframe>
-    </div>
 
   <script>
     let diseasesDatabase = [];
     let userSymptoms = [];
     let currentPatientData = {};
+    let currentMatchedDiseases = [];
+    let databaseLoadSuccessful = false;
 
     const EMBEDDED_DISEASES = {"diseases":[{
   "diseases": [
@@ -22795,14 +22741,82 @@
     });
 
     function loadDiseaseDatabase() {
-      // Fixed: EMBEDDED_DISEASES has nested "diseases" structure
-      if (EMBEDDED_DISEASES.diseases && EMBEDDED_DISEASES.diseases.length > 0 && EMBEDDED_DISEASES.diseases[0].diseases) {
+      try {
+        if (!EMBEDDED_DISEASES || !Array.isArray(EMBEDDED_DISEASES.diseases) || !Array.isArray(EMBEDDED_DISEASES.diseases[0].diseases)) {
+          throw new Error('Unexpected disease data structure');
+        }
         diseasesDatabase = EMBEDDED_DISEASES.diseases[0].diseases;
-      } else {
-        diseasesDatabase = EMBEDDED_DISEASES.diseases || [];
+        if (diseasesDatabase.length === 0) throw new Error('Disease database is empty');
+        diseasesDatabase.forEach(addSymptomMetadata);
+        databaseLoadSuccessful = true;
+        document.getElementById('submitDiagnosisButton').disabled = false;
+        document.getElementById('formError').hidden = true;
+        console.log('Diseases database loaded:', diseasesDatabase.length, 'diseases');
+        populateSymptomsDatalist();
+      } catch (error) {
+        diseasesDatabase = [];
+        databaseLoadSuccessful = false;
+        const submitButton = document.getElementById('submitDiagnosisButton');
+        if (submitButton) submitButton.disabled = true;
+        showFormError('Diagnosis data failed to load - please refresh or contact support.');
+        console.error('Disease database failed to load:', error);
       }
-      console.log('Diseases database loaded:', diseasesDatabase.length, 'diseases');
-      populateSymptomsDatalist();
+    }
+
+    function showFormError(message) {
+      const formError = document.getElementById('formError');
+      if (!formError) return;
+      formError.textContent = message;
+      formError.hidden = false;
+    }
+
+    function clearFormError() {
+      const formError = document.getElementById('formError');
+      if (formError) {
+        formError.textContent = '';
+        formError.hidden = true;
+      }
+    }
+
+    const symptomSynonyms = {
+      'stomach ache': 'abdominal pain',
+      'tummy ache': 'abdominal pain',
+      'belly pain': 'abdominal pain',
+      'high temperature': 'fever',
+      'breathlessness': 'shortness of breath',
+      'difficulty breathing': 'shortness of breath',
+      'throwing up': 'vomiting',
+      'being sick': 'vomiting',
+      'feeling sick': 'nausea',
+      'light headedness': 'lightheadedness'
+    };
+
+    const redFlagSymptoms = new Set([
+      'difficulty breathing', 'shortness of breath', 'chest pain', 'loss of consciousness',
+      'severe headache', 'sudden severe headache', 'seizures', 'coughing up blood',
+      'unexplained bleeding', 'severe dehydration', 'confusion', 'weakness or numbness on one side'
+    ]);
+
+    function normalizeSymptom(value) {
+      const normalized = String(value || '').toLowerCase().trim().replace(/[^\p{L}\p{N}\s]/gu, '').replace(/\s+/g, ' ');
+      return symptomSynonyms[normalized] || normalized;
+    }
+
+    function getSymptomSpecificity(symptom) {
+      const normalized = normalizeSymptom(symptom);
+      if (redFlagSymptoms.has(normalized)) return 1;
+      if (/\b(fever|fatigue|pain|cough|headache|nausea|vomiting|weakness|swelling|rash)\b/.test(normalized)) return 0.35;
+      return 0.75;
+    }
+
+    function addSymptomMetadata(disease) {
+      if (!Array.isArray(disease.symptoms)) return;
+      disease.symptomDetails = disease.symptoms.map(symptom => ({
+        name: symptom,
+        normalized: normalizeSymptom(symptom),
+        specificity: getSymptomSpecificity(symptom),
+        redFlag: redFlagSymptoms.has(normalizeSymptom(symptom))
+      }));
     }
 
     function populateSymptomsDatalist() {
@@ -22825,58 +22839,102 @@
 
     function handleFormSubmit(event) {
       event.preventDefault();
-      currentPatientData = {
-        name: document.getElementById('patientName').value,
-        age: document.getElementById('patientAge').value,
-        gender: document.getElementById('patientGender').value,
-        notes: document.getElementById('patientNotes').value,
-        duration: document.getElementById('durationDays').value || 'Not specified'
-      };
-      const symptomsInput = document.getElementById('symptomsInput').value;
-      userSymptoms = symptomsInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
-      if (userSymptoms.length === 0) {
-        alert('Please select at least one symptom');
+      clearFormError();
+      if (!databaseLoadSuccessful || diseasesDatabase.length === 0) {
+        showFormError('Diagnosis data failed to load - please refresh or contact support.');
         return;
       }
-      const matchedDiseases = matchSymptomsToDisease();
-      
-      // ===== CHANGE: Save diagnosis data to localStorage and redirect =====
-      const diagnosisData = {
-        patientData: currentPatientData,
-        symptoms: userSymptoms,
-        matchedDiseases: matchedDiseases,
-        timestamp: new Date().toLocaleString()
+      const ageValue = document.getElementById('patientAge').value.trim();
+      const age = Number(ageValue);
+      const genderSelect = document.getElementById('patientGender');
+      const validGenders = Array.from(genderSelect.options).map(option => option.value).filter(Boolean);
+      const durationValue = document.getElementById('durationDays').value.trim();
+      const duration = durationValue === '' ? null : Number(durationValue);
+      const validationErrors = [];
+      if (ageValue === '' || !Number.isFinite(age) || age < 0 || age > 120) validationErrors.push('Enter an age from 0 to 120.');
+      if (!validGenders.includes(genderSelect.value)) validationErrors.push('Select a valid gender option.');
+      if (durationValue !== '' && (!Number.isFinite(duration) || duration <= 0)) validationErrors.push('Enter a positive symptom duration, or leave it blank.');
+      const symptomsInput = document.getElementById('symptomsInput').value;
+      userSymptoms = symptomsInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      if (userSymptoms.length === 0) validationErrors.push('Enter at least one symptom.');
+      if (validationErrors.length > 0) {
+        showFormError(validationErrors.join(' '));
+        return;
+      }
+      currentPatientData = {
+        name: document.getElementById('patientName').value,
+        age: age,
+        gender: genderSelect.value,
+        notes: document.getElementById('patientNotes').value,
+        duration: duration
       };
-      localStorage.setItem('diagnosisReport', JSON.stringify(diagnosisData));
-      
-      // Redirect to separate results page
-      window.location.href = 'results.html';
+      const matchedDiseases = matchSymptomsToDisease();
+      currentMatchedDiseases = matchedDiseases;
+      displayResults(matchedDiseases);
+      showPage('resultsPage');
     }
 
     function matchSymptomsToDisease() {
       const matches = [];
       diseasesDatabase.forEach(disease => {
-        if (!disease.symptoms) return;
-        const matchingSymptoms = userSymptoms.filter(symptom =>
-          disease.symptoms.some(diseaseSymptom =>
-            diseaseSymptom.toLowerCase().includes(symptom.toLowerCase()) ||
-            symptom.toLowerCase().includes(diseaseSymptom.toLowerCase())
-          )
-        );
+        if (!Array.isArray(disease.symptomDetails) || disease.symptomDetails.length === 0) return;
+        const matchingSymptoms = userSymptoms.filter(symptom => {
+          const normalizedSymptom = normalizeSymptom(symptom);
+          return disease.symptomDetails.some(diseaseSymptom => diseaseSymptom.normalized === normalizedSymptom);
+        });
         if (matchingSymptoms.length > 0) {
-          const matchPercentage = Math.round((matchingSymptoms.length / userSymptoms.length) * 100);
+          const matchedDetails = disease.symptomDetails.filter(diseaseSymptom =>
+            matchingSymptoms.some(symptom => normalizeSymptom(symptom) === diseaseSymptom.normalized)
+          );
+          const matchedWeight = matchedDetails.reduce((sum, symptom) => sum + symptom.specificity, 0);
+          const totalWeight = disease.symptomDetails.reduce((sum, symptom) => sum + symptom.specificity, 0);
           matches.push({
             ...disease,
             matchCount: matchingSymptoms.length,
-            matchPercentage: matchPercentage,
-            matchedSymptoms: matchingSymptoms
+            matchScore: totalWeight > 0 ? matchedWeight / totalWeight : 0,
+            matchedSymptoms: matchingSymptoms,
+            matchedDetails: matchedDetails
           });
         }
       });
       return matches.sort((a, b) => {
-        if (b.matchPercentage !== a.matchPercentage) return b.matchPercentage - a.matchPercentage;
+        if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
         return b.matchCount - a.matchCount;
       });
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[character]));
+    }
+
+    function computeUrgency(disease, matchedSymptoms, patientData) {
+      const matchedDetails = disease.matchedDetails || disease.symptomDetails || [];
+      const hasRedFlag = matchedDetails.some(symptom => symptom.redFlag);
+      const duration = Number(patientData.duration);
+      let level = disease.severity === 'high' ? 2 : disease.severity === 'medium' ? 1 : 0;
+      if (matchedSymptoms.length >= 3) level += 1;
+      if (hasRedFlag) level = Math.max(level, 3);
+      if (Number.isFinite(duration) && duration > 14) level += 1;
+      if (level >= 3) return { label: 'Seek urgent medical care', className: 'high' };
+      if (level >= 1) return { label: 'Consider prompt medical review', className: 'medium' };
+      return { label: 'Routine medical review may be appropriate', className: 'low' };
+    }
+
+    let previousPage = 'resultsPage';
+    let libraryVisibleCount = 24;
+    let libraryFilteredDiseases = [];
+
+    function iconSVG(path) {
+      return `<svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${path}</svg>`;
+    }
+
+    function resultCardHTML(disease) {
+      const severity = disease.severity || 'Unknown';
+      const urgency = computeUrgency(disease, disease.matchedSymptoms || [], currentPatientData);
+      const score = Math.round((disease.matchScore || 0) * 100);
+      return `<article class="result-card" data-disease-name="${escapeHTML(disease.name)}" onclick="showDiseaseDetailFromCard(this)"><h3>${escapeHTML(disease.name)}</h3><div class="tag-row"><span class="tag">${escapeHTML(disease.category || 'Uncategorized')}</span><span class="tag severity ${escapeHTML(severity.toLowerCase())}">Typical severity: ${escapeHTML(severity)}</span><span class="tag severity ${escapeHTML(urgency.className)}">${escapeHTML(urgency.label)}</span></div><p>${escapeHTML(disease.description || 'No description available')}</p><div class="score-row"><span>${score}% match</span><span>${escapeHTML(disease.matchCount || 0)}/${escapeHTML(userSymptoms.length)} symptoms</span></div><div class="progress" aria-label="${score}% symptom match"><span style="width:${score}%"></span></div></article>`;
     }
 
     function displayResults(matchedDiseases) {
@@ -22884,166 +22942,79 @@
       document.getElementById('resultPatientAge').textContent = `${currentPatientData.age} years old, ${currentPatientData.gender}`;
       document.getElementById('resultSymptomCount').textContent = `${userSymptoms.length} reported`;
       const resultsContainer = document.getElementById('resultsContainer');
-      if (matchedDiseases.length === 0) {
-        resultsContainer.innerHTML = '<div style="text-align: center; padding: 60px 40px; background: linear-gradient(135deg, #e3f9ff 0%, #f0f9ff 100%); border-radius: 15px; margin-top: 30px;"><p style="font-size: 1.3em; color: #0d5a7a; margin-bottom: 15px;">❌ No matching diseases found</p><p style="color: #1a5f7a; font-size: 1.05em;"><strong>Please consult with a healthcare professional for proper diagnosis.</strong></p></div>';
-        return;
-      }
-      
-      const perfectMatches = matchedDiseases.filter(d => d.matchPercentage === 100);
-      const otherMatches = matchedDiseases.filter(d => d.matchPercentage < 100);
-      
-      let resultsHTML = '';
-      
-      if (perfectMatches.length > 0) {
-        resultsHTML += `<h3 style="color: #047857; font-size: 1.6em; margin-bottom: 30px; font-weight: 700;">✓ 100% Match Found</h3>`;
-        perfectMatches.forEach(disease => {
-          const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-          resultsHTML += `
-            <div style="background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; margin-bottom: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1);" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
-              <h3 style="color: #0d5a7a; font-size: 1.3em; font-weight: 700; margin-bottom: 12px;">${disease.name}</h3>
-              <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
-                <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-                <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
-              </div>
-              <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${disease.description || 'No description available'}</p>
-              <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
-                🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
-              </div>
-            </div>
-          `;
-        });
-        
-        if (otherMatches.length > 0) {
-          resultsHTML += `<div style="text-align: center; margin-top: 30px;"><button class="btn-primary" onclick="toggleOtherMatches()" style="padding: 15px 45px; font-size: 1.05em;">👀 View Other Related Matches</button></div>`;
-          resultsHTML += `<div id="otherMatchesContainer" style="display: none; margin-top: 40px;">`;
-          otherMatches.forEach(disease => {
-            const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-            resultsHTML += `
-              <div style="background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; margin-bottom: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1);" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
-                <h3 style="color: #0d5a7a; font-size: 1.3em; font-weight: 700; margin-bottom: 12px;">${disease.name}</h3>
-                <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
-                  <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-                  <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
-                </div>
-                <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${disease.description || 'No description available'}</p>
-                <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
-                  🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
-                </div>
-              </div>
-            `;
-          });
-          resultsHTML += `</div>`;
-        }
-      } else {
-        resultsHTML += `<h3 style="color: #047857; font-size: 1.6em; margin-bottom: 30px; font-weight: 700;">✓ Likely Conditions Found</h3>`;
-        matchedDiseases.forEach(disease => {
-          const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-          resultsHTML += `
-            <div style="background: white; border: 2px solid #d4e9f2; border-radius: 15px; padding: 25px; margin-bottom: 25px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(48, 233, 254, 0.1);" onclick="showDiseaseDetail('${disease.name.replace(/'/g, "\\'")}')">
-              <h3 style="color: #0d5a7a; font-size: 1.3em; font-weight: 700; margin-bottom: 12px;">${disease.name}</h3>
-              <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
-                <span style="display: inline-block; background: #e3f9ff; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; color: #0d5a7a; font-weight: 600; border: 1px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-                <span class="severity ${severityClass}" style="display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">Severity: ${disease.severity || 'Unknown'}</span>
-              </div>
-              <p style="color: #4a7a95; margin: 15px 0; font-size: 0.95em; line-height: 1.6;">${disease.description || 'No description available'}</p>
-              <div style="color: #0da5c0; font-weight: 700; margin-top: 15px; padding-top: 15px; border-top: 2px solid #b3e5fc; font-size: 1em;">
-                🎯 Match Score: <span style="font-size: 1.1em; color: #0d5a7a;">${disease.matchPercentage}%</span> (${disease.matchCount}/${userSymptoms.length} symptoms matched)
-              </div>
-            </div>
-          `;
-        });
-      }
-      
-      resultsContainer.innerHTML = resultsHTML;
+      resultsContainer.innerHTML = matchedDiseases.length ? matchedDiseases.map(resultCardHTML).join('') : '<div class="disclaimer"><strong>No possible matches found.</strong><p>Please consult with a healthcare professional for proper diagnosis.</p></div>';
     }
 
-    function toggleOtherMatches() {
-      const otherMatchesContainer = document.getElementById('otherMatchesContainer');
-      if (otherMatchesContainer) {
-        if (otherMatchesContainer.style.display === 'none') {
-          otherMatchesContainer.style.display = 'block';
-          event.target.textContent = '👀 Hide Other Related Matches';
-        } else {
-          otherMatchesContainer.style.display = 'none';
-          event.target.textContent = event.target.textContent.replace('Hide', 'View');
-        }
-      }
+    function showDiseaseDetailFromCard(card) { showDiseaseDetail(card.dataset.diseaseName); }
+
+    function detailList(title, items, ordered) {
+      if (!items || !items.length) return '';
+      const tag = ordered ? 'ol' : 'ul';
+      return `<section class="detail-section"><h3>${iconSVG('<path d="M4 5h16v14H4zM8 9h8M8 13h5"/>')}${title}</h3><${tag}>${items.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</${tag}></section>`;
     }
 
     function showDiseaseDetail(diseaseName) {
-      const disease = diseasesDatabase.find(d => d.name === diseaseName);
+      const disease = diseasesDatabase.find(item => item.name === diseaseName);
       if (!disease) return;
-      const severityClass = disease.severity ? disease.severity.toLowerCase() : 'low';
-      let detailHTML = `<div class="disease-detail">
-        <h2 style="color: #0d5a7a; font-size: 2.2em; margin-bottom: 15px; font-weight: 700;">${disease.name}</h2>
-        <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
-          <span style="display: inline-block; background: #e3f9ff; padding: 10px 18px; border-radius: 20px; color: #0d5a7a; font-weight: 700; border: 2px solid #b3e5fc;">${disease.category || 'Uncategorized'}</span>
-          <span class="severity ${severityClass}" style="display: inline-block; padding: 10px 18px; border-radius: 20px; font-weight: 700; font-size: 1.05em;">Severity: ${disease.severity || 'Unknown'}</span>
-        </div>`;
-      if (disease.image) detailHTML += `<img src="${disease.image}" alt="${disease.name}" style="width: 100%; max-height: 500px; border-radius: 15px; margin: 25px 0; box-shadow: 0 10px 30px rgba(13, 165, 192, 0.2);">`;
-      if (disease.description) detailHTML += `<div class="detail-section"><h3 style="font-size: 1.5em;">📖 Overview</h3><p style="color: #1a5f7a; font-size: 1.05em; line-height: 1.8;">${disease.description}</p></div>`;
-      if (disease.causes && disease.causes.length > 0) detailHTML += `<div class="detail-section"><h3 style="font-size: 1.5em;">🔬 Causes</h3><ul>${disease.causes.map(cause => `<li style="font-size: 1.05em;">${cause}</li>`).join('')}</ul></div>`;
-      if (disease.symptoms && disease.symptoms.length > 0) detailHTML += `<div class="detail-section"><h3 style="font-size: 1.5em;">🩹 Symptoms</h3><ul>${disease.symptoms.map(symptom => `<li style="font-size: 1.05em;">${symptom}</li>`).join('')}</ul></div>`;
-      if (disease.first_aid && disease.first_aid.length > 0) detailHTML += `<div class="detail-section"><h3 style="font-size: 1.5em;">🆘 First Aid</h3><ol>${disease.first_aid.map(aid => `<li style="font-size: 1.05em;">${aid}</li>`).join('')}</ol></div>`;
-      if (disease.drugs && disease.drugs.length > 0) detailHTML += `<div class="detail-section"><h3 style="font-size: 1.5em;">💊 Medications</h3><ul>${disease.drugs.map(drug => `<li style="font-size: 1.05em;">${drug}</li>`).join('')}</ul></div>`;
-      if (disease.treatment && disease.treatment.length > 0) detailHTML += `<div class="detail-section"><h3 style="font-size: 1.5em;">🏥 Treatment</h3><ol>${disease.treatment.map(treatment => `<li style="font-size: 1.05em;">${treatment}</li>`).join('')}</ol></div>`;
-      detailHTML += `<div style="background: linear-gradient(135deg, #fff3cd 0%, #ffe0b2 100%); padding: 25px; border-radius: 15px; margin-top: 40px; border-left: 5px solid #ffc107; box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);"><strong style="color: #c97000; font-size: 1.1em;">⚠️ Important Medical Disclaimer:</strong><p style="color: #c97000; margin-top: 12px; line-height: 1.8; font-size: 1.05em;">This information is provided for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider for accurate diagnosis and appropriate treatment of any health condition.</p></div></div>`;
+      previousPage = document.getElementById('libraryPage').classList.contains('active') ? 'libraryPage' : 'resultsPage';
+      const matchedDisease = currentMatchedDiseases.find(item => item.name === disease.name) || disease;
+      const urgency = computeUrgency(matchedDisease, matchedDisease.matchedSymptoms || [], currentPatientData);
+      let detailHTML = `<div class="detail-banner"><h2>${escapeHTML(disease.name)}</h2><p>${escapeHTML(disease.description || 'Educational disease reference')}</p><div class="tag-row"><span class="tag">${escapeHTML(disease.category || 'Uncategorized')}</span><span class="tag severity ${escapeHTML((disease.severity || 'low').toLowerCase())}">Typical severity: ${escapeHTML(disease.severity || 'Unknown')}</span><span class="tag severity ${escapeHTML(urgency.className)}">${escapeHTML(urgency.label)}</span></div></div>`;
+      detailHTML += disease.description ? `<section class="detail-section"><h3>${iconSVG('<circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/>')}Overview</h3><p>${escapeHTML(disease.description)}</p></section>` : '';
+      detailHTML += detailList('Causes', disease.causes, false) + detailList('Symptoms', disease.symptoms, false) + detailList('First Aid', disease.first_aid, true) + detailList('Medications', disease.drugs, false) + detailList('Treatment', disease.treatment, true);
+      detailHTML += `<div class="disclaimer detail-disclaimer">${iconSVG('<path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5M12 17h.01"/>')}<div><strong>Important medical disclaimer</strong><p>This information is provided for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider for accurate diagnosis and appropriate treatment of any health condition.</p></div></div>`;
       document.getElementById('diseaseDetailContainer').innerHTML = detailHTML;
-      showPage('detailPage');
+      goToPage('detailPage');
     }
 
-    function showPage(pageId) {
-      // CRITICAL FIX: Remove active class from ALL pages to ensure they're hidden
-      const allPages = document.querySelectorAll('.page');
-      allPages.forEach(page => {
-        page.classList.remove('active');
-        // Clear any inline styles that might interfere
-        page.style.display = '';
-        page.style.visibility = '';
-        page.style.pointerEvents = '';
-        page.style.opacity = '';
-        page.style.zIndex = '';
-      });
-      
-      // CRITICAL FIX: Get the target page and ensure it exists
-      const activePage = document.getElementById(pageId);
-      if (!activePage) {
-        console.error('Page not found:', pageId);
-        return;
-      }
-      
-      // CRITICAL FIX: Add active class to make only the target page visible
-      activePage.classList.add('active');
-      
-      // Manage FAB button visibility
-      const fabButton = document.getElementById('fabButton');
-      if (pageId === 'resultsPage') {
-        fabButton.style.display = 'flex';
-      } else {
-        fabButton.style.display = 'none';
-        closeAIChat();
-      }
-      
-      // Scroll to top of page
+    function goToPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.toggle('active', page.id === pageId));
+      document.querySelectorAll('.nav-button').forEach(button => button.classList.toggle('active', button.dataset.page === pageId));
+      if (pageId === 'detailPage') document.querySelectorAll('.nav-button').forEach(button => button.classList.remove('active'));
+      document.getElementById('navActions').classList.remove('open');
+      document.getElementById('navToggle').setAttribute('aria-expanded', 'false');
       window.scrollTo(0, 0);
     }
 
-    function goBackToForm() { showPage('landingPage'); }
-    function goBackToResults() { showPage('resultsPage'); }
+    function showPage(pageId) { goToPage(pageId); }
+    function goBackToForm() { goToPage('assessmentPage'); }
+    function goBackToResults() { goToPage('resultsPage'); }
+    function goBackToPreviousPage() { goToPage(previousPage); }
+    function printResults() { window.print(); }
 
-    function printResults() {
-      window.print();
+    function libraryCardHTML(disease) {
+      return `<article class="library-card" data-disease-name="${escapeHTML(disease.name)}" onclick="showDiseaseDetailFromCard(this)"><h3>${escapeHTML(disease.name)}</h3><div class="tag-row"><span class="tag">${escapeHTML(disease.category || 'Uncategorized')}</span><span class="tag severity ${escapeHTML((disease.severity || 'low').toLowerCase())}">${escapeHTML(disease.severity || 'Unknown')} severity</span></div><p>${escapeHTML(disease.description || 'Open for details')}</p></article>`;
     }
 
-    function openAIChat() {
-      document.getElementById('modalOverlay').classList.add('active');
-      document.getElementById('modalChat').classList.add('active');
+    function renderLibrary() {
+      const query = document.getElementById('librarySearch').value.trim().toLowerCase();
+      const category = document.getElementById('libraryCategory').value;
+      const severity = document.getElementById('librarySeverity').value;
+      libraryFilteredDiseases = diseasesDatabase.filter(disease => {
+        const haystack = `${disease.name} ${(disease.symptoms || []).join(' ')}`.toLowerCase();
+        return (!query || haystack.includes(query)) && (!category || disease.category === category) && (!severity || disease.severity === severity);
+      });
+      const visible = libraryFilteredDiseases.slice(0, libraryVisibleCount);
+      document.getElementById('libraryGrid').innerHTML = visible.map(libraryCardHTML).join('');
+      document.getElementById('libraryCount').textContent = `${libraryFilteredDiseases.length} conditions found`;
+      document.getElementById('loadMoreButton').hidden = visible.length >= libraryFilteredDiseases.length;
     }
 
-    function closeAIChat() {
-      document.getElementById('modalOverlay').classList.remove('active');
-      document.getElementById('modalChat').classList.remove('active');
+    function initializeLibrary() {
+      document.getElementById('diseaseCount').textContent = diseasesDatabase.length;
+      const categories = [...new Set(diseasesDatabase.map(disease => disease.category).filter(Boolean))].sort();
+      document.getElementById('categoryCount').textContent = categories.length;
+      const categorySelect = document.getElementById('libraryCategory');
+      categories.forEach(category => { const option = document.createElement('option'); option.value = category; option.textContent = category; categorySelect.appendChild(option); });
+      ['librarySearch', 'libraryCategory', 'librarySeverity'].forEach(id => document.getElementById(id).addEventListener('input', () => { libraryVisibleCount = 24; renderLibrary(); }));
+      document.getElementById('loadMoreButton').addEventListener('click', () => { libraryVisibleCount += 24; renderLibrary(); });
+      renderLibrary();
     }
+
+    document.querySelectorAll('.nav-button').forEach(button => button.addEventListener('click', () => goToPage(button.dataset.page)));
+    document.getElementById('navToggle').addEventListener('click', () => { const actions = document.getElementById('navActions'); const open = actions.classList.toggle('open'); document.getElementById('navToggle').setAttribute('aria-expanded', String(open)); });
+    document.addEventListener('DOMContentLoaded', initializeLibrary);
+
   </script>
 </body>
 </html>
