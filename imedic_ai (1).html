@@ -35,7 +35,10 @@
             --text: var(--ink);
             --text-light: var(--teal-deep);
             --border: var(--line);
-            --shadow: none;
+            --page-bg: #F3F7F7;
+            --muted: #566F7A;
+            --success: #16866C;
+            --warning: #B96B24;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,7 +59,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: var(--shadow-lg);
+            box-shadow: none;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -96,7 +99,7 @@
         .sidebar { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
         .sidebar-card {
             background: var(--card); border-radius: 16px; padding: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: none;
         }
         .sidebar-card h3 {
             font-size: 0.875rem; font-weight: 600; color: var(--text-light);
@@ -130,7 +133,7 @@
         .chat-container {
             flex: 1; display: flex; flex-direction: column;
             background: var(--card); border-radius: 20px;
-            box-shadow: var(--shadow-lg); overflow: hidden;
+            box-shadow: none; overflow: hidden;
         }
         .chat-messages {
             flex: 1; overflow-y: auto; padding: 24px;
@@ -406,23 +409,6 @@
                     .brand-mark { width: 32px; height: 32px; }
                 }
 
-                :root {
-                    --ink: #0C3441;
-                    --teal: #2B7A9D;
-                    --teal-deep: #1D5A76;
-                    --aqua: #8FE0D3;
-                    --aqua-soft: #E4F6F2;
-                    --page-bg: #F3F7F7;
-                    --card: #FFFFFF;
-                    --line: #DCE6E6;
-                    --text: #12333D;
-                    --muted: #566F7A;
-                    --success: #16866C;
-                    --warning: #B96B24;
-                    --danger: #B94A4A;
-                    --shadow-soft: 0 10px 30px rgba(12, 52, 65, 0.07);
-                }
-
                 body { background: var(--page-bg); color: var(--text); }
                 .skip-link { position: fixed; left: 1rem; top: -4rem; z-index: 200; padding: 0.7rem 1rem; background: var(--ink); color: var(--card); border-radius: 999px; text-decoration: none; font-weight: 700; }
                 .skip-link:focus { top: 1rem; }
@@ -443,15 +429,15 @@
                 .disclaimer-banner strong { color: var(--ink); }
                 .main-container { max-width: 1440px; padding: clamp(1rem, 3vw, 2rem); gap: clamp(1rem, 3vw, 2rem); }
                 .sidebar { width: 250px; }
-                .sidebar-card { padding: 1.25rem; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-soft); }
+                .sidebar-card { padding: 1.25rem; background: var(--card); border: 1px solid var(--line); box-shadow: none; }
                 .sidebar-card h3 { color: var(--muted); }
                 .quick-topic { min-height: 3.25rem; color: var(--text); }
                 .quick-topic:hover { background: var(--aqua-soft); }
                 .quick-topic i { flex-shrink: 0; }
-                .chat-container { min-height: min(720px, calc(100vh - 190px)); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-soft); }
+                .chat-container { min-height: min(720px, calc(100vh - 190px)); background: var(--card); border: 1px solid var(--line); box-shadow: none; }
                 .chat-messages { padding: clamp(1rem, 3vw, 2rem); }
                 .welcome-screen { min-height: 100%; justify-content: center; padding: clamp(2rem, 7vh, 5rem) 1rem; }
-                .welcome-icon { width: 68px; height: 68px; border-radius: 18px; background: var(--ink); box-shadow: 0 8px 18px rgba(12, 52, 65, 0.15); }
+                .welcome-icon { width: 68px; height: 68px; border-radius: 18px; background: var(--ink); box-shadow: none; }
                 .welcome-screen h2 { color: var(--ink); }
                 .welcome-screen p, .input-hint { color: var(--muted); }
                 .chip { color: var(--teal-deep); background: var(--aqua-soft); border-color: var(--aqua); }
@@ -460,7 +446,7 @@
                 .message-avatar { width: 34px; height: 34px; border-radius: 10px; }
                 .message.ai .message-avatar { background: var(--ink); }
                 .message.user .message-avatar { background: var(--aqua); color: var(--ink); }
-                .message-content { background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-soft); border-radius: 18px; border-top-left-radius: 5px; color: var(--text); }
+                .message-content { background: var(--card); border: 1px solid var(--line); box-shadow: none; border-radius: 18px; border-top-left-radius: 5px; color: var(--text); }
                 .message.user .message-content { background: var(--ink); border-color: var(--ink); border-radius: 18px; border-top-right-radius: 5px; }
                 .message.user .message-time { color: var(--muted); }
                 .info-card, .sources-card, .fallback-card, .warning-box, .doctor-cta { border-radius: 16px; }
@@ -546,7 +532,7 @@
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
                     <h2>Health reference lookup</h2>
-                    <p>Ask a health question to match it against a fixed reference set. When nothing matches confidently, you get links to search WHO, CDC, and NHS yourself.</p>
+                    <p>Ask a health question to match it against a fixed reference set. When nothing matches confidently, you get links to search WHO, CDC, NHS, Mayo Clinic, and NHI yourself.</p>
                     <div class="suggestion-chips">
                         <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
                         <button class="chip" onclick="sendMessage('How can I improve my sleep quality?')">Sleep tips</button>
@@ -853,7 +839,9 @@
                 nhs: `https://www.nhs.uk/search/?q=${encoded}`,
                 who: `https://www.who.int/search?q=${encoded}`,
                 cdc: `https://search.cdc.gov/search/?query=${encoded}&sitelimit=&affiliate=cdc-main`,
-                filtered: `https://www.google.com/search?q=${encoded}+site:nhs.uk+OR+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org`
+                mayo: `https://www.mayoclinic.org/search/search-results?q=${encoded}`,
+                nhi: 'https://www.nhi.gov.tw/English/',
+                filtered: `https://www.google.com/search?q=${encoded}+site:nhs.uk+OR+site:who.int+OR+site:cdc.gov+OR+site:mayoclinic.org+OR+site:nhi.gov.tw`
             };
         }
 
@@ -882,6 +870,12 @@
                         </a>
                         <a class="search-btn" href="${escapeHTML(searchUrls.cdc)}" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-shield-virus"></i> Search CDC
+                        </a>
+                        <a class="search-btn" href="${escapeHTML(searchUrls.mayo)}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-hospital"></i> Search Mayo Clinic
+                        </a>
+                        <a class="search-btn" href="${escapeHTML(searchUrls.nhi)}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-briefcase-medical"></i> Visit NHI
                         </a>
                         <a class="search-btn" href="${escapeHTML(searchUrls.filtered)}" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-google"></i> Search All Sources
@@ -1162,7 +1156,7 @@
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
                     <h2>Health reference lookup</h2>
-                    <p>Ask a health question to match it against a fixed reference set. When nothing matches confidently, you get links to search WHO, CDC, and NHS yourself.</p>
+                    <p>Ask a health question to match it against a fixed reference set. When nothing matches confidently, you get links to search WHO, CDC, NHS, Mayo Clinic, and NHI yourself.</p>
                     <div class="suggestion-chips">
                         <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
                         <button class="chip" onclick="sendMessage('How can I improve my sleep quality?')">Sleep tips</button>
@@ -1184,7 +1178,7 @@
                     <h3 style="margin-bottom: 8px;">iMedic reference lookup</h3>
                     <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 16px;">Version 3.0.0 - Smart Search Fallback</p>
                     <p style="font-size: 0.875rem; line-height: 1.6; margin-bottom: 16px;">
-                        This tool matches keywords against a fixed reference set. When there is no confident match, it provides links for you to search WHO, CDC, and NHS directly.
+                        This tool matches keywords against a fixed reference set. When there is no confident match, it provides links for you to search WHO, CDC, NHS, Mayo Clinic, and NHI directly.
                     </p>
                     <div style="background: var(--sand-deep); border-radius: 10px; padding: 12px; font-size: 0.8rem; color: var(--teal-deep); text-align: left;">
                         <strong>Medical Disclaimer:</strong> This application does not provide medical diagnosis, treatment recommendations, or prescriptions. All information is for educational purposes only. Always consult a qualified healthcare professional for medical advice.
