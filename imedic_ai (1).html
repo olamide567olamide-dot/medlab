@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNIFY Medic AI - Health Information Assistant</title>
+    <title>UNIFY Medic - Health Reference Lookup</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231D5A76'/%3E%3Cpath d='M19 15v19a13 13 0 0 0 26 0V15' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round'/%3E%3Cpath d='M32 24v14M25 31h14' stroke='%23E8896B' stroke-width='4.6' stroke-linecap='round'/%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -405,11 +405,91 @@
                     .brand-word { font-size: 1.2rem; }
                     .brand-mark { width: 32px; height: 32px; }
                 }
+
+                :root {
+                    --ink: #0C3441;
+                    --teal: #2B7A9D;
+                    --teal-deep: #1D5A76;
+                    --aqua: #8FE0D3;
+                    --aqua-soft: #E4F6F2;
+                    --page-bg: #F3F7F7;
+                    --card: #FFFFFF;
+                    --line: #DCE6E6;
+                    --text: #12333D;
+                    --muted: #566F7A;
+                    --success: #16866C;
+                    --warning: #B96B24;
+                    --danger: #B94A4A;
+                    --shadow-soft: 0 10px 30px rgba(12, 52, 65, 0.07);
+                }
+
+                body { background: var(--page-bg); color: var(--text); }
+                .skip-link { position: fixed; left: 1rem; top: -4rem; z-index: 200; padding: 0.7rem 1rem; background: var(--ink); color: var(--card); border-radius: 999px; text-decoration: none; font-weight: 700; }
+                .skip-link:focus { top: 1rem; }
+                .header { padding: 0.9rem clamp(1rem, 4vw, 3rem); background: var(--card); border-bottom: 1px solid var(--line); }
+                .header-inner { width: 100%; max-width: 1440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+                .logo { gap: 0.85rem; }
+                .logo-text { display: flex; flex-direction: column; gap: 0.15rem; }
+                .logo-text h1 { font-size: 1.3rem; color: var(--ink); }
+                .logo-text span { color: var(--muted); }
+                .brand { flex-shrink: 0; }
+                .dashboard-link { color: var(--teal-deep); font-size: 0.85rem; font-weight: 700; text-decoration: none; padding: 0.55rem 0.85rem; border: 1px solid var(--line); border-radius: 999px; }
+                .dashboard-link:hover { background: var(--mint, var(--aqua-soft)); border-color: var(--aqua); }
+                .header-actions { gap: 0.5rem; }
+                .btn-icon { width: 42px; height: 42px; background: var(--aqua-soft); color: var(--ink); border: 1px solid transparent; }
+                .btn-icon:hover, .btn-icon:focus-visible { background: var(--aqua); }
+                .btn-icon:focus-visible, .dashboard-link:focus-visible, button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 3px solid rgba(43, 122, 157, 0.35); outline-offset: 3px; }
+                .disclaimer-banner { background: var(--aqua-soft); border-left-color: var(--teal); color: var(--ink); padding: 0.75rem clamp(1rem, 4vw, 3rem); }
+                .disclaimer-banner strong { color: var(--ink); }
+                .main-container { max-width: 1440px; padding: clamp(1rem, 3vw, 2rem); gap: clamp(1rem, 3vw, 2rem); }
+                .sidebar { width: 250px; }
+                .sidebar-card { padding: 1.25rem; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-soft); }
+                .sidebar-card h3 { color: var(--muted); }
+                .quick-topic { min-height: 3.25rem; color: var(--text); }
+                .quick-topic:hover { background: var(--aqua-soft); }
+                .quick-topic i { flex-shrink: 0; }
+                .chat-container { min-height: min(720px, calc(100vh - 190px)); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-soft); }
+                .chat-messages { padding: clamp(1rem, 3vw, 2rem); }
+                .welcome-screen { min-height: 100%; justify-content: center; padding: clamp(2rem, 7vh, 5rem) 1rem; }
+                .welcome-icon { width: 68px; height: 68px; border-radius: 18px; background: var(--ink); box-shadow: 0 8px 18px rgba(12, 52, 65, 0.15); }
+                .welcome-screen h2 { color: var(--ink); }
+                .welcome-screen p, .input-hint { color: var(--muted); }
+                .chip { color: var(--teal-deep); background: var(--aqua-soft); border-color: var(--aqua); }
+                .chip:hover { background: var(--teal); border-color: var(--teal); }
+                .message { max-width: min(780px, 92%); }
+                .message-avatar { width: 34px; height: 34px; border-radius: 10px; }
+                .message.ai .message-avatar { background: var(--ink); }
+                .message.user .message-avatar { background: var(--aqua); color: var(--ink); }
+                .message-content { background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-soft); border-radius: 18px; border-top-left-radius: 5px; color: var(--text); }
+                .message.user .message-content { background: var(--ink); border-color: var(--ink); border-radius: 18px; border-top-right-radius: 5px; }
+                .message.user .message-time { color: var(--muted); }
+                .info-card, .sources-card, .fallback-card, .warning-box, .doctor-cta { border-radius: 16px; }
+                .confidence-bar { color: var(--muted); }
+                .confidence-bar .bar { height: 6px; background: var(--line); }
+                .confidence-bar .bar-fill.high { background: var(--success); }
+                .confidence-bar .bar-fill.medium { background: var(--warning); }
+                .confidence-bar .bar-fill.low { background: var(--danger); }
+                .reference-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.65rem; border: 1px solid var(--aqua); border-radius: 999px; background: var(--aqua-soft); color: var(--teal-deep); font-size: 0.75rem; margin-bottom: 0.65rem; }
+                .reference-badge i { color: var(--success); }
+                .chat-input-area { padding: 1rem clamp(1rem, 3vw, 2rem); background: var(--card); }
+                .input-wrapper { background: var(--page-bg); border-color: var(--line); border-radius: 18px; }
+                .input-wrapper:focus-within { border-color: var(--teal); }
+                .send-btn { background: var(--ink); }
+                .send-btn:hover, .send-btn:focus-visible { background: var(--teal-deep); }
+                .footer-disclaimer { background: var(--page-bg); color: var(--muted); border-top-color: var(--line); }
+                .search-btn, .source-link { border-radius: 999px; }
+                .doctor-cta { cursor: default; }
+                .auto-open-notice { display: none; }
+                @media (max-width: 860px) { .sidebar { display: none; } .main-container { padding: 1rem; } }
+                @media (max-width: 640px) { .header { padding: 0.75rem 1rem; } .header-inner { flex-wrap: wrap; } .dashboard-link { order: 3; width: 100%; text-align: center; } .header-actions { margin-left: auto; } .chat-container { min-height: calc(100vh - 178px); } }
+                @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#chatInput">Skip to chat input</a>
     <header class="header">
-        <div class="logo">
+        <div class="header-inner">
+          <div class="logo">
                         <a href="index.html" class="brand" aria-label="Unify Medic home">
                             <svg class="brand-mark" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">
                                 <defs>
@@ -427,20 +507,22 @@
                             <span class="brand-word">Unify<span>Medic</span></span>
                         </a>
             <div class="logo-text">
-                <span>Health Information Assistant</span>
+                <span>Fixed reference lookup</span>
             </div>
-        </div>
-        <div class="header-actions">
+          </div>
+          <a class="dashboard-link" href="dashboard.html">Dashboard</a>
+          <div class="header-actions">
             <button class="btn-icon" title="Voice Search" id="voiceBtn" onclick="toggleVoiceSearch()"><i class="fas fa-microphone"></i></button>
             <button class="btn-icon" title="Clear Chat" onclick="clearChat()"><i class="fas fa-trash-alt"></i></button>
             <button class="btn-icon" title="About" onclick="showAbout()"><i class="fas fa-info-circle"></i></button>
+          </div>
         </div>
     </header>
 
     <div class="disclaimer-banner">
         <i class="fas fa-exclamation-triangle"></i>
         <div>
-            <strong>Medical Disclaimer:</strong> UNIFY🌎Medic AI provides general health information about diseases diagnosis only from verified source.
+            <strong>Reference lookup:</strong> Matches your question against a fixed health reference set; unmatched questions get WHO, CDC, and NHS search links.
         </div>
     </div>
 
@@ -463,8 +545,8 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
-                    <h2>Welcome to UNIFY Medic AI</h2>
-                    <p>I answer health questions from verified sources. If I cannot answer confidently, I automatically search Google, NHS, and WHO for you!</p>
+                    <h2>Health reference lookup</h2>
+                    <p>Ask a health question to match it against a fixed reference set. When nothing matches confidently, you get links to search WHO, CDC, and NHS yourself.</p>
                     <div class="suggestion-chips">
                         <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
                         <button class="chip" onclick="sendMessage('How can I improve my sleep quality?')">Sleep tips</button>
@@ -482,7 +564,7 @@
                     <button class="send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
                 </div>
                 <div class="input-hint">
-                    <i class="fas fa-shield-alt"></i> UNIFY🌏Medic AI answers from verified sources. Unknown questions trigger automatic search on WHO, NHS & Google.
+                    <i class="fas fa-shield-alt"></i> Educational information only. Search links open when you choose them.
                 </div>
             </div>
         </main>
@@ -490,7 +572,7 @@
 
     <footer class="footer-disclaimer">
         <i class="fas fa-exclamation-circle"></i>
-        <strong>Important:</strong> The information provided by UNIFY🌏Medic AI is for educational purposes only and should not replace professional medical advice, diagnosis, or treatment. If you think you may have a medical emergency, call 911 or your local emergency number immediately.
+        <strong>Important:</strong> The information provided by UNIFY🌏Medic is for educational purposes only and should not replace professional medical advice, diagnosis, or treatment. If you think you may have a medical emergency, call 911 or your local emergency number immediately.
     </footer>
 
     <script>
@@ -706,6 +788,15 @@
         };
 
         // ========== QUERY ANALYSIS ENGINE ==========
+        function escapeHTML(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function analyzeQuery(query) {
             const lowerQuery = query.toLowerCase();
             const keywords = {
@@ -769,6 +860,7 @@
         // ========== FALLBACK RESPONSE GENERATOR ==========
         function generateFallbackResponse(query) {
             const searchUrls = generateSearchUrls(query);
+            const safeQuery = escapeHTML(query);
 
             return `
                 <div class="confidence-bar">
@@ -776,30 +868,25 @@
                     <div class="bar"><div class="bar-fill low"></div></div>
                     <span>Low - Searching external sources</span>
                 </div>
-                <p>I don't have specific information about <strong>"${query}"</strong> in my knowledge base. Let me search verified health sources for you.</p>
+                <p>I don't have a confident match for <strong>"${safeQuery}"</strong> in the fixed reference set. Search a trusted health source below.</p>
 
                 <div class="fallback-card">
                     <h4><i class="fas fa-search"></i> Search Verified Sources</h4>
                     <p>I have prepared searches across the most trusted health organizations. Click any link below to find official information:</p>
                     <div class="source-links" style="margin-top: 10px;">
-                        <a class="search-btn" href="${searchUrls.nhs}" target="_blank" rel="noopener noreferrer">
+                        <a class="search-btn" href="${escapeHTML(searchUrls.nhs)}" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-hospital"></i> Search NHS
                         </a>
-                        <a class="search-btn" href="${searchUrls.who}" target="_blank" rel="noopener noreferrer">
+                        <a class="search-btn" href="${escapeHTML(searchUrls.who)}" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-globe"></i> Search WHO
                         </a>
-                        <a class="search-btn" href="${searchUrls.cdc}" target="_blank" rel="noopener noreferrer">
+                        <a class="search-btn" href="${escapeHTML(searchUrls.cdc)}" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-shield-virus"></i> Search CDC
                         </a>
-                        <a class="search-btn" href="${searchUrls.filtered}" target="_blank" rel="noopener noreferrer">
+                        <a class="search-btn" href="${escapeHTML(searchUrls.filtered)}" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-google"></i> Search All Sources
                         </a>
                     </div>
-                </div>
-
-                <div class="auto-open-notice">
-                    <i class="fas fa-robot"></i>
-                    <span><strong>Auto-search activated:</strong> A new tab with Google results has been opened automatically.</span>
                 </div>
 
                 <div class="warning-box">
@@ -807,13 +894,13 @@
                     <div><strong>Important:</strong> Since I cannot verify this topic, please consult a healthcare professional before making any health decisions based on information you find.</div>
                 </div>
 
-                <div class="doctor-cta" onclick="window.open('https://www.zocdoc.com', '_blank')">
+                <a class="doctor-cta" href="https://www.zocdoc.com" target="_blank" rel="noopener noreferrer">
                     <i class="fas fa-user-md"></i>
                     <div>
                         <strong>Need professional care?</strong>
                         Find a doctor near you and schedule an appointment.
                     </div>
-                </div>
+                </a>
             `;
         }
 
@@ -849,7 +936,7 @@
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
-            contentDiv.innerHTML = content;
+            contentDiv.innerHTML = isUser ? escapeHTML(content) : content;
 
             const timeDiv = document.createElement('div');
             timeDiv.className = 'message-time';
@@ -930,7 +1017,7 @@
                     <div class="bar"><div class="bar-fill ${confidenceClass}"></div></div>
                     <span>${confidenceClass === 'high' ? 'High' : confidenceClass === 'medium' ? 'Medium' : 'Low'} - Based on verified sources</span>
                 </div>
-                <div class="live-badge"><div class="pulse"></div>Connected to Verified Health Sources</div>
+                <div class="reference-badge"><i class="fas fa-book-medical"></i>Matched in fixed reference set</div>
                 <p>${data.content}</p>
             `;
 
@@ -1009,13 +1096,13 @@
             response += generateSourcesLinks(topic);
 
             response += `
-                <div class="doctor-cta" onclick="window.open('https://www.zocdoc.com', '_blank')">
+                <a class="doctor-cta" href="https://www.zocdoc.com" target="_blank" rel="noopener noreferrer">
                     <i class="fas fa-user-md"></i>
                     <div>
                         <strong>Need professional care?</strong>
                         Find a doctor near you and schedule an appointment.
                     </div>
-                </div>
+                </a>
             `;
 
             return response;
@@ -1049,15 +1136,12 @@
                 } else {
                     // Low confidence - fallback to external search
                     response = generateFallbackResponse(query);
-                    // Auto-open Google search in new tab
-                    const searchUrls = generateSearchUrls(query);
-                    window.open(searchUrls.filtered, '_blank');
                 }
 
                 addMessage(response, false);
                 isTyping = false;
                 sendBtn.disabled = false;
-            }, 1500 + Math.random() * 1000);
+            }, 700 + Math.random() * 500);
         }
 
         function sendQuickTopic(topic) {
@@ -1077,8 +1161,8 @@
             chatMessages.innerHTML = `
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-icon"><i class="fas fa-heart-pulse"></i></div>
-                    <h2>Welcome to UNIFY Medic AI</h2>
-                    <p>I answer health questions from verified sources. If I cannot answer confidently, I automatically search Google, NHS, and WHO for you!</p>
+                    <h2>Health reference lookup</h2>
+                    <p>Ask a health question to match it against a fixed reference set. When nothing matches confidently, you get links to search WHO, CDC, and NHS yourself.</p>
                     <div class="suggestion-chips">
                         <button class="chip" onclick="sendMessage('What are common causes of headaches?')">Common headache causes</button>
                         <button class="chip" onclick="sendMessage('How can I improve my sleep quality?')">Sleep tips</button>
@@ -1097,10 +1181,10 @@
                     <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.75rem; margin: 0 auto 16px;">
                         <i class="fas fa-heart-pulse"></i>
                     </div>
-                    <h3 style="margin-bottom: 8px;">iMedic AI</h3>
+                    <h3 style="margin-bottom: 8px;">iMedic reference lookup</h3>
                     <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 16px;">Version 3.0.0 - Smart Search Fallback</p>
                     <p style="font-size: 0.875rem; line-height: 1.6; margin-bottom: 16px;">
-                        UNIFY🌍Medic AI uses a confidence-based system. When it can answer confidently, it provides verified health information. When it cannot, it automatically searches WHO, NHS, and Google for the most reliable information available.
+                        This tool matches keywords against a fixed reference set. When there is no confident match, it provides links for you to search WHO, CDC, and NHS directly.
                     </p>
                     <div style="background: var(--sand-deep); border-radius: 10px; padding: 12px; font-size: 0.8rem; color: var(--teal-deep); text-align: left;">
                         <strong>Medical Disclaimer:</strong> This application does not provide medical diagnosis, treatment recommendations, or prescriptions. All information is for educational purposes only. Always consult a qualified healthcare professional for medical advice.
