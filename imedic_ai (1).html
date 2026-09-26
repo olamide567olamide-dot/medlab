@@ -845,10 +845,47 @@
             };
         }
 
+        async function fetchVerifiedAnswer(query) {
+            try {
+                const searchResponse = await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query + ' health')}&format=json&origin=*`, {
+                    signal: AbortSignal.timeout(6000)
+                });
+                if (!searchResponse.ok) return null;
+
+                const searchData = await searchResponse.json();
+                const title = searchData[1]?.[0];
+                if (!title) return null;
+
+                const summaryResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`, {
+                    signal: AbortSignal.timeout(6000)
+                });
+                if (!summaryResponse.ok) return null;
+
+                const summaryData = await summaryResponse.json();
+                const url = summaryData.content_urls?.desktop?.page;
+                if (!summaryData.extract || !url) return null;
+
+                return { title, extract: summaryData.extract, url };
+            } catch (error) {
+                return null;
+            }
+        }
+
         // ========== FALLBACK RESPONSE GENERATOR ==========
-        function generateFallbackResponse(query) {
+        function generateFallbackResponse(query, autoAnswer = null) {
             const searchUrls = generateSearchUrls(query);
             const safeQuery = escapeHTML(query);
+            const automaticAnswer = autoAnswer ? `
+                <div class="reference-badge"><i class="fas fa-check-circle"></i>Retrieved automatically</div>
+                <div class="fallback-card">
+                    <h4><i class="fas fa-book-medical"></i>${escapeHTML(autoAnswer.title)}</h4>
+                    <p>${escapeHTML(autoAnswer.extract)}</p>
+                    <a class="search-btn" href="${escapeHTML(autoAnswer.url)}" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i> Read full article
+                    </a>
+                </div>
+            ` : '';
+            const sourcesHeading = autoAnswer ? 'Verify With Official Sources' : 'Search Verified Sources';
 
             return `
                 <div class="confidence-bar">
@@ -858,8 +895,9 @@
                 </div>
                 <p>I don't have a confident match for <strong>"${safeQuery}"</strong> in the fixed reference set. Search a trusted health source below.</p>
 
+                ${automaticAnswer}
                 <div class="fallback-card">
-                    <h4><i class="fas fa-search"></i> Search Verified Sources</h4>
+                    <h4><i class="fas fa-search"></i> ${sourcesHeading}</h4>
                     <p>I have prepared searches across the most trusted health organizations. Click any link below to find official information:</p>
                     <div class="source-links" style="margin-top: 10px;">
                         <a class="search-btn" href="${escapeHTML(searchUrls.nhs)}" target="_blank" rel="noopener noreferrer">
@@ -1103,7 +1141,7 @@
         }
 
         // ========== MESSAGE HANDLER ==========
-        function sendMessage(text = null) {
+        async function sendMessage(text = null) {
             const input = document.getElementById('chatInput');
             const sendBtn = document.getElementById('sendBtn');
             const query = text || input.value.trim();
@@ -1117,25 +1155,29 @@
             sendBtn.disabled = true;
             showTyping();
 
-            setTimeout(() => {
-                hideTyping();
+            const delay = () => new Promise(resolve => setTimeout(resolve, 700 + Math.random() * 500));
 
+            try {
                 const topic = analyzeQuery(query);
                 const confidence = calculateConfidence(query, topic);
 
                 let response;
                 if (topic !== 'default' && confidence >= 0.3) {
                     // High/Medium confidence - answer from knowledge base
+                    await delay();
                     response = generateConfidentResponse(query, topic);
                 } else {
                     // Low confidence - fallback to external search
-                    response = generateFallbackResponse(query);
+                    const [autoAnswer] = await Promise.all([fetchVerifiedAnswer(query), delay()]);
+                    response = generateFallbackResponse(query, autoAnswer);
                 }
 
+                hideTyping();
                 addMessage(response, false);
+            } finally {
                 isTyping = false;
                 sendBtn.disabled = false;
-            }, 700 + Math.random() * 500);
+            }
         }
 
         function sendQuickTopic(topic) {
