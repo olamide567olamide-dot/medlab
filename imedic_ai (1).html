@@ -845,7 +845,60 @@
             };
         }
 
-        async function fetchVerifiedAnswer(query) {
+        // ========== LIVE VERIFIED-SOURCE LOOKUP ==========
+        // Serper.dev (a Google Search API) is the live source here: free 2,500 queries on
+        // signup, one API key, and it's queried straight from the browser via fetch().
+        // Get your key from: https://serper.dev -> API Keys tab -> copy the key shown there.
+        // Paste it below. Until it's set (or if the request ever fails), this automatically
+        // falls back to a no-key CORS-enabled source (Wikipedia's public API), then to
+        // link-only if that also fails - so the page always keeps working.
+        //
+        // SECURITY NOTE: this file is static HTML - anyone who opens it can read the key
+        // in the page source, and Serper's free tier has no domain-lock option, so a key
+        // pasted here can be copied and used by anyone who views this file. Don't paste
+        // a key you'd mind someone else spending your free quota on.
+        const SERPER_CONFIG = {
+            apiKey: ''   // <-- paste your Serper.dev API key here
+        };
+
+        async function fetchGoogleAnswer(query) {
+            const { apiKey } = SERPER_CONFIG;
+            if (!apiKey) return null;
+            try {
+                const restricted = `${query} (site:nhs.uk OR site:who.int OR site:cdc.gov OR site:mayoclinic.org)`;
+                const res = await fetch('https://google.serper.dev/search', {
+                    method: 'POST',
+                    headers: {
+                        'X-API-KEY': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ q: restricted, num: 3 }),
+                    signal: AbortSignal.timeout(6000)
+                });
+                if (!res.ok) return null;
+                const data = await res.json();
+                const organic = data.organic;
+                if (!organic || !organic.length) return null;
+
+                return {
+                    engine: 'Google (via Serper)',
+                    items: organic.slice(0, 3).map(item => {
+                        let domain = item.link;
+                        try { domain = new URL(item.link).hostname; } catch (e) { /* keep raw link */ }
+                        return {
+                            title: item.title,
+                            snippet: item.snippet || '',
+                            url: item.link,
+                            domain
+                        };
+                    })
+                };
+            } catch (error) {
+                return null;
+            }
+        }
+
+        async function fetchWikipediaAnswer(query) {
             try {
                 const searchResponse = await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query + ' health')}&format=json&origin=*`, {
                     signal: AbortSignal.timeout(6000)
@@ -865,10 +918,23 @@
                 const url = summaryData.content_urls?.desktop?.page;
                 if (!summaryData.extract || !url) return null;
 
-                return { title, extract: summaryData.extract, url };
+                return {
+                    engine: 'Wikipedia',
+                    items: [{
+                        title,
+                        snippet: summaryData.extract,
+                        url,
+                        domain: new URL(url).hostname
+                    }]
+                };
             } catch (error) {
                 return null;
             }
+        }
+
+        async function fetchVerifiedAnswer(query) {
+            const googleAnswer = await fetchGoogleAnswer(query);
+            return googleAnswer || await fetchWikipediaAnswer(query);
         }
 
         // ========== FALLBACK RESPONSE GENERATOR ==========
@@ -876,14 +942,17 @@
             const searchUrls = generateSearchUrls(query);
             const safeQuery = escapeHTML(query);
             const automaticAnswer = autoAnswer ? `
-                <div class="reference-badge"><i class="fas fa-check-circle"></i>Retrieved automatically</div>
-                <div class="fallback-card">
-                    <h4><i class="fas fa-book-medical"></i>${escapeHTML(autoAnswer.title)}</h4>
-                    <p>${escapeHTML(autoAnswer.extract)}</p>
-                    <a class="search-btn" href="${escapeHTML(autoAnswer.url)}" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-external-link-alt"></i> Read full article
-                    </a>
-                </div>
+                <div class="reference-badge"><i class="fas fa-check-circle"></i>Retrieved automatically via ${escapeHTML(autoAnswer.engine)}</div>
+                ${autoAnswer.items.map(item => `
+                    <div class="info-card">
+                        <h4><i class="fas fa-book-medical"></i>${escapeHTML(item.title)}</h4>
+                        <p><strong>${escapeHTML(item.domain)}</strong></p>
+                        <p>${escapeHTML(item.snippet)}</p>
+                        <a class="search-btn" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i> Read full source
+                        </a>
+                    </div>
+                `).join('')}
             ` : '';
             const sourcesHeading = autoAnswer ? 'Verify With Official Sources' : 'Search Verified Sources';
 
