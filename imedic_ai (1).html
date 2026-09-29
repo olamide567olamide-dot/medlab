@@ -214,6 +214,15 @@
             position: absolute; left: 0; font-weight: bold;
         }
 
+        .fast-answer-label {
+            color: var(--text-light); font-size: 0.75rem;
+            font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .fast-answer-body p { margin-bottom: 12px; line-height: 1.65; }
+        .fast-answer-body ul { padding-left: 20px; margin: 0 0 12px; }
+        .fast-answer-body li { margin-bottom: 6px; line-height: 1.65; }
+        .fast-answer-body strong { color: var(--teal-deep); }
+
         .warning-box {
             background: var(--sand-deep); border: 1px solid var(--sand-deep);
             border-radius: 12px; padding: 14px; margin-top: 12px;
@@ -275,57 +284,8 @@
             font-size: 0.875rem; color: var(--teal-deep); font-weight: 500;
             cursor: pointer; transition: all 0.2s; text-decoration: none;
         }
-        .search-btn:hover { background: var(--coral); color: white; }
         button.search-btn { font-family: inherit; }
-        .fast-answer-label {
-            font-size: 0.7rem; color: #9ca3af; text-transform: uppercase;
-            letter-spacing: 0.06em; font-weight: 700; margin: 2px 0 10px;
-        }
-        .fast-answer-body p { margin: 0 0 12px; line-height: 1.65; }
-        .fast-answer-body ul { margin: 0 0 14px 20px; padding: 0; }
-        .fast-answer-body li { margin-bottom: 7px; line-height: 1.6; }
-        .fast-answer-body strong { color: var(--teal-deep); }
-
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(10, 30, 40, 0.55);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000; padding: 20px;
-        }
-        .modal-card {
-            background: white; border-radius: 16px; padding: 28px;
-            max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-        }
-        .modal-card h3 {
-            display: flex; align-items: center; gap: 8px;
-            margin: 0 0 8px; color: var(--teal-deep); font-size: 1.1rem;
-        }
-        .modal-hint {
-            font-size: 0.8rem; color: var(--text-light); line-height: 1.5; margin: 0 0 18px;
-        }
-        .modal-label {
-            display: block; font-size: 0.8rem; font-weight: 600;
-            color: var(--teal-deep); margin-bottom: 6px;
-        }
-        .modal-input {
-            width: 100%; padding: 10px 12px; border: 1px solid var(--teal-line, #cbd5da);
-            border-radius: 8px; font-size: 0.875rem; font-family: inherit; box-sizing: border-box;
-        }
-        .modal-get-link {
-            display: inline-block; font-size: 0.75rem; color: var(--coral);
-            margin-top: 6px; text-decoration: none;
-        }
-        .modal-get-link:hover { text-decoration: underline; }
-        .modal-actions {
-            display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px;
-        }
-        .btn-primary, .btn-secondary {
-            padding: 9px 18px; border-radius: 8px; font-size: 0.875rem;
-            font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid transparent;
-        }
-        .btn-primary { background: var(--ink, #16323f); color: white; }
-        .btn-primary:hover { background: var(--teal-deep); }
-        .btn-secondary { background: white; border-color: #d1d5db; color: var(--teal-deep); }
-        .btn-secondary:hover { background: #f3f4f6; }
+        .search-btn:hover { background: var(--coral); color: white; }
 
         .auto-open-notice {
             background: var(--aqua-soft); border: 1px solid var(--aqua);
@@ -549,7 +509,6 @@
           <a class="dashboard-link" href="dashboard.html">Dashboard</a>
           <div class="header-actions">
             <button class="btn-icon" title="Voice Search" id="voiceBtn" onclick="toggleVoiceSearch()"><i class="fas fa-microphone"></i></button>
-            <button class="btn-icon" title="API Settings" onclick="openApiSettings()"><i class="fas fa-key"></i></button>
             <button class="btn-icon" title="Clear Chat" onclick="clearChat()"><i class="fas fa-trash-alt"></i></button>
             <button class="btn-icon" title="About" onclick="showAbout()"><i class="fas fa-info-circle"></i></button>
           </div>
@@ -612,30 +571,7 @@
         <strong>Important:</strong> The information provided by UNIFY🌏Medic is for educational purposes only and should not replace professional medical advice, diagnosis, or treatment. If you think you may have a medical emergency, call 911 or your local emergency number immediately.
     </footer>
 
-    <div id="apiSettingsOverlay" class="modal-overlay" style="display:none">
-        <div class="modal-card">
-            <h3><i class="fas fa-key"></i> API Settings</h3>
-            <p class="modal-hint">Keys entered here are saved only in this browser. Leave a field blank to skip that feature.</p>
-
-            <label class="modal-label" for="serperKeyInput">Serper.dev API key</label>
-            <input type="password" id="serperKeyInput" class="modal-input" placeholder="Paste your Serper key" autocomplete="off">
-            <a class="modal-get-link" href="https://serper.dev" target="_blank" rel="noopener noreferrer">Get a free key at serper.dev &rarr;</a>
-
-            <label class="modal-label" for="geminiKeyInput" style="margin-top:16px">Gemini API key</label>
-            <input type="password" id="geminiKeyInput" class="modal-input" placeholder="Paste your Gemini key" autocomplete="off">
-            <a class="modal-get-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Get a free key at aistudio.google.com &rarr;</a>
-
-            <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeApiSettings()">Cancel</button>
-                <button type="button" class="btn-primary" onclick="saveApiSettings()">Save</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Client-side keys are visible in page source; use this only for local or private deployments.
-        const CONFIG = { SERPER_API_KEY: '', GEMINI_API_KEY: '' };
-
         // ========== EXTERNAL SOURCE DATABASE ==========
         const externalSources = {
             fever: {
@@ -857,37 +793,24 @@
                 .replace(/'/g, '&#39;');
         }
 
-        function safeUrl(url) {
-            try {
-                const u = new URL(url);
-                return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : '#';
-            } catch (e) { return '#'; }
-        }
-
-        const TOPIC_KEYWORDS = {
-            fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
-            cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
-            headache: ['headache', 'migraine', 'head pain', 'head hurts'],
-            stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
-            sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
-            stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
-            chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
-            diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
-            diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
-            hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
-            covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
-        };
-
-        function keywordMatches(lowerQuery, keyword) {
-            const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            return new RegExp('\\b' + escaped + '(?:s|es|ing|ed)?\\b', 'i').test(lowerQuery);
-        }
-
         function analyzeQuery(query) {
             const lowerQuery = query.toLowerCase();
+            const keywords = {
+                fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
+                cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
+                headache: ['headache', 'migraine', 'head pain', 'head hurts'],
+                stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
+                sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
+                stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
+                chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
+                diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
+                diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
+                hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
+                covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
+            };
 
-            for (const [topic, words] of Object.entries(TOPIC_KEYWORDS)) {
-                if (words.some(word => keywordMatches(lowerQuery, word))) return topic;
+            for (const [topic, words] of Object.entries(keywords)) {
+                if (words.some(word => lowerQuery.includes(word))) return topic;
             }
             return 'default';
         }
@@ -895,11 +818,24 @@
         // ========== CONFIDENCE SCORING ==========
         function calculateConfidence(query, topic) {
             const lowerQuery = query.toLowerCase();
+            const keywords = {
+                fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
+                cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
+                headache: ['headache', 'migraine', 'head pain', 'head hurts'],
+                stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
+                sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
+                stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
+                chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
+                diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
+                diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
+                hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
+                covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
+            };
 
             if (topic === 'default') return 0;
 
-            const topicKeywords = TOPIC_KEYWORDS[topic] || [];
-            const matches = topicKeywords.filter(kw => keywordMatches(lowerQuery, kw)).length;
+            const topicKeywords = keywords[topic] || [];
+            const matches = topicKeywords.filter(kw => lowerQuery.includes(kw)).length;
             const score = Math.min(matches / 2, 1);
 
             return score;
@@ -919,69 +855,75 @@
             };
         }
 
-        // ========== API KEY STORAGE ==========
-        // Configured keys take precedence; Settings keys are used when config is blank.
-        function getSerperKey() {
-            if (CONFIG.SERPER_API_KEY.trim()) return CONFIG.SERPER_API_KEY;
-            try { return localStorage.getItem('imedic_serper_key') || ''; } catch (e) { return ''; }
-        }
-        function setSerperKey(value) {
-            try { localStorage.setItem('imedic_serper_key', value); } catch (e) { /* ignore */ }
-        }
-        function getGeminiKey() {
-            if (CONFIG.GEMINI_API_KEY.trim()) return CONFIG.GEMINI_API_KEY;
-            try { return localStorage.getItem('imedic_gemini_key') || ''; } catch (e) { return ''; }
-        }
-        function setGeminiKey(value) {
-            try { localStorage.setItem('imedic_gemini_key', value); } catch (e) { /* ignore */ }
-        }
-
         // ========== LIVE VERIFIED-SOURCE LOOKUP ==========
         // Serper.dev (a Google Search API) is the live source here: free 2,500 queries on
-        // signup, one API key. Get yours from https://serper.dev -> API Keys tab, then
-        // Paste the key into CONFIG above or enter it in Settings.
+        // signup, one API key, and it's queried straight from the browser via fetch().
+        // Get your key from: https://serper.dev -> API Keys tab -> copy the key shown there.
+        // Paste it below. Until it's set (or if the request ever fails), this automatically
+        // falls back to a no-key CORS-enabled source (Wikipedia's public API), then to
+        // link-only if that also fails - so the page always keeps working.
+        //
+        // SECURITY NOTE: this file is static HTML - anyone who opens it can read the key
+        // in the page source, and Serper's free tier has no domain-lock option, so a key
+        // pasted here can be copied and used by anyone who views this file. Don't paste
+        // a key you'd mind someone else spending your free quota on.
+        const SERPER_CONFIG = {
+            apiKey: 'd00e8cc449bb13fbd9c2fa7d54c144f0104e8ab8'   // <-- paste your Serper.dev API key here
+        };
+
+        const GEMINI_CONFIG = {
+            apiKey: 'AQ.Ab8RN6KqBwYp2_On6BJqm4OxNQK2Rg8RuAvJmWdbrQIcrjKfgw' // Get a free-tier key (no card required) from https://aistudio.google.com/apikey
+        };
+
+        const VERIFIED_SOURCES = {
+            nhs: { name: 'NHS', domain: 'nhs.uk', icon: 'fas fa-hospital' },
+            who: { name: 'WHO', domain: 'who.int', icon: 'fas fa-globe' },
+            cdc: { name: 'CDC', domain: 'cdc.gov', icon: 'fas fa-shield-virus' },
+            mayo: { name: 'Mayo Clinic', domain: 'mayoclinic.org', icon: 'fas fa-hospital' },
+            nhi: { name: 'NHI', domain: 'nhi.gov.tw', icon: 'fas fa-briefcase-medical' }
+        };
+
+        function encodeQuery(query) {
+            return btoa(unescape(encodeURIComponent(query)));
+        }
+
+        function decodeQuery(encoded) {
+            return decodeURIComponent(escape(atob(encoded)));
+        }
+
         async function fetchGoogleAnswer(query) {
-            const apiKey = getSerperKey();
+            const { apiKey } = SERPER_CONFIG;
             if (!apiKey) return null;
             try {
-                const restricted = `${query} (site:nhs.uk OR site:who.int OR site:cdc.gov OR site:mayoclinic.org OR site:nhi.gov.tw)`;
+                const restricted = `${query} (site:nhs.uk OR site:who.int OR site:cdc.gov OR site:mayoclinic.org)`;
                 const res = await fetch('https://google.serper.dev/search', {
                     method: 'POST',
                     headers: {
                         'X-API-KEY': apiKey,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ q: restricted, num: 8 }),
+                    body: JSON.stringify({ q: restricted, num: 3 }),
                     signal: AbortSignal.timeout(6000)
                 });
-                if (!res.ok) { console.warn('API request failed:', res.url, res.status); return null; }
+                if (!res.ok) return null;
                 const data = await res.json();
-                const toItem = item => {
-                    let domain = item.link;
-                    try { domain = new URL(item.link).hostname; } catch (e) { /* keep raw link */ }
-                    return {
-                        title: item.title,
-                        snippet: item.snippet || '',
-                        url: item.link,
-                        domain
-                    };
-                };
-                const all = (data.organic || []).map(toItem);
-                const answerBox = data.answerBox;
-                if (answerBox && (answerBox.snippet || answerBox.answer) && answerBox.link) {
-                    all.unshift(toItem({
-                        title: answerBox.title || query,
-                        snippet: answerBox.snippet || answerBox.answer,
-                        link: answerBox.link
-                    }));
-                }
-                if (!all.length) return null;
+                const organic = data.organic;
+                if (!organic || !organic.length) return null;
 
-                const shown = all.slice(0, 4);
-                shown.extra = all.slice(4);
-                return { engine: 'Google (via Serper)', items: shown };
+                return {
+                    engine: 'Google (via Serper)',
+                    items: organic.slice(0, 3).map(item => {
+                        let domain = item.link;
+                        try { domain = new URL(item.link).hostname; } catch (e) { /* keep raw link */ }
+                        return {
+                            title: item.title,
+                            snippet: item.snippet || '',
+                            url: item.link,
+                            domain
+                        };
+                    })
+                };
             } catch (error) {
-                console.warn('Request error:', error);
                 return null;
             }
         }
@@ -1016,7 +958,6 @@
                     }]
                 };
             } catch (error) {
-                console.warn('Request error:', error);
                 return null;
             }
         }
@@ -1026,268 +967,223 @@
             return googleAnswer || await fetchWikipediaAnswer(query);
         }
 
-        // ========== ANSWER SYNTHESIS (ChatGPT-style "Fast answer") ==========
-        // Search snippets alone are choppy and disconnected (a sentence or two per
-        // source). This sends those snippets to Gemini and asks it to write one
-        // coherent, well-formatted answer from them - shown above the raw source
-        // cards, the same way Copilot/ChatGPT show a synthesized answer before links.
-        //
-        // Get a free key from https://aistudio.google.com/apikey (no card required,
-        // generous free tier) and paste it into CONFIG above or enter it in Settings.
-        // Until it's set, or if a call fails, this is
-        // skipped entirely and the page falls back to showing the raw source cards
-        // only, exactly as before - nothing breaks either way.
         async function synthesizeAnswer(query, items) {
-            const apiKey = getGeminiKey();
-            if (!apiKey || !items || !items.length) return null;
+            const { apiKey } = GEMINI_CONFIG;
+            if (!apiKey || !items?.length) return null;
+
+            const sources = items.map((item, index) =>
+                `[${index + 1}] Title: ${item.title}\nDomain: ${item.domain}\nSnippet: ${item.snippet}`
+            ).join('\n\n');
+            const prompt = `Write a clear, well-organized answer to this question: ${query}
+
+Use ONLY the information in the source items below. Write 1-2 short paragraphs that directly answer the question. Bold key terms using **double asterisks**. Use bullet points (lines starting with "- ") for multiple causes, types, or steps if the sources describe them. Do not invent information. Do not say "according to the sources". Keep the answer under 200 words.
+
+Source items:
+${sources}`;
+
             try {
-                const sourceList = items.concat(items.extra || [])
-                    .map((item, i) => `${i + 1}. (${item.domain}) ${item.title}: ${item.snippet}`)
-                    .join('\n');
-                const prompt = `You are a medical information assistant. Using ONLY the information in the sources below, write a clear, well-organized answer to this question: "${query}"
-
-Format rules:
-- Start with 1-2 short paragraphs that directly answer the question.
-- Bold key medical terms and important facts using **double asterisks**.
-- If the sources describe multiple causes, types, symptoms, or steps, list them as bullet points, each on its own line starting with "- ".
-- Do not invent information that isn't supported by the sources below.
-- Do not say "according to the sources" or mention source names inline.
-- Cover the main causes/mechanism, key details, and prevention or when to seek care where the sources support it.
-- Keep the whole answer under 250 words.
-
-Sources:
-${sourceList}`;
-
-                const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
                     method: 'POST',
-                    headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { thinkingConfig: { thinkingBudget: 0 } } }),
-                    signal: AbortSignal.timeout(20000)
+                    headers: {
+                        'x-goog-api-key': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+                    signal: AbortSignal.timeout(12000)
                 });
-                if (!res.ok) { console.warn('API request failed:', res.url, res.status); return null; }
-                const data = await res.json();
-                const text = data && data.candidates && data.candidates[0]
-                    && data.candidates[0].content && data.candidates[0].content.parts
-                    && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-                return text ? text.trim() : null;
+                if (!response.ok) return null;
+                const data = await response.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                return typeof text === 'string' && text.trim() ? text.trim() : null;
             } catch (error) {
-                console.warn('Request error:', error);
                 return null;
             }
         }
 
-        // Turns the plain-text synthesis (**bold**, "- " bullet lines, blank-line
-        // paragraphs) into safe HTML. Input is escaped first, so nothing the model
-        // returns can inject markup - only the bold/bullet patterns we add ourselves.
         function formatSynthesizedText(text) {
-            const escaped = escapeHTML(text).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-            const blocks = escaped.split(/\n\s*\n/);
-            return blocks.map(block => {
-                const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
-                if (!lines.length) return '';
-                if (lines.every(l => l.startsWith('- ') || l.startsWith('&#8226; '))) {
-                    return `<ul>${lines.map(l => `<li>${l.replace(/^-\s*/, '')}</li>`).join('')}</ul>`;
+            const escapedText = escapeHTML(text)
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\r\n?/g, '\n');
+            return escapedText.split(/\n\s*\n/).map(paragraph => {
+                const lines = paragraph.split('\n');
+                if (lines.every(line => line.startsWith('- '))) {
+                    return `<ul>${lines.map(line => `<li>${line.slice(2)}</li>`).join('')}</ul>`;
                 }
-                return `<p>${lines.join(' ')}</p>`;
+                return `<p>${paragraph.replace(/\n/g, '<br>')}</p>`;
             }).join('');
         }
 
         function renderFastAnswer(synthesis) {
             if (!synthesis) return '';
-            return `
+            return `<div class="fast-answer">
                 <div class="fast-answer-label">Fast answer</div>
                 <div class="fast-answer-body">${formatSynthesizedText(synthesis)}</div>
-            `;
-        }
-
-        // ========== PER-SOURCE LIVE SEARCH (NHS / WHO / CDC / Mayo / NHI buttons) ==========
-        // Each "Search X" button below now pulls real results from that one organization's
-        // site, instead of just opening a new tab. Uses the same Serper key as the general
-        // lookup, restricted with site: to just that domain.
-        const VERIFIED_SOURCES = {
-            nhs:  { name: 'NHS',          domain: 'nhs.uk',         icon: 'fa-hospital' },
-            who:  { name: 'WHO',          domain: 'who.int',        icon: 'fa-globe' },
-            cdc:  { name: 'CDC',          domain: 'cdc.gov',        icon: 'fa-shield-virus' },
-            mayo: { name: 'Mayo Clinic',  domain: 'mayoclinic.org', icon: 'fa-hospital' },
-            nhi:  { name: 'NHI',          domain: 'nhi.gov.tw',     icon: 'fa-briefcase-medical' }
-        };
-
-        // Queries are passed through onclick attributes, so they're base64-encoded to
-        // avoid quote/escaping issues with arbitrary user text.
-        function encodeQuery(query) {
-            return btoa(unescape(encodeURIComponent(query)));
-        }
-        function decodeQuery(encoded) {
-            return decodeURIComponent(escape(atob(encoded)));
+            </div>`;
         }
 
         async function fetchSourceAnswer(query, domain) {
-            const apiKey = getSerperKey();
+            const { apiKey } = SERPER_CONFIG;
             if (!apiKey) return null;
             try {
-                const res = await fetch('https://google.serper.dev/search', {
+                const response = await fetch('https://google.serper.dev/search', {
                     method: 'POST',
-                    headers: { 'X-API-KEY': apiKey, 'Content-Type': 'application/json' },
+                    headers: {
+                        'X-API-KEY': apiKey,
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ q: `${query} site:${domain}`, num: 3 }),
                     signal: AbortSignal.timeout(6000)
                 });
-                if (!res.ok) { console.warn('API request failed:', res.url, res.status); return null; }
-                const data = await res.json();
-                const organic = data.organic;
-                if (!organic || !organic.length) return null;
-                return organic.slice(0, 3).map(item => {
-                    let host = item.link;
-                    try { host = new URL(item.link).hostname; } catch (e) { /* keep raw link */ }
-                    return { title: item.title, snippet: item.snippet || '', url: item.link, domain: host };
+                if (!response.ok) return null;
+                const data = await response.json();
+                if (!Array.isArray(data.organic) || !data.organic.length) return null;
+
+                return data.organic.slice(0, 3).map(item => {
+                    let resultDomain = domain;
+                    try { resultDomain = new URL(item.link).hostname; } catch {}
+                    return {
+                        title: item.title || '',
+                        snippet: item.snippet || '',
+                        url: item.link,
+                        domain: resultDomain
+                    };
                 });
             } catch (error) {
-                console.warn('Request error:', error);
                 return null;
             }
         }
 
-        function renderSourceResultCard(icon, item) {
-            return `
+        function renderSearchResults(items, heading) {
+            return `<p>${escapeHTML(heading)}</p>${items.map(item => `
                 <div class="info-card">
-                    <h4><i class="fas ${icon}"></i>${escapeHTML(item.title)}</h4>
+                    <h4><i class="fas fa-book-medical"></i>${escapeHTML(item.title)}</h4>
                     <p><strong>${escapeHTML(item.domain)}</strong></p>
                     <p>${escapeHTML(item.snippet)}</p>
-                    <a class="search-btn" href="${escapeHTML(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">
+                    <a class="search-btn" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-external-link-alt"></i> Read full source
                     </a>
                 </div>
-            `;
+            `).join('')}`;
+        }
+
+        function renderSearchFallback(message, url, linkLabel) {
+            return `<p>${escapeHTML(message)}</p>
+                <a class="search-btn" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-external-link-alt"></i> ${escapeHTML(linkLabel)}
+                </a>`;
         }
 
         async function searchSpecificSource(encodedQuery, sourceKey) {
-            const query = decodeQuery(encodedQuery);
             const source = VERIFIED_SOURCES[sourceKey];
             if (!source || isTyping) return;
-            const searchUrls = generateSearchUrls(query);
-            const fallbackUrl = searchUrls[sourceKey] || searchUrls.filtered;
 
+            let query;
+            try { query = decodeQuery(encodedQuery); } catch { return; }
+
+            const sendBtn = document.getElementById('sendBtn');
             isTyping = true;
+            sendBtn.disabled = true;
             addMessage(`Search ${source.name} for "${query}"`, true);
             showTyping();
 
-            const items = await fetchSourceAnswer(query, source.domain);
-            let html;
-            if (items && items.length) {
+            try {
+                let items = null;
+                try { items = await fetchSourceAnswer(query, source.domain); } catch {}
                 const synthesis = await synthesizeAnswer(query, items);
                 hideTyping();
-                isTyping = false;
-                html = `
-                    ${renderFastAnswer(synthesis)}
-                    <div class="reference-badge"><i class="fas fa-check-circle"></i>Live results from ${escapeHTML(source.name)}</div>
-                    ${items.map(item => renderSourceResultCard(source.icon, item)).join('')}
-                    <div class="warning-box">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div><strong>Important:</strong> Please consult a healthcare professional before making any health decisions based on information you find.</div>
-                    </div>
-                `;
-            } else {
+                const response = renderFastAnswer(synthesis) + (items?.length
+                    ? renderSearchResults(items, `Search results from ${source.name}:`)
+                    : renderSearchFallback(
+                        `I couldn't retrieve live results from ${source.name} right now.`,
+                        generateSearchUrls(query)[sourceKey],
+                        `Search ${source.name}`
+                    ));
+                addMessage(response, false);
+            } finally {
                 hideTyping();
                 isTyping = false;
-                const reason = getSerperKey() ? 'no matching results came back' : "live search isn't configured yet";
-                html = `
-                    <p>I couldn't pull live results from ${escapeHTML(source.name)} for <strong>"${escapeHTML(query)}"</strong> (${reason}). Open the search directly instead:</p>
-                    <a class="search-btn" href="${escapeHTML(fallbackUrl)}" target="_blank" rel="noopener noreferrer">
-                        <i class="fas ${source.icon}"></i> Open ${escapeHTML(source.name)} Search
-                    </a>
-                `;
+                sendBtn.disabled = false;
             }
-            addMessage(html, false);
         }
 
         async function searchAllSources(encodedQuery) {
-            const query = decodeQuery(encodedQuery);
             if (isTyping) return;
-            const searchUrls = generateSearchUrls(query);
 
+            let query;
+            try { query = decodeQuery(encodedQuery); } catch { return; }
+
+            const sendBtn = document.getElementById('sendBtn');
             isTyping = true;
+            sendBtn.disabled = true;
             addMessage(`Search all verified sources for "${query}"`, true);
             showTyping();
 
-            const result = await fetchVerifiedAnswer(query);
-            let html;
-            if (result && result.items && result.items.length) {
-                const synthesis = await synthesizeAnswer(query, result.items);
+            try {
+                let answer = null;
+                try { answer = await fetchVerifiedAnswer(query); } catch {}
+                const synthesis = await synthesizeAnswer(query, answer?.items);
+                hideTyping();
+                const response = renderFastAnswer(synthesis) + (answer?.items?.length
+                    ? renderSearchResults(answer.items, `Search results from ${answer.engine}:`)
+                    : renderSearchFallback(
+                        'I could not retrieve results from verified sources right now.',
+                        generateSearchUrls(query).filtered,
+                        'Search all verified sources'
+                    ));
+                addMessage(response, false);
+            } finally {
                 hideTyping();
                 isTyping = false;
-                html = `
-                    ${renderFastAnswer(synthesis)}
-                    <div class="reference-badge"><i class="fas fa-check-circle"></i>Live results via ${escapeHTML(result.engine)}</div>
-                    ${result.items.map(item => renderSourceResultCard('fa-book-medical', item)).join('')}
-                    <div class="warning-box">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div><strong>Important:</strong> Please consult a healthcare professional before making any health decisions based on information you find.</div>
-                    </div>
-                `;
-            } else {
-                hideTyping();
-                isTyping = false;
-                html = `
-                    <p>I couldn't pull live results for <strong>"${escapeHTML(query)}"</strong>. Open a combined search instead:</p>
-                    <a class="search-btn" href="${escapeHTML(searchUrls.filtered)}" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-google"></i> Open Search All Sources
-                    </a>
-                `;
+                sendBtn.disabled = false;
             }
-            addMessage(html, false);
         }
 
         // ========== FALLBACK RESPONSE GENERATOR ==========
         function generateFallbackResponse(query, autoAnswer = null, synthesis = null) {
-            const searchUrls = generateSearchUrls(query);
-            const safeQuery = escapeHTML(query);
             const encodedQuery = encodeQuery(query);
+            const safeQuery = escapeHTML(query);
             const automaticAnswer = autoAnswer ? `
-                ${renderFastAnswer(synthesis)}
                 <div class="reference-badge"><i class="fas fa-check-circle"></i>Retrieved automatically via ${escapeHTML(autoAnswer.engine)}</div>
                 ${autoAnswer.items.map(item => `
                     <div class="info-card">
                         <h4><i class="fas fa-book-medical"></i>${escapeHTML(item.title)}</h4>
                         <p><strong>${escapeHTML(item.domain)}</strong></p>
                         <p>${escapeHTML(item.snippet)}</p>
-                        <a class="search-btn" href="${escapeHTML(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">
+                        <a class="search-btn" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-external-link-alt"></i> Read full source
                         </a>
                     </div>
                 `).join('')}
             ` : '';
-            const leadIn = autoAnswer ? '' : `
+            const sourcesHeading = autoAnswer ? 'Verify With Official Sources' : 'Search Verified Sources';
+
+            return `
                 <div class="confidence-bar">
                     <span>Confidence:</span>
                     <div class="bar"><div class="bar-fill low"></div></div>
                     <span>Low - Searching external sources</span>
                 </div>
                 <p>I don't have a confident match for <strong>"${safeQuery}"</strong> in the fixed reference set. Search a trusted health source below.</p>
-            `;
-            const sourcesHeading = autoAnswer ? 'Verify With Official Sources' : 'Search Verified Sources';
-            const warningText = autoAnswer
-                ? 'Please consult a healthcare professional before making any health decisions based on information you find.'
-                : 'Since I cannot verify this topic, please consult a healthcare professional before making any health decisions based on information you find.';
 
-            return `
-                ${leadIn}
+                ${renderFastAnswer(synthesis)}
                 ${automaticAnswer}
                 <div class="fallback-card">
                     <h4><i class="fas fa-search"></i> ${sourcesHeading}</h4>
-                    <p>Click any button below and I'll pull real results from that organization straight into this chat:</p>
+                    <p>I have prepared searches across the most trusted health organizations. Click any button below to find official information:</p>
                     <div class="source-links" style="margin-top: 10px;">
-                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}','nhs')">
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'nhs')">
                             <i class="fas fa-hospital"></i> Search NHS
                         </button>
-                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}','who')">
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'who')">
                             <i class="fas fa-globe"></i> Search WHO
                         </button>
-                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}','cdc')">
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'cdc')">
                             <i class="fas fa-shield-virus"></i> Search CDC
                         </button>
-                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}','mayo')">
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'mayo')">
                             <i class="fas fa-hospital"></i> Search Mayo Clinic
                         </button>
-                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}','nhi')">
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'nhi')">
                             <i class="fas fa-briefcase-medical"></i> Visit NHI
                         </button>
                         <button type="button" class="search-btn" onclick="searchAllSources('${encodedQuery}')">
@@ -1298,7 +1194,7 @@ ${sourceList}`;
 
                 <div class="warning-box">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <div><strong>Important:</strong> ${warningText}</div>
+                    <div><strong>Important:</strong> Since I cannot verify this topic, please consult a healthcare professional before making any health decisions based on information you find.</div>
                 </div>
 
                 <a class="doctor-cta" href="https://www.zocdoc.com" target="_blank" rel="noopener noreferrer">
@@ -1544,18 +1440,13 @@ ${sourceList}`;
                 } else {
                     // Low confidence - fallback to external search
                     const [autoAnswer] = await Promise.all([fetchVerifiedAnswer(query), delay()]);
-                    const synthesis = autoAnswer ? await synthesizeAnswer(query, autoAnswer.items) : null;
+                    const synthesis = await synthesizeAnswer(query, autoAnswer?.items);
                     response = generateFallbackResponse(query, autoAnswer, synthesis);
                 }
 
                 hideTyping();
                 addMessage(response, false);
-            } catch (error) {
-                console.error('Message handling error:', error);
-                hideTyping();
-                addMessage('<p>Sorry, something went wrong while looking that up. Please try again.</p>', false);
             } finally {
-                hideTyping();
                 isTyping = false;
                 sendBtn.disabled = false;
             }
@@ -1571,23 +1462,6 @@ ${sourceList}`;
                 stress: "Tips for managing stress and anxiety"
             };
             sendMessage(queries[topic]);
-        }
-
-        function openApiSettings() {
-            document.getElementById('serperKeyInput').value = getSerperKey();
-            document.getElementById('geminiKeyInput').value = getGeminiKey();
-            document.getElementById('apiSettingsOverlay').style.display = 'flex';
-        }
-
-        function closeApiSettings() {
-            document.getElementById('apiSettingsOverlay').style.display = 'none';
-        }
-
-        function saveApiSettings() {
-            setSerperKey(document.getElementById('serperKeyInput').value.trim());
-            setGeminiKey(document.getElementById('geminiKeyInput').value.trim());
-            closeApiSettings();
-            addMessage('API keys saved to this browser. Live search is ready to use.', false);
         }
 
         function clearChat() {
@@ -1674,7 +1548,6 @@ ${sourceList}`;
                 input.value = transcript;
 
                 if (event.results[0].isFinal) {
-                    input.value = '';
                     sendMessage(transcript);
                 }
             };
@@ -1737,10 +1610,6 @@ ${sourceList}`;
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('chatInput').focus();
-            if (CONFIG.SERPER_API_KEY.trim() && CONFIG.GEMINI_API_KEY.trim()) {
-                const apiSettingsButton = document.querySelector('.header-actions button[onclick="openApiSettings()"]');
-                if (apiSettingsButton) apiSettingsButton.style.display = 'none';
-            }
             const voiceBtn = document.getElementById('voiceBtn');
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (voiceBtn && !SpeechRecognition) {
