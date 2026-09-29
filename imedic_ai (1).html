@@ -275,6 +275,7 @@
             font-size: 0.875rem; color: var(--teal-deep); font-weight: 500;
             cursor: pointer; transition: all 0.2s; text-decoration: none;
         }
+        button.search-btn { font-family: inherit; }
         .search-btn:hover { background: var(--coral); color: white; }
 
         .auto-open-notice {
@@ -861,6 +862,22 @@
             apiKey: '5889d155ab57f60d24a48088a019c0c12fed7fef'   // <-- paste your Serper.dev API key here
         };
 
+        const VERIFIED_SOURCES = {
+            nhs: { name: 'NHS', domain: 'nhs.uk', icon: 'fas fa-hospital' },
+            who: { name: 'WHO', domain: 'who.int', icon: 'fas fa-globe' },
+            cdc: { name: 'CDC', domain: 'cdc.gov', icon: 'fas fa-shield-virus' },
+            mayo: { name: 'Mayo Clinic', domain: 'mayoclinic.org', icon: 'fas fa-hospital' },
+            nhi: { name: 'NHI', domain: 'nhi.gov.tw', icon: 'fas fa-briefcase-medical' }
+        };
+
+        function encodeQuery(query) {
+            return btoa(unescape(encodeURIComponent(query)));
+        }
+
+        function decodeQuery(encoded) {
+            return decodeURIComponent(escape(atob(encoded)));
+        }
+
         async function fetchGoogleAnswer(query) {
             const { apiKey } = SERPER_CONFIG;
             if (!apiKey) return null;
@@ -937,9 +954,124 @@
             return googleAnswer || await fetchWikipediaAnswer(query);
         }
 
+        async function fetchSourceAnswer(query, domain) {
+            const { apiKey } = SERPER_CONFIG;
+            if (!apiKey) return null;
+            try {
+                const response = await fetch('https://google.serper.dev/search', {
+                    method: 'POST',
+                    headers: {
+                        'X-API-KEY': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ q: `${query} site:${domain}`, num: 3 }),
+                    signal: AbortSignal.timeout(6000)
+                });
+                if (!response.ok) return null;
+                const data = await response.json();
+                if (!Array.isArray(data.organic) || !data.organic.length) return null;
+
+                return data.organic.slice(0, 3).map(item => {
+                    let resultDomain = domain;
+                    try { resultDomain = new URL(item.link).hostname; } catch {}
+                    return {
+                        title: item.title || '',
+                        snippet: item.snippet || '',
+                        url: item.link,
+                        domain: resultDomain
+                    };
+                });
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function renderSearchResults(items, heading) {
+            return `<p>${escapeHTML(heading)}</p>${items.map(item => `
+                <div class="info-card">
+                    <h4><i class="fas fa-book-medical"></i>${escapeHTML(item.title)}</h4>
+                    <p><strong>${escapeHTML(item.domain)}</strong></p>
+                    <p>${escapeHTML(item.snippet)}</p>
+                    <a class="search-btn" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i> Read full source
+                    </a>
+                </div>
+            `).join('')}`;
+        }
+
+        function renderSearchFallback(message, url, linkLabel) {
+            return `<p>${escapeHTML(message)}</p>
+                <a class="search-btn" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-external-link-alt"></i> ${escapeHTML(linkLabel)}
+                </a>`;
+        }
+
+        async function searchSpecificSource(encodedQuery, sourceKey) {
+            const source = VERIFIED_SOURCES[sourceKey];
+            if (!source || isTyping) return;
+
+            let query;
+            try { query = decodeQuery(encodedQuery); } catch { return; }
+
+            const sendBtn = document.getElementById('sendBtn');
+            isTyping = true;
+            sendBtn.disabled = true;
+            addMessage(`Search ${source.name} for "${query}"`, true);
+            showTyping();
+
+            try {
+                let items = null;
+                try { items = await fetchSourceAnswer(query, source.domain); } catch {}
+                hideTyping();
+                const response = items?.length
+                    ? renderSearchResults(items, `Search results from ${source.name}:`)
+                    : renderSearchFallback(
+                        `I couldn't retrieve live results from ${source.name} right now.`,
+                        generateSearchUrls(query)[sourceKey],
+                        `Search ${source.name}`
+                    );
+                addMessage(response, false);
+            } finally {
+                hideTyping();
+                isTyping = false;
+                sendBtn.disabled = false;
+            }
+        }
+
+        async function searchAllSources(encodedQuery) {
+            if (isTyping) return;
+
+            let query;
+            try { query = decodeQuery(encodedQuery); } catch { return; }
+
+            const sendBtn = document.getElementById('sendBtn');
+            isTyping = true;
+            sendBtn.disabled = true;
+            addMessage(`Search all verified sources for "${query}"`, true);
+            showTyping();
+
+            try {
+                let answer = null;
+                try { answer = await fetchVerifiedAnswer(query); } catch {}
+                hideTyping();
+                const response = answer?.items?.length
+                    ? renderSearchResults(answer.items, `Search results from ${answer.engine}:`)
+                    : renderSearchFallback(
+                        'I could not retrieve results from verified sources right now.',
+                        generateSearchUrls(query).filtered,
+                        'Search all verified sources'
+                    );
+                addMessage(response, false);
+            } finally {
+                hideTyping();
+                isTyping = false;
+                sendBtn.disabled = false;
+            }
+        }
+
         // ========== FALLBACK RESPONSE GENERATOR ==========
         function generateFallbackResponse(query, autoAnswer = null) {
-            const searchUrls = generateSearchUrls(query);
+            const encodedQuery = encodeQuery(query);
             const safeQuery = escapeHTML(query);
             const automaticAnswer = autoAnswer ? `
                 <div class="reference-badge"><i class="fas fa-check-circle"></i>Retrieved automatically via ${escapeHTML(autoAnswer.engine)}</div>
@@ -967,26 +1099,26 @@
                 ${automaticAnswer}
                 <div class="fallback-card">
                     <h4><i class="fas fa-search"></i> ${sourcesHeading}</h4>
-                    <p>I have prepared searches across the most trusted health organizations. Click any link below to find official information:</p>
+                    <p>I have prepared searches across the most trusted health organizations. Click any button below to find official information:</p>
                     <div class="source-links" style="margin-top: 10px;">
-                        <a class="search-btn" href="${escapeHTML(searchUrls.nhs)}" target="_blank" rel="noopener noreferrer">
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'nhs')">
                             <i class="fas fa-hospital"></i> Search NHS
-                        </a>
-                        <a class="search-btn" href="${escapeHTML(searchUrls.who)}" target="_blank" rel="noopener noreferrer">
+                        </button>
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'who')">
                             <i class="fas fa-globe"></i> Search WHO
-                        </a>
-                        <a class="search-btn" href="${escapeHTML(searchUrls.cdc)}" target="_blank" rel="noopener noreferrer">
+                        </button>
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'cdc')">
                             <i class="fas fa-shield-virus"></i> Search CDC
-                        </a>
-                        <a class="search-btn" href="${escapeHTML(searchUrls.mayo)}" target="_blank" rel="noopener noreferrer">
+                        </button>
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'mayo')">
                             <i class="fas fa-hospital"></i> Search Mayo Clinic
-                        </a>
-                        <a class="search-btn" href="${escapeHTML(searchUrls.nhi)}" target="_blank" rel="noopener noreferrer">
+                        </button>
+                        <button type="button" class="search-btn" onclick="searchSpecificSource('${encodedQuery}', 'nhi')">
                             <i class="fas fa-briefcase-medical"></i> Visit NHI
-                        </a>
-                        <a class="search-btn" href="${escapeHTML(searchUrls.filtered)}" target="_blank" rel="noopener noreferrer">
+                        </button>
+                        <button type="button" class="search-btn" onclick="searchAllSources('${encodedQuery}')">
                             <i class="fab fa-google"></i> Search All Sources
-                        </a>
+                        </button>
                     </div>
                 </div>
 
