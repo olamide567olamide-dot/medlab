@@ -632,12 +632,10 @@
         </div>
     </div>
 
+    <script src="config.js"></script>
     <script>
         // Client-side keys are visible in page source; use this only for local or private deployments.
-        const CONFIG = {
-            SERPER_API_KEY: '00dcfa0ba69bd2949f1d75fdc6e18d0045dd8ecf', // Paste your Serper.dev API key here.
-            GEMINI_API_KEY: 'AQ.Ab8RN6Lyf8opgru5neteI5UW5kNop_e7-sCuiDF3pPqPV16-fw' // Paste your Gemini API key here.
-        };
+        const CONFIG = window.CONFIG || { SERPER_API_KEY: '', GEMINI_API_KEY: '' };
 
         // ========== EXTERNAL SOURCE DATABASE ==========
         const externalSources = {
