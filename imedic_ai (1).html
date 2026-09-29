@@ -615,7 +615,7 @@
     <div id="apiSettingsOverlay" class="modal-overlay" style="display:none">
         <div class="modal-card">
             <h3><i class="fas fa-key"></i> API Settings</h3>
-            <p class="modal-hint">Your keys are saved only in this browser (never in this file, never uploaded anywhere). Leave a field blank to skip that feature.</p>
+            <p class="modal-hint">Keys entered here are saved only in this browser. Leave a field blank to skip that feature.</p>
 
             <label class="modal-label" for="serperKeyInput">Serper.dev API key</label>
             <input type="password" id="serperKeyInput" class="modal-input" placeholder="Paste your Serper key" autocomplete="off">
@@ -633,6 +633,12 @@
     </div>
 
     <script>
+        // Client-side keys are visible in page source; use this only for local or private deployments.
+        const CONFIG = {
+            SERPER_API_KEY: '00dcfa0ba69bd2949f1d75fdc6e18d0045dd8ecf', // Paste your Serper.dev API key here.
+            GEMINI_API_KEY: 'AQ.Ab8RN6Lyf8opgru5neteI5UW5kNop_e7-sCuiDF3pPqPV16-fw' // Paste your Gemini API key here.
+        };
+
         // ========== EXTERNAL SOURCE DATABASE ==========
         const externalSources = {
             fever: {
@@ -917,18 +923,16 @@
         }
 
         // ========== API KEY STORAGE ==========
-        // Keys are entered once through the Settings panel (the key icon in the header)
-        // and saved only in this browser's localStorage - never written into this file,
-        // never committed to git, never pasted anywhere else. Each person who runs this
-        // app supplies their own key. If no key is saved, live search/synthesis is
-        // skipped and the app falls back gracefully (Wikipedia, then plain links).
+        // Configured keys take precedence; Settings keys are used when config is blank.
         function getSerperKey() {
+            if (CONFIG.SERPER_API_KEY.trim()) return CONFIG.SERPER_API_KEY;
             try { return localStorage.getItem('imedic_serper_key') || ''; } catch (e) { return ''; }
         }
         function setSerperKey(value) {
             try { localStorage.setItem('imedic_serper_key', value); } catch (e) { /* ignore */ }
         }
         function getGeminiKey() {
+            if (CONFIG.GEMINI_API_KEY.trim()) return CONFIG.GEMINI_API_KEY;
             try { return localStorage.getItem('imedic_gemini_key') || ''; } catch (e) { return ''; }
         }
         function setGeminiKey(value) {
@@ -938,39 +942,47 @@
         // ========== LIVE VERIFIED-SOURCE LOOKUP ==========
         // Serper.dev (a Google Search API) is the live source here: free 2,500 queries on
         // signup, one API key. Get yours from https://serper.dev -> API Keys tab, then
-        // paste it into Settings (the key icon at the top of the app) - not into this file.
+        // Paste the key into CONFIG above or enter it in Settings.
         async function fetchGoogleAnswer(query) {
             const apiKey = getSerperKey();
             if (!apiKey) return null;
             try {
-                const restricted = `${query} (site:nhs.uk OR site:who.int OR site:cdc.gov OR site:mayoclinic.org)`;
+                const restricted = `${query} (site:nhs.uk OR site:who.int OR site:cdc.gov OR site:mayoclinic.org OR site:nhi.gov.tw)`;
                 const res = await fetch('https://google.serper.dev/search', {
                     method: 'POST',
                     headers: {
                         'X-API-KEY': apiKey,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ q: restricted, num: 3 }),
+                    body: JSON.stringify({ q: restricted, num: 8 }),
                     signal: AbortSignal.timeout(6000)
                 });
                 if (!res.ok) return null;
                 const data = await res.json();
-                const organic = data.organic;
-                if (!organic || !organic.length) return null;
-
-                return {
-                    engine: 'Google (via Serper)',
-                    items: organic.slice(0, 3).map(item => {
-                        let domain = item.link;
-                        try { domain = new URL(item.link).hostname; } catch (e) { /* keep raw link */ }
-                        return {
-                            title: item.title,
-                            snippet: item.snippet || '',
-                            url: item.link,
-                            domain
-                        };
-                    })
+                const toItem = item => {
+                    let domain = item.link;
+                    try { domain = new URL(item.link).hostname; } catch (e) { /* keep raw link */ }
+                    return {
+                        title: item.title,
+                        snippet: item.snippet || '',
+                        url: item.link,
+                        domain
+                    };
                 };
+                const all = (data.organic || []).map(toItem);
+                const answerBox = data.answerBox;
+                if (answerBox && (answerBox.snippet || answerBox.answer) && answerBox.link) {
+                    all.unshift(toItem({
+                        title: answerBox.title || query,
+                        snippet: answerBox.snippet || answerBox.answer,
+                        link: answerBox.link
+                    }));
+                }
+                if (!all.length) return null;
+
+                const shown = all.slice(0, 4);
+                shown.extra = all.slice(4);
+                return { engine: 'Google (via Serper)', items: shown };
             } catch (error) {
                 return null;
             }
@@ -1030,7 +1042,7 @@
             const apiKey = getGeminiKey();
             if (!apiKey || !items || !items.length) return null;
             try {
-                const sourceList = items
+                const sourceList = items.concat(items.extra || [])
                     .map((item, i) => `${i + 1}. (${item.domain}) ${item.title}: ${item.snippet}`)
                     .join('\n');
                 const prompt = `You are a medical information assistant. Using ONLY the information in the sources below, write a clear, well-organized answer to this question: "${query}"
@@ -1041,7 +1053,8 @@ Format rules:
 - If the sources describe multiple causes, types, symptoms, or steps, list them as bullet points, each on its own line starting with "- ".
 - Do not invent information that isn't supported by the sources below.
 - Do not say "according to the sources" or mention source names inline.
-- Keep the whole answer under 200 words.
+- Cover the main causes/mechanism, key details, and prevention or when to seek care where the sources support it.
+- Keep the whole answer under 250 words.
 
 Sources:
 ${sourceList}`;
@@ -1712,6 +1725,10 @@ ${sourceList}`;
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('chatInput').focus();
+            if (CONFIG.SERPER_API_KEY.trim() && CONFIG.GEMINI_API_KEY.trim()) {
+                const apiSettingsButton = document.querySelector('.header-actions button[onclick="openApiSettings()"]');
+                if (apiSettingsButton) apiSettingsButton.style.display = 'none';
+            }
             const voiceBtn = document.getElementById('voiceBtn');
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (voiceBtn && !SpeechRecognition) {
