@@ -857,24 +857,37 @@
                 .replace(/'/g, '&#39;');
         }
 
+        function safeUrl(url) {
+            try {
+                const u = new URL(url);
+                return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : '#';
+            } catch (e) { return '#'; }
+        }
+
+        const TOPIC_KEYWORDS = {
+            fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
+            cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
+            headache: ['headache', 'migraine', 'head pain', 'head hurts'],
+            stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
+            sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
+            stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
+            chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
+            diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
+            diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
+            hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
+            covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
+        };
+
+        function keywordMatches(lowerQuery, keyword) {
+            const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            return new RegExp('\\b' + escaped + '(?:s|es|ing|ed)?\\b', 'i').test(lowerQuery);
+        }
+
         function analyzeQuery(query) {
             const lowerQuery = query.toLowerCase();
-            const keywords = {
-                fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
-                cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
-                headache: ['headache', 'migraine', 'head pain', 'head hurts'],
-                stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
-                sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
-                stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
-                chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
-                diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
-                diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
-                hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
-                covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
-            };
 
-            for (const [topic, words] of Object.entries(keywords)) {
-                if (words.some(word => lowerQuery.includes(word))) return topic;
+            for (const [topic, words] of Object.entries(TOPIC_KEYWORDS)) {
+                if (words.some(word => keywordMatches(lowerQuery, word))) return topic;
             }
             return 'default';
         }
@@ -882,24 +895,11 @@
         // ========== CONFIDENCE SCORING ==========
         function calculateConfidence(query, topic) {
             const lowerQuery = query.toLowerCase();
-            const keywords = {
-                fever: ['fever', 'temperature', 'hot', 'chills', 'thermometer'],
-                cough: ['cough', 'cold', 'flu', 'congestion', 'sore throat', 'runny nose'],
-                headache: ['headache', 'migraine', 'head pain', 'head hurts'],
-                stomach: ['stomach', 'nausea', 'vomit', 'diarrhea', 'abdominal', 'belly', 'tummy'],
-                sleep: ['sleep', 'insomnia', 'tired', 'fatigue', 'rest', 'nap'],
-                stress: ['stress', 'anxiety', 'depression', 'worried', 'panic', 'mental health'],
-                chest: ['chest', 'heart', 'chest pain', 'heart attack', 'angina'],
-                diet: ['diet', 'food', 'eat', 'nutrition', 'healthy eating', 'weight loss'],
-                diabetes: ['diabetes', 'blood sugar', 'insulin', 'type 1', 'type 2', 'prediabetes'],
-                hypertension: ['hypertension', 'high blood pressure', 'bp', 'blood pressure'],
-                covid: ['covid', 'coronavirus', 'sars', 'pandemic', 'covid-19']
-            };
 
             if (topic === 'default') return 0;
 
-            const topicKeywords = keywords[topic] || [];
-            const matches = topicKeywords.filter(kw => lowerQuery.includes(kw)).length;
+            const topicKeywords = TOPIC_KEYWORDS[topic] || [];
+            const matches = topicKeywords.filter(kw => keywordMatches(lowerQuery, kw)).length;
             const score = Math.min(matches / 2, 1);
 
             return score;
@@ -954,7 +954,7 @@
                     body: JSON.stringify({ q: restricted, num: 8 }),
                     signal: AbortSignal.timeout(6000)
                 });
-                if (!res.ok) return null;
+                if (!res.ok) { console.warn('API request failed:', res.url, res.status); return null; }
                 const data = await res.json();
                 const toItem = item => {
                     let domain = item.link;
@@ -981,6 +981,7 @@
                 shown.extra = all.slice(4);
                 return { engine: 'Google (via Serper)', items: shown };
             } catch (error) {
+                console.warn('Request error:', error);
                 return null;
             }
         }
@@ -1015,6 +1016,7 @@
                     }]
                 };
             } catch (error) {
+                console.warn('Request error:', error);
                 return null;
             }
         }
@@ -1031,8 +1033,8 @@
         // cards, the same way Copilot/ChatGPT show a synthesized answer before links.
         //
         // Get a free key from https://aistudio.google.com/apikey (no card required,
-        // generous free tier) and paste it into Settings (the key icon at the top of
-        // the app) - not into this file. Until it's set, or if a call fails, this is
+        // generous free tier) and paste it into CONFIG above or enter it in Settings.
+        // Until it's set, or if a call fails, this is
         // skipped entirely and the page falls back to showing the raw source cards
         // only, exactly as before - nothing breaks either way.
         async function synthesizeAnswer(query, items) {
@@ -1059,16 +1061,17 @@ ${sourceList}`;
                 const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
                     method: 'POST',
                     headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-                    signal: AbortSignal.timeout(12000)
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { thinkingConfig: { thinkingBudget: 0 } } }),
+                    signal: AbortSignal.timeout(20000)
                 });
-                if (!res.ok) return null;
+                if (!res.ok) { console.warn('API request failed:', res.url, res.status); return null; }
                 const data = await res.json();
                 const text = data && data.candidates && data.candidates[0]
                     && data.candidates[0].content && data.candidates[0].content.parts
                     && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
                 return text ? text.trim() : null;
             } catch (error) {
+                console.warn('Request error:', error);
                 return null;
             }
         }
@@ -1128,7 +1131,7 @@ ${sourceList}`;
                     body: JSON.stringify({ q: `${query} site:${domain}`, num: 3 }),
                     signal: AbortSignal.timeout(6000)
                 });
-                if (!res.ok) return null;
+                if (!res.ok) { console.warn('API request failed:', res.url, res.status); return null; }
                 const data = await res.json();
                 const organic = data.organic;
                 if (!organic || !organic.length) return null;
@@ -1138,6 +1141,7 @@ ${sourceList}`;
                     return { title: item.title, snippet: item.snippet || '', url: item.link, domain: host };
                 });
             } catch (error) {
+                console.warn('Request error:', error);
                 return null;
             }
         }
@@ -1148,7 +1152,7 @@ ${sourceList}`;
                     <h4><i class="fas ${icon}"></i>${escapeHTML(item.title)}</h4>
                     <p><strong>${escapeHTML(item.domain)}</strong></p>
                     <p>${escapeHTML(item.snippet)}</p>
-                    <a class="search-btn" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
+                    <a class="search-btn" href="${escapeHTML(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-external-link-alt"></i> Read full source
                     </a>
                 </div>
@@ -1163,7 +1167,7 @@ ${sourceList}`;
             const fallbackUrl = searchUrls[sourceKey] || searchUrls.filtered;
 
             isTyping = true;
-            addMessage(`Search ${source.name} for "${escapeHTML(query)}"`, true);
+            addMessage(`Search ${source.name} for "${query}"`, true);
             showTyping();
 
             const items = await fetchSourceAnswer(query, source.domain);
@@ -1201,7 +1205,7 @@ ${sourceList}`;
             const searchUrls = generateSearchUrls(query);
 
             isTyping = true;
-            addMessage(`Search all verified sources for "${escapeHTML(query)}"`, true);
+            addMessage(`Search all verified sources for "${query}"`, true);
             showTyping();
 
             const result = await fetchVerifiedAnswer(query);
@@ -1245,22 +1249,27 @@ ${sourceList}`;
                         <h4><i class="fas fa-book-medical"></i>${escapeHTML(item.title)}</h4>
                         <p><strong>${escapeHTML(item.domain)}</strong></p>
                         <p>${escapeHTML(item.snippet)}</p>
-                        <a class="search-btn" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
+                        <a class="search-btn" href="${escapeHTML(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-external-link-alt"></i> Read full source
                         </a>
                     </div>
                 `).join('')}
             ` : '';
-            const sourcesHeading = autoAnswer ? 'Verify With Official Sources' : 'Search Verified Sources';
-
-            return `
+            const leadIn = autoAnswer ? '' : `
                 <div class="confidence-bar">
                     <span>Confidence:</span>
                     <div class="bar"><div class="bar-fill low"></div></div>
                     <span>Low - Searching external sources</span>
                 </div>
                 <p>I don't have a confident match for <strong>"${safeQuery}"</strong> in the fixed reference set. Search a trusted health source below.</p>
+            `;
+            const sourcesHeading = autoAnswer ? 'Verify With Official Sources' : 'Search Verified Sources';
+            const warningText = autoAnswer
+                ? 'Please consult a healthcare professional before making any health decisions based on information you find.'
+                : 'Since I cannot verify this topic, please consult a healthcare professional before making any health decisions based on information you find.';
 
+            return `
+                ${leadIn}
                 ${automaticAnswer}
                 <div class="fallback-card">
                     <h4><i class="fas fa-search"></i> ${sourcesHeading}</h4>
@@ -1289,7 +1298,7 @@ ${sourceList}`;
 
                 <div class="warning-box">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <div><strong>Important:</strong> Since I cannot verify this topic, please consult a healthcare professional before making any health decisions based on information you find.</div>
+                    <div><strong>Important:</strong> ${warningText}</div>
                 </div>
 
                 <a class="doctor-cta" href="https://www.zocdoc.com" target="_blank" rel="noopener noreferrer">
@@ -1541,7 +1550,12 @@ ${sourceList}`;
 
                 hideTyping();
                 addMessage(response, false);
+            } catch (error) {
+                console.error('Message handling error:', error);
+                hideTyping();
+                addMessage('<p>Sorry, something went wrong while looking that up. Please try again.</p>', false);
             } finally {
+                hideTyping();
                 isTyping = false;
                 sendBtn.disabled = false;
             }
@@ -1660,6 +1674,7 @@ ${sourceList}`;
                 input.value = transcript;
 
                 if (event.results[0].isFinal) {
+                    input.value = '';
                     sendMessage(transcript);
                 }
             };
