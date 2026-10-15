@@ -48,6 +48,7 @@
             background: var(--sand);
             color: var(--text);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
         }
@@ -109,13 +110,15 @@
             display: flex; align-items: center; gap: 12px;
             padding: 10px 12px; border-radius: 10px;
             cursor: pointer; transition: all 0.2s; margin-bottom: 4px;
+            width: 100%; border: 0; background: transparent;
+            color: inherit; font: inherit; text-align: left;
         }
         .quick-topic:hover { background: var(--bg); }
         .quick-topic i { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
         .quick-topic .icon-fever { background: var(--coral-soft); color: var(--danger); }
         .quick-topic .icon-cough { background: var(--aqua-soft); color: var(--secondary); }
         .quick-topic .icon-headache { background: var(--aqua-soft); color: var(--primary); }
-        .quick-topic .icon-stomach { background: var(--white)beb; color: var(--accent); }
+        .quick-topic .icon-stomach { background: var(--aqua-soft); color: var(--accent); }
         .quick-topic .icon-sleep { background: var(--aqua-soft); color: var(--teal); }
         .quick-topic .icon-stress { background: var(--coral-soft); color: var(--coral); }
         .quick-topic span { font-size: 0.875rem; font-weight: 500; }
@@ -134,6 +137,7 @@
             flex: 1; display: flex; flex-direction: column;
             background: var(--card); border-radius: 20px;
             box-shadow: none; overflow: hidden;
+            min-width: 0;
         }
         .chat-messages {
             flex: 1; overflow-y: auto; padding: 24px;
@@ -341,7 +345,8 @@
         }
 
         .chat-input-area {
-            padding: 20px 24px; border-top: 1px solid var(--border); background: white;
+            padding: 20px 24px; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            border-top: 1px solid var(--border); background: white;
         }
         .input-wrapper {
             display: flex; gap: 12px; align-items: flex-end;
@@ -372,12 +377,37 @@
 
         .footer-disclaimer {
             background: var(--sand); border-top: 1px solid var(--border);
-            padding: 16px 24px; text-align: center;
+            padding: 16px 24px; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); text-align: center;
             font-size: 0.75rem; color: var(--text-light);
         }
         .footer-disclaimer i { color: var(--accent); margin-right: 6px; }
 
-        @media (max-width: 1024px) { .sidebar { display: none; } }
+        @media (max-width: 1024px) {
+            .main-container { flex-direction: column; min-width: 0; }
+            .sidebar { width: 100%; }
+            .sidebar-card { min-width: 0; }
+            .quick-topics {
+                display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain;
+                scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+                padding: 2px 2px 10px;
+            }
+            .quick-topic {
+                flex: 0 0 auto; width: auto; min-height: 44px; max-width: calc(100vw - 48px);
+                margin: 0; white-space: normal; scroll-snap-align: start;
+            }
+            .quick-topic:focus-visible, .quick-topics:focus-visible {
+                outline: 3px solid rgba(43, 122, 157, 0.45); outline-offset: 2px;
+            }
+            .chat-container { min-height: min(720px, calc(100vh - 280px)); min-height: min(720px, calc(100dvh - 280px)); }
+            .chat-input { font-size: 16px; }
+            .btn-icon { width: 44px; height: 44px; flex: 0 0 44px; }
+            .chat-container, .chat-messages, .message, .message-content, .info-card,
+            .sources-card, .fallback-card, .warning-box, .doctor-cta { min-width: 0; max-width: 100%; }
+            .message-content, .info-card, .sources-card, .fallback-card, .warning-box,
+            .doctor-cta, .disclaimer-banner, .footer-disclaimer { overflow-wrap: anywhere; }
+            img { max-width: 100%; height: auto; }
+            pre, table { display: block; max-width: 100%; overflow-x: auto; }
+        }
         @media (max-width: 640px) {
             .main-container { padding: 0; gap: 0; }
             .chat-container { border-radius: 0; }
@@ -444,7 +474,7 @@
                 .quick-topic { min-height: 3.25rem; color: var(--text); }
                 .quick-topic:hover { background: var(--aqua-soft); }
                 .quick-topic i { flex-shrink: 0; }
-                .chat-container { min-height: min(720px, calc(100vh - 190px)); background: var(--card); border: 1px solid var(--line); box-shadow: none; }
+                .chat-container { min-height: min(720px, calc(100vh - 190px)); min-height: min(720px, calc(100dvh - 190px)); background: var(--card); border: 1px solid var(--line); box-shadow: none; }
                 .chat-messages { padding: clamp(1rem, 3vw, 2rem); }
                 .welcome-screen { min-height: 100%; justify-content: center; padding: clamp(2rem, 7vh, 5rem) 1rem; }
                 .welcome-icon { width: 68px; height: 68px; border-radius: 18px; background: var(--ink); box-shadow: none; }
@@ -476,8 +506,33 @@
                 .search-btn, .source-link { border-radius: 999px; }
                 .doctor-cta { cursor: default; }
                 .auto-open-notice { display: none; }
-                @media (max-width: 860px) { .sidebar { display: none; } .main-container { padding: 1rem; } }
-                @media (max-width: 640px) { .header { padding: 0.75rem 1rem; } .header-inner { flex-wrap: wrap; } .dashboard-link { order: 3; width: 100%; text-align: center; } .header-actions { margin-left: auto; } .chat-container { min-height: calc(100vh - 178px); } }
+                        @media (max-width: 1024px) { .btn-icon { width: 44px; height: 44px; flex: 0 0 44px; } }
+                        @media (max-width: 860px) { .main-container { padding: 1rem; } }
+                        @media (max-width: 640px) {
+                            .header { padding: 0.75rem 1rem; }
+                            .header-inner { flex-wrap: wrap; }
+                            .logo { flex: 1 1 150px; min-width: 0; }
+                            .logo-text { min-width: 0; }
+                            .dashboard-link { order: 3; width: 100%; min-height: 44px; text-align: center; }
+                            .header-actions { margin-left: auto; gap: 0.35rem; }
+                            .main-container { padding: 0; gap: 0; }
+                            .sidebar { padding: 0.75rem 1rem 0; }
+                            .sidebar-card { padding: 0.75rem; }
+                            .sidebar-card h3 { margin-bottom: 0.5rem; }
+                            .chat-container { min-height: calc(100vh - 400px); min-height: calc(100dvh - 400px); border-radius: 0; overflow: visible; }
+                            .chat-messages { min-height: 0; padding: 1rem; }
+                            .welcome-screen { padding: 2rem 0.5rem; }
+                            .welcome-screen h2 { font-size: 1.4rem; }
+                            .message { max-width: 100%; }
+                            .message-content { padding: 0.75rem; }
+                            .chat-input-area { position: sticky; bottom: 0; z-index: 2; padding: 0.75rem 1rem; padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
+                            .chat-input-area:focus-within { position: fixed; left: 0; right: 0; bottom: 0; z-index: 100; }
+                            .input-wrapper { gap: 0.5rem; padding: 0.35rem; }
+                            .chat-input { min-width: 0; padding: 0.65rem; scroll-margin-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+                            .send-btn { width: 44px; height: 44px; flex: 0 0 44px; }
+                            .input-hint { line-height: 1.4; }
+                            .footer-disclaimer { padding: 1rem; padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); }
+                        }
                 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }
     </style>
 </head>
@@ -508,9 +563,9 @@
           </div>
           <a class="dashboard-link" href="dashboard.html">Dashboard</a>
           <div class="header-actions">
-            <button class="btn-icon" title="Voice Search" id="voiceBtn" onclick="toggleVoiceSearch()"><i class="fas fa-microphone"></i></button>
-            <button class="btn-icon" title="Clear Chat" onclick="clearChat()"><i class="fas fa-trash-alt"></i></button>
-            <button class="btn-icon" title="About" onclick="showAbout()"><i class="fas fa-info-circle"></i></button>
+            <button class="btn-icon" title="Voice Search" aria-label="Voice Search" id="voiceBtn" onclick="toggleVoiceSearch()"><i class="fas fa-microphone"></i></button>
+            <button class="btn-icon" title="Clear Chat" aria-label="Clear Chat" onclick="clearChat()"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn-icon" title="About" aria-label="About" onclick="showAbout()"><i class="fas fa-info-circle"></i></button>
           </div>
         </div>
     </header>
@@ -526,12 +581,14 @@
         <aside class="sidebar">
             <div class="sidebar-card">
                 <h3>Quick Topics</h3>
-                <div class="quick-topic" onclick="sendQuickTopic('fever')"><i class="fas fa-temperature-high icon-fever"></i><span>Fever & Temperature</span></div>
-                <div class="quick-topic" onclick="sendQuickTopic('cough')"><i class="fas fa-head-side-cough icon-cough"></i><span>Cough & Cold</span></div>
-                <div class="quick-topic" onclick="sendQuickTopic('headache')"><i class="fas fa-brain icon-headache"></i><span>Headache & Migraine</span></div>
-                <div class="quick-topic" onclick="sendQuickTopic('stomach')"><i class="fas fa-stomach icon-stomach"></i><span>Stomach Issues</span></div>
-                <div class="quick-topic" onclick="sendQuickTopic('sleep')"><i class="fas fa-moon icon-sleep"></i><span>Sleep Problems</span></div>
-                <div class="quick-topic" onclick="sendQuickTopic('stress')"><i class="fas fa-spa icon-stress"></i><span>Stress & Anxiety</span></div>
+                <div class="quick-topics" role="group" aria-label="Quick topics">
+                    <button type="button" class="quick-topic" onclick="sendQuickTopic('fever')"><i class="fas fa-temperature-high icon-fever"></i><span>Fever & Temperature</span></button>
+                    <button type="button" class="quick-topic" onclick="sendQuickTopic('cough')"><i class="fas fa-head-side-cough icon-cough"></i><span>Cough & Cold</span></button>
+                    <button type="button" class="quick-topic" onclick="sendQuickTopic('headache')"><i class="fas fa-brain icon-headache"></i><span>Headache & Migraine</span></button>
+                    <button type="button" class="quick-topic" onclick="sendQuickTopic('stomach')"><i class="fas fa-stomach icon-stomach"></i><span>Stomach Issues</span></button>
+                    <button type="button" class="quick-topic" onclick="sendQuickTopic('sleep')"><i class="fas fa-moon icon-sleep"></i><span>Sleep Problems</span></button>
+                    <button type="button" class="quick-topic" onclick="sendQuickTopic('stress')"><i class="fas fa-spa icon-stress"></i><span>Stress & Anxiety</span></button>
+                </div>
             </div>
 
             
