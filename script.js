@@ -52,25 +52,6 @@ if (prevBtn && nextBtn && reviewsContainer) {
     });
 }
 
-// ============ HAMBURGER MENU ============
-const hamburgerMenu = document.querySelector('.hamburger-menu');
-const mobileNavPanel = document.querySelector('.mobile-nav-panel');
-
-if (hamburgerMenu && mobileNavPanel) {
-    hamburgerMenu.addEventListener('click', () => {
-        const isHidden = mobileNavPanel.getAttribute('aria-hidden') === 'true';
-        mobileNavPanel.setAttribute('aria-hidden', !isHidden);
-        hamburgerMenu.classList.toggle('active');
-    });
-
-    // Close menu on link click
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileNavPanel.setAttribute('aria-hidden', 'true');
-            hamburgerMenu.classList.remove('active');
-        });
-    });
-}
 // ============ ADD SCROLL ANIMATIONS ============
 const observerOptions = {
     threshold: 0.1,

@@ -191,9 +191,12 @@
             right: 0;
             width: min(82vw, 320px);
             height: 100vh;
+            height: 100dvh;
+            overflow-y: auto;
+            overscroll-behavior: contain;
             background: var(--white);
             box-shadow: none;
-            padding: 96px 24px 24px;
+            padding: calc(96px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -251,20 +254,6 @@
             font-weight: 700;
         }
 
-        @media (max-width: 768px) {
-            .navbar-menu,
-            .login-signup-btn {
-                display: none;
-            }
-
-            .hamburger-menu {
-                display: inline-flex;
-            }
-
-            .mobile-only-login {
-                display: inline-flex;
-            }
-        }
         /* Direction indicators */
         .nav-link, .mobile-nav-link, .cta-button {
             position: relative;
@@ -326,7 +315,6 @@
             line-height: 1.6;
             background: var(--white);
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         h1, h2, h3, h4 {
@@ -617,17 +605,37 @@
             .hamburger-menu { display: inline-flex; }
             .hero-container, .about-container, .reviews-section { grid-template-columns: 1fr; }
             .hero-content { grid-column: auto; }
-            .hero-title { font-size: 2.5rem; }
+            .hero-title { font-size: clamp(2rem, 8vw, 2.75rem); }
             .service-badges { flex-direction: column; }
             .badge { width: 100%; }
             .reviews-section { gap: 2rem; }
+            .review-carousel { width: 100%; }
+            .reviews-header, .review-carousel, .reviews-container { min-width: 0; }
+            .services-grid, .testimonials-grid, .blog-grid, .doctors-grid,
+            .about-container, .footer-container { min-width: 0; }
+            .services-grid, .testimonials-grid, .blog-grid, .doctors-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .about-container { gap: 2rem; }
+            .brand { min-height: 44px; }
+            .Nurse-card img { width: min(120px, 100%); height: auto; aspect-ratio: 1; }
+            .services-header h3, .about-content h2, .cta-content h2 {
+                font-size: clamp(1.55rem, 7vw, 2.5rem);
+            }
+            .blog-card img { height: auto; aspect-ratio: 16 / 10; }
+            .badge { min-height: 44px; }
+            .read-more-btn, .blog-card a, .footer-section a {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+            }
+            .social-links { align-items: center; flex-wrap: wrap; }
+            .service-card, .testimonial-card, .blog-card, .Nurse-card { overflow: visible; }
         }
 
         @media (max-width: 480px) {
             .hero, .reviews-section, .services, .about, .doctors, .testimonials, .blog, .cta { padding-left: 1rem; padding-right: 1rem; }
-            .hero-title { font-size: 2rem; }
             .about-stats { grid-template-columns: 1fr; }
-            .cta-content h2, .services-header h3, .about-content h2 { font-size: 1.8rem; }
         }
 
                 /* Unify Medic brand logo */
@@ -677,19 +685,20 @@
                 login & signup 
                 <span class="arrow-icon">→</span>
             </a>
-            <button class="hamburger-menu" type="button" aria-label="mobile-nav-panel">
+            <button class="hamburger-menu" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav-panel">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-            <div class="mobile-nav-panel" aria-hidden="true">
+            <nav id="mobile-nav-panel" class="mobile-nav-panel" aria-hidden="true" inert>
                 <a href="#home" class="mobile-nav-link">Home</a>
-                <a href="#about" class="mobile-nav-link">About</a>
                 <a href="#services" class="mobile-nav-link">Services</a>
+                <a href="#about" class="mobile-nav-link">About us</a>
+                <a href="#testimonials" class="mobile-nav-link">Testimonials</a>
                 <a href="#blog" class="mobile-nav-link">Blog</a>
                 <a href="#contact" class="mobile-nav-link">Contact Info</a>
                 <a href="login.html" class="mobile-nav-link mobile-only-login">Login &amp; Signup</a>
-            </div>
+            </nav>
             <div class="mobile-nav-backdrop" aria-hidden="true"></div>
         </div>
     </header>
@@ -919,22 +928,49 @@
 
         const closeMobileMenu = () => {
             mobileNavPanel.setAttribute('aria-hidden', 'true');
+            mobileNavPanel.setAttribute('inert', '');
             mobileNavBackdrop.classList.remove('active');
             hamburgerMenu.classList.remove('active');
             hamburgerMenu.setAttribute('aria-expanded', 'false');
+            hamburgerMenu.focus();
+        };
+
+        const openMobileMenu = () => {
+            mobileNavPanel.removeAttribute('inert');
+            mobileNavPanel.setAttribute('aria-hidden', 'false');
+            mobileNavBackdrop.classList.add('active');
+            hamburgerMenu.classList.add('active');
+            hamburgerMenu.setAttribute('aria-expanded', 'true');
+            mobileNavLinks[0].focus();
         };
 
         // Toggle mobile menu
         hamburgerMenu.addEventListener('click', () => {
             const isHidden = mobileNavPanel.getAttribute('aria-hidden') === 'true';
-            mobileNavPanel.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
-            mobileNavBackdrop.classList.toggle('active', isHidden);
-            hamburgerMenu.classList.toggle('active', isHidden);
-            hamburgerMenu.setAttribute('aria-expanded', String(isHidden));
-            
-            // Keep navbar-menu visible and toggle vertical display
-            const navbarMenu = document.querySelector('.navbar-menu');
-            navbarMenu.classList.toggle('vertical', isHidden);
+            if (isHidden) {
+                openMobileMenu();
+            } else {
+                closeMobileMenu();
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            if (mobileNavPanel.getAttribute('aria-hidden') === 'true') return;
+            if (event.key === 'Escape') {
+                closeMobileMenu();
+                return;
+            }
+            if (event.key === 'Tab') {
+                const firstLink = mobileNavLinks[0];
+                const lastLink = mobileNavLinks[mobileNavLinks.length - 1];
+                if (event.shiftKey && document.activeElement === firstLink) {
+                    event.preventDefault();
+                    lastLink.focus();
+                } else if (!event.shiftKey && document.activeElement === lastLink) {
+                    event.preventDefault();
+                    firstLink.focus();
+                }
+            }
         });
 
         mobileNavBackdrop.addEventListener('click', closeMobileMenu);
